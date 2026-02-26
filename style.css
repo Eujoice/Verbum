@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap'); /*Fonte do título*/
+
+.body-login {
+    background-color: #6C9467;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#titulo {
+    font-family: "Milonga", serif;
+    color: #6C9467;
+}
+
+.titulo-login {
+    font-size: 96px;
+    font-weight: lighter;
+}
+
+.div-central {
+    display: grid;
+    grid-template-areas: 
+    "div-titulo div-entradas";
+    grid-template-columns: 1fr 1fr;
+}
+
+.div-titulo {
+    background-color: white;
+    text-align: center;
+    padding: 25px;
+}
+
+.div-entradas {
+    background-color: #354A2B;
+    padding: 25px;
+}
+
