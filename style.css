@@ -37,3 +37,13 @@
     padding: 25px;
 }
 
+/* TELA -- PERFIL */
+
+.body-perfil {
+    background-color: #6C9467;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
