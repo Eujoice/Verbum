@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap'); /*Fonte do título*/
 
+/* TELA -- LOGIN */
 .body-login {
     background-color: #6C9467;
     height: 100vh;
@@ -7,6 +8,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: sans-serif;
 }
 
 #titulo {
@@ -35,6 +37,10 @@
 .div-entradas {
     background-color: #354A2B;
     padding: 25px;
+}
+
+#a-login {
+    color: white;
 }
 
 /* TELA -- PERFIL */
