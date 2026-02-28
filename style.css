@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap'); /*Fonte do título*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee&display=swap');
 
 /* TELA -- LOGIN */
 .body-login {
@@ -52,4 +54,87 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: "Poppins", serif;
+}
+
+.container-perfil {
+    background-color: white;
+    border-radius: 20px;
+    border: 2px solid #6C9467;
+    padding: 40px;
+    width: 400px;
+}
+
+.foto{
+    display: flex;
+    justify-content: center;
+}
+
+.dados-entrada-perfil{
+    font-family: "ABeeZee", serif;
+    color: #687661;
+    text-align: center;
+    align-items: center;
+}
+
+.dados-entrada-perfil p{
+    margin: 0;
+}
+
+.dados-entrada-perfil p:first-child {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.dados-entrada-perfil p:last-child {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
+.botoes button {
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #6C9467;
+    background-color: white;
+    color: #6C9467;
+    cursor: pointer;
+    font-size: medium;
+    font-family: "Poppins", serif;
+    font-weight: bold;
+}
+
+.botoes button:hover {
+
+    background-color: #687661;
+    color: white;
+    border-color: #687661;
+}
+
+.botoes a {
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #6C9467;
+    background-color: white;
+    color: #6C9467;
+    cursor: pointer;
+    font-size: medium;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    text-decoration: none; 
+}
+
+.botoes a:hover {
+    background-color: #687661;
+    color: white;
+    border-color: #687661;
 }

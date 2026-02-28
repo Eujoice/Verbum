@@ -8,23 +8,26 @@
     <link rel="stylesheet" href="style.css">
     <title>Perfil</title>
 </head>
-<body>
-    <div class="body-perfil">
-        <div class="container-perfil">
-            <h1>Perfil</h1>
-            <div class="foto">
+<body class="body-perfil">  
+    <div class="container-perfil">
 
-            </div>
-            <p>Nome: </p>
-            <p>Email: </p>
+        <div class="foto">
+            <img src="imgs/icon_perfil.png" alt="Foto de Perfil" width="180" height="140">
+        </div>
 
-            <div>
-                <button class="btn-titulos">Títulos Pendentes</button>
-                <button class="btn-historico">Histórico de empréstimos</button>
-                <button class="btn-dados">Dados Pessoais</button>
-                <button class="btn-favoritos">Favoritos e Avaliações</button>
-                <button class="btn-sair">Sair</button>
-            </div>
+        <div class="dados-entrada-perfil">
+            <p id="nomeUsuario"></p>
+            <p id="emailUsuario"></p>
+        </div>
+
+        <div class="botoes">
+            <a class="btn-titulos">Títulos Pendentes</a>
+            <a class="btn-historico">Histórico de Empréstimos</a>
+            <a class="btn-dados" href="dpessoais.html">Dados Pessoais</a>
+            <a class="btn-favoritos">Favoritos e Avaliações</a>
+            <button class="btn-sair" id="btnSair">Sair</button>
+        </div>
     </div>
+    <script src="script.js"></script>
 </body>
 </html>
