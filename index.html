@@ -14,16 +14,19 @@
 
         </div>
         <div class="div-entradas">
-            <label for="matricula">Matrícula</label>
-            <input type="text" id="matricula" name="matricula"><br>
 
-            <label for="senha">Senha</label>
-            <input type="password" id="senha" name="senha" minlength="8"><br><br>
+            <label id="label-login" class="matr-login" for="matricula">Matrícula</label>
+            <input type="text" class="input-login" id="matricula" name="matricula"><br>
 
-            <button type="button">Entrar</button><br>
+            <label id="label-login" class="senha-login" for="senha">Senha</label>
+            <input type="password" class="input-login" id="senha" name="senha" minlength="8"><br>
+            
+            <div class="div-log-inf">
+                <button id="btn-login" type="button">Entrar</button><br>
 
-            <a id="a-login" href="">Esqueceu a senha ou o usuário?</a><br>
-            <a id="a-login" href="">Entrada para servidores</a>
+                <a class="a-log-sup" id="a-login" href="">Esqueceu a senha ou o usuário?</a>
+                <a class="a-log-inf" id="a-login" href="">Entrada para servidores</a>
+            </div>
 
 
 

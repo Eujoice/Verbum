@@ -33,16 +33,63 @@
 .div-titulo {
     background-color: white;
     text-align: center;
-    padding: 25px;
+    padding-top: 95px;
+    padding-bottom: 95px;
+    padding-left: 30px;
+    padding-right: 30px;
+    border-radius: 15px 0px 0px 15px;
 }
 
 .div-entradas {
     background-color: #354A2B;
-    padding: 25px;
+    padding: 80px;
+}
+
+.div-log-inf {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#label-login {
+    color: white;
+    font-size: 15px;
+    font-family: "poppins", serif;
+}
+
+.senha-login {
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.input-login {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+    width: 100%;
+    height: 10px;
+    outline: none;
+    color: white;
+}
+
+#btn-login {
+    margin-top: 60px;
+    font-size: 12px;
+    font-family: "poppins", serif;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: 1.5px solid white;
+    color: white;
+    padding: 3px 30px 3px 30px
 }
 
 #a-login {
     color: white;
+    font-size: 12px;
+    font-family: "poppins", serif;
+    display: inline-block;
+    margin-bottom: 10px;
 }
 
 /* TELA -- PERFIL */
