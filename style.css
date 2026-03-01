@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: sans-serif;
+    font-family: serif;
 }
 
 #titulo {
@@ -24,10 +24,8 @@
 }
 
 .div-central {
-    display: grid;
-    grid-template-areas: 
-    "div-titulo div-entradas";
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
 }
 
 .div-titulo {
@@ -35,14 +33,19 @@
     text-align: center;
     padding-top: 95px;
     padding-bottom: 95px;
-    padding-left: 30px;
-    padding-right: 30px;
-    border-radius: 15px 0px 0px 15px;
+    padding-left: 32px;
+    padding-right: 32px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
+    left: 11px;
+    box-shadow: -10px 2px 30px -5px rgb(0, 0, 0, 0.4);
 }
 
 .div-entradas {
     background-color: #354A2B;
     padding: 80px;
+    border-radius: 0px 15px 15px 0px;
+    box-shadow: 10px 2px 30px -5px rgb(0, 0, 0, 0.4);
 }
 
 .div-log-inf {
@@ -81,7 +84,8 @@
     background-color: transparent;
     border: 1.5px solid white;
     color: white;
-    padding: 3px 30px 3px 30px
+    padding: 3px 30px 3px 30px;
+    cursor: pointer;
 }
 
 #a-login {
