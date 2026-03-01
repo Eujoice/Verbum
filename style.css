@@ -189,3 +189,40 @@
     color: white;
     border-color: #687661;
 }
+
+.star {
+    position: absolute;
+    width: 330px; 
+    animation: girar 6s linear infinite;
+  }
+@keyframes girar {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.star1 {
+    top: 0px;    
+    left: 0px;    
+    animation-duration: 8s;
+  }
+.star2 {
+    top: 0px;
+    right: 0px;
+    animation-duration: 8s; 
+}
+
+.star3 {
+    bottom: 1px;
+    left: 50px;
+    animation-duration: 8s; 
+}
+.star4 {
+    top: 400px;
+    right: 5px;
+    animation-duration: 8s; 
+}
+
