@@ -226,3 +226,175 @@
     animation-duration: 8s; 
 }
 
+/* TELA -- ACERVO */
+.body-acervo {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: #ffffff;
+}
+
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+}
+
+.logo {
+    font-family: "Milonga", serif;
+    font-size: 28px;
+    color: #6C9467;
+}
+
+.busca {
+    position: relative;
+}
+.busca input {
+    width: 520px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.busca input {
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+
+.icone-lupa {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    opacity: 0.6;
+}
+
+.icones {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    color: #6C9467;
+    cursor: pointer;
+}
+.icone-usuario {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #8a8a8a;
+    font-weight: 600;
+    font-size: 14px;
+    position: relative;
+}
+
+.menu a.ativo {
+    color: #6C9467;
+}
+
+.menu a.ativo::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    background-color: #6C9467;
+    border-radius: 50%;
+}
+
+.banner {
+    padding: 30px 0;
+    display: flex;
+    justify-content: center;
+}
+
+
+.banner img {
+    width: 75%;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+.populares {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.populares-container {
+    width: 100%;
+    max-width: 900px; 
+}
+
+.populares h2 {
+    color: #6C9467;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.lista-livros {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+}
+
+.livro {
+    width: 120px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.livro:hover {
+    transform: scale(1.08);
+}
+
+.livro img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.livro .titulo {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 6px;
+}
+
+.livro .autor {
+    font-size: 11px;
+    color: #888;
+}
+
+.livro .avaliacao {
+    font-size: 11px;
+    color: #f4b400;
+}
+
+.favoritos {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.icone-coracao {
+    width: 20px;
+    height: 20px;
+}
