@@ -398,3 +398,85 @@
     width: 20px;
     height: 20px;
 }
+/* TELA -- DADOS PESSOAIS */
+.body-perfil {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #6C9467;
+}
+
+.container-dp {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
+}
+
+.foto3 {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-dp {
+    font-size: 18px;
+    font-family: "Poppins", serif;
+    color: #6C9467;
+    margin-bottom: 5px;
+}
+
+.formu {
+    border-radius: 15px;
+    padding: 10px;
+    width: 100%;
+    border: 2px solid #6C9467;
+    box-sizing: border-box;
+    border: 1px solid #6C9467;
+}
+
+
+.btn {
+    margin: 10px auto 0 auto; 
+    padding: 10px;
+    border-radius: 15px;
+    border: none;
+    background-color: #354A2B;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffffff;
+    width: 150px;
+    font-size: 15px;
+}
+.formu:focus::placeholder {
+    color: rgba(104, 118, 97, 0.3);
+}
+.dados-entrada-dp{
+    font-family: "ABeeZee", serif;
+    color: #687661;
+    text-align: center;
+    margin-bottom: 25px; 
+}
+#nomeUsuario {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+#emailUsuario {
+    margin: 0; 
+    font-size: 14px;
+}
