@@ -527,3 +527,24 @@
     margin: 0; 
     font-size: 14px;
 }
+
+/* TELA -- DETALHES -- LIVROS */
+
+.body-det-livro {
+    margin: 0;
+    padding: 0;
+    background-color: #6C9467;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+}
+
+.container-dl-cheio {
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+
