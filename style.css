@@ -441,6 +441,21 @@
     width: 20px;
     height: 20px;
 }
+
+.body-acervo{
+    margin: 0;
+    padding: 0;
+    background-color: #6C9467;
+    font-family: "Poppins", sans-serif;
+}
+
+.container-acervo{
+    width: 100vw;
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
 /* TELA -- DADOS PESSOAIS */
 .body-perfil {
     display: flex;
