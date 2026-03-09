@@ -367,7 +367,6 @@
     justify-content: center;
 }
 
-
 .banner img {
     width: 75%;
     max-height: 220px;
@@ -540,11 +539,32 @@
 
 .container-dl-cheio {
     width: 100vw;
-    height: 100vh;
+    height: fit-content;
     background-color: white;
     border-radius: 25px;
     margin-top: 18px;
     margin-bottom: 18px;
 }
 
+.div-livro {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 2% 12%;
+}
 
+.capa-livro-det {
+    width: 300px;
+}
+
+.ttl-livro {
+    color: #517463;
+}
+
+.autor-livro, .nota-livro, .resenha {
+    color: #939393;
+    font-weight: 500;
+}
+
+.nota-livro, .nota-livro-img {
+    display: inline;
+}
