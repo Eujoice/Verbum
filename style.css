@@ -554,6 +554,7 @@
 
 .capa-livro-det {
     width: 300px;
+    padding-right: 35px;
 }
 
 .ttl-livro {
@@ -563,8 +564,24 @@
 .autor-livro, .nota-livro, .resenha {
     color: #939393;
     font-weight: 500;
+    font-size: 16px;
 }
 
 .nota-livro, .nota-livro-img {
     display: inline;
+}
+
+#detalhes {
+    display: grid;
+    grid-template-areas: 
+    "ttl-detalhes info-detalhes";
+    font-size: 14px;
+    justify-content: left;
+    gap: 15px;
+    color: #939393;
+}
+
+.ttl-detalhes {
+    font-weight: 600;
+    margin-right: 20px;
 }
