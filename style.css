@@ -571,7 +571,7 @@
     display: inline;
 }
 
-#detalhes {
+#div-detalhes {
     display: grid;
     grid-template-areas: 
     "ttl-detalhes info-detalhes";
@@ -584,4 +584,58 @@
 .ttl-detalhes {
     font-weight: 600;
     margin-right: 20px;
+}
+
+.div-reserva {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 30px;
+}
+
+.disponibilidade {
+    border: 3px solid #CBD2CB;
+    border-radius: 15px;
+    padding: 10px 50px 10px 20px;
+    color: #6F7880;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #F0F4F0;
+}
+
+.btn-reservar {
+    background-color: #6C9467;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    border: none;
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.avaliar {
+    font-weight: 600;
+    color: #6F7880;
+}
+
+.avaliar {
+    padding-left: 12%;
+}
+
+.form-avaliar {
+    padding-left: 12%;
+    padding-bottom: 10%;
+}
+
+.nota-user {
+    display: inline;
+    padding-left: 10px;
+}
+
+#input-avaliar {
+    outline: none;
+    border: 2px solid #CBD2CB;
+    border-radius: 15px;
+    padding: 10px 25px 10px 10px;
+    font-family: "Poppins", sans-serif;
+    width: 250px;
 }
