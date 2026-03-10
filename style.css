@@ -441,6 +441,21 @@
     width: 20px;
     height: 20px;
 }
+
+.body-acervo{
+    margin: 0;
+    padding: 0;
+    background-color: #6C9467;
+    font-family: "Poppins", sans-serif;
+}
+
+.container-acervo{
+    width: 100vw;
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
 /* TELA -- DADOS PESSOAIS */
 .body-perfil {
     display: flex;
@@ -585,6 +600,7 @@
     font-weight: 600;
     margin-right: 20px;
 }
+<<<<<<< HEAD
 
 .div-reserva {
     display: grid;
@@ -639,3 +655,5 @@
     font-family: "Poppins", sans-serif;
     width: 250px;
 }
+=======
+>>>>>>> d335c82581032a6580100ba19e3c75b1c0a35cfd
