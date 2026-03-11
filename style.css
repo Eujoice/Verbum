@@ -587,6 +587,17 @@
     display: inline;
 }
 
+#mais {
+    display: none;
+}
+
+#btnLerMais {
+    background-color: transparent;
+    border: none;
+    color: #96C1DD;
+    font-size: 16px;
+}
+
 #div-detalhes {
     display: grid;
     grid-template-areas: 
