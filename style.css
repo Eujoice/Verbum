@@ -569,7 +569,8 @@
 
 .capa-livro-det {
     width: 300px;
-    padding-right: 35px;
+    margin-right: 35px;
+    box-shadow: -20px 18px 10px rgb(0, 0, 0, 0.2);
 }
 
 .ttl-livro {
@@ -600,7 +601,6 @@
     font-weight: 600;
     margin-right: 20px;
 }
-<<<<<<< HEAD
 
 .div-reserva {
     display: grid;
@@ -639,7 +639,7 @@
 
 .form-avaliar {
     padding-left: 12%;
-    padding-bottom: 10%;
+    padding-bottom: 8%;
 }
 
 .nota-user {
@@ -654,6 +654,16 @@
     padding: 10px 25px 10px 10px;
     font-family: "Poppins", sans-serif;
     width: 250px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
 }
-=======
->>>>>>> d335c82581032a6580100ba19e3c75b1c0a35cfd
+
+.inp-submit-avaliacao {
+    border: none;
+    color: white;
+    background-color: #6C9467;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 15px;
+    font-family: "Poppins", sans-serif;
+}
