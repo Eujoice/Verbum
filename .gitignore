@@ -1,2 +1,6 @@
 verbum-bd-firebase-adminsdk-fbsvc-d1e9edc0a7.json
 verbum-bd-firebase-adminsdk-*.json
+
+
+
+git filter-branch --force --index-filter "git rm --cached --ignore-unmatch verbum-bd-firebase-adminsdk-fbsvc-d1e9edc0a7.json" --prune-empty --tag-name-filter cat -- --all
