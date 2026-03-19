@@ -1,5 +1,13 @@
 <!--Tela de Perfil-->
 
+<?php
+session_start();
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header("Location: index.html");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -25,8 +33,8 @@
         </div>
 
         <div class="dados-entrada-perfil">
-            <p id="nomeUsuario"></p>
-            <p id="emailUsuario"></p>
+            <p id="nomeUsuario"><?php echo $_SESSION['usuario_nome']; ?></p>
+            <p id="matriculaUsuario">Matrícula: <?php echo $_SESSION['usuario_matricula']; ?></p>
         </div>
 
         <div class="botoes">
@@ -34,7 +42,7 @@
             <a class="btn-historico">Histórico de Empréstimos</a>
             <a class="btn-dados" href="dpessoais.html">Dados Pessoais</a>
             <a class="btn-favoritos">Favoritos e Avaliações</a>
-            <button class="btn-sair" id="btnSair">Sair</button>
+            <a href="logout.php" class="btn-sair" style="text-decoration: none; text-align: center;">Sair</a>
         </div>
     </div>
     <script src="script.js"></script>

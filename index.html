@@ -23,23 +23,22 @@
         </div>
         <div class="div-entradas">
 
-            <label id="label-login" class="matr-login" for="matricula">Matrícula</label>
-            <input type="text" class="input-login" id="matricula" name="matricula"><br>
+            <form action="login.php" method="post">
+                <label id="label-login" class="matr-login" for="matricula">Matrícula</label>
+                <input type="text" class="input-login" id="matricula" name="matricula"><br>
 
-            <label id="label-login" class="senha-login" for="senha">Senha</label>
-            <input type="password" class="input-login" id="senha" name="senha" minlength="8"><br>
-            
-            <div class="div-log-inf">
-                <button id="btn-login" type="button">Entrar</button><br>
+                <label id="label-login" class="senha-login" for="senha">Senha</label>
+                <input type="password" class="input-login" id="senha" name="senha" minlength="8"><br>
+                
+                <div class="div-log-inf">
+                    <button class="btn-login" type="submit" id="btn-login">Entrar</button><br>
 
-                <a class="a-log-sup" id="a-login" href="">Esqueceu a senha ou o usuário?</a>
-                <a class="a-log-inf" id="a-login" href="">Entrada para servidores</a>
-            </div>
-
+                    <a class="a-log-sup" id="a-login" href="">Esqueceu a senha ou o usuário?</a>
+                    <a class="a-log-inf" id="a-login" href="">Entrada para servidores</a>
+            </form>
+        </div>
         </div>
     </div>
-   
     <script src="script.js"></script>
-
 </body>
 </html>

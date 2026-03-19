@@ -1,4 +1,13 @@
 <!--Tela de Acervo-->
+
+<?php
+session_start();
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header("Location: index.html");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,7 +33,9 @@
             Favoritos
             <img src="imgs/Heart.png" class="icone-coracao">
         </span>
-        <img id="iconeUsuario" src="imgs/usuario.png" class="icone-usuario">
+        <a href="perfil.php">
+            <img id="iconeUsuario" src="imgs/usuario.png" class="icone-usuario">
+        </a>
     </div>
 </header>
 
