@@ -3,7 +3,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -21,7 +21,9 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 <div class="container-acervo">
 
 <header class="header">
-    <div class="logo">Verbum</div>
+    <div class="logo">
+        <a href="acervo.php" style="text-decoration: none; color: inherit;">Verbum</a>
+    </div>
 
     <div class="busca">
         <img src="imgs/lupa.png" class="icone-lupa">

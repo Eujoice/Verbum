@@ -8,25 +8,35 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $dadosFirebase = buscarUsuario($matricula);
 
-    // Se o usuário existir, o Firebase retorna os campos. Se não, retorna um erro.
     if (isset($dadosFirebase['fields'])) {
-        // O Firestore retorna os dados num formato específico: ['fields']['nome']['stringValue']
         $senhaNoBanco = $dadosFirebase['fields']['senha']['stringValue'];
         $nomeNoBanco = $dadosFirebase['fields']['nome']['stringValue'];
+        
+        $tipoUsuario = isset($dadosFirebase['fields']['tipo']['stringValue']) ? $dadosFirebase['fields']['tipo']['stringValue'] : 'aluno';
 
-        // Verificação por password_verify por causa do hash (criptografia)
         if (password_verify($senhaDigitada, $senhaNoBanco)){
             $_SESSION['logado'] = true;
             $_SESSION['usuario_nome'] = $nomeNoBanco;
             $_SESSION['usuario_matricula'] = $matricula; 
-            
-            header("Location: acervo.php");
+            $_SESSION['usuario_tipo'] = $tipoUsuario; 
+
+            // Tipo
+            // -> aluno: acervo
+            // -> administrador -> consulta.php
+            // Se não existir o campo no banco, ele assume aluno por padrão
+            if ($tipoUsuario === 'administrador') {
+                header("Location: consulta.php"); // pag inical de adm
+            } else {
+                header("Location: acervo.php"); // Pag inical de aluno
+            }
             exit();
         } else {
-            echo "<script>alert('Senha incorreta!'); window.location.href='index.html';</script>";
+                header("Location: index.php?erro=senha");
+                exit();
+            }
+        } else {
+            header("Location: index.php?erro=usuario");
+            exit();
         }
-    } else {
-        echo "<script>alert('Usuário não encontrado!'); window.location.href='index.html';</script>";
-    }
 }
 ?>

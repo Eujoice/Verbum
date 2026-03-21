@@ -2,8 +2,15 @@
 
 <?php
 session_start();
+
+// FORÇA O NAVEGADOR A NÃO GUARDAR ESTA PÁGINA NO CACHE
+header("Cache-Control: no-cache, no-store, must-revalidate"); // HTTP 1.1.
+header("Pragma: no-cache"); // HTTP 1.0.
+header("Expires: 0"); // Proxies.
+
+// verifica se o usuário está logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -38,6 +45,10 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         </div>
 
         <div class="botoes">
+            <?php if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'administrador'): ?>
+                <a href="consulta.php" class="btn-admin-atalho">Acessar Painel Administrativo</a>
+            <?php endif; ?>
+
             <a class="btn-titulos">Títulos Pendentes</a>
             <a class="btn-historico">Histórico de Empréstimos</a>
             <a class="btn-dados" href="dpessoais.html">Dados Pessoais</a>

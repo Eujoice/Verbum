@@ -3,17 +3,27 @@ require 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $matricula = trim($_POST['matricula']);
+    
     $nome = $_POST['nome'];
-    $senha = $_POST['senha'];
+    $cpf = $_POST['cpf'];
+    $email = $_POST['email'];
+    $telefone = $_POST['telefone'];
+    $endereco = $_POST['rua'] . ", " . $_POST['numero'] . " - " . $_POST['bairro'];
+    $cidade_uf = $_POST['cidade'] . "/" . $_POST['uf'];
 
-    $url = $baseUrl . $matricula;
+    $url = $baseUrl . $matricula; 
     
     $dados = [
         'fields' => [
-            'nome' => ['stringValue' => $nome],
             'matricula' => ['stringValue' => $matricula],
-            'senha' => ['stringValue' => password_hash($senha, PASSWORD_DEFAULT)], 
-            'tipo' => ['stringValue' => 'aluno']
+            'nome' => ['stringValue' => $nome],
+            'cpf' => ['stringValue' => $cpf],
+            'email' => ['stringValue' => $email],
+            'telefone' => ['stringValue' => $telefone],
+            'endereco' => ['stringValue' => $endereco],
+            'localidade' => ['stringValue' => $cidade_uf],
+            'tipo' => ['stringValue' => 'aluno'],
+            'senha' => ['stringValue' => password_hash("12345678", PASSWORD_DEFAULT)] // Senha padrão inicial
         ]
     ];
 
@@ -23,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($dados));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-    
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
     $resposta = curl_exec($ch);
@@ -31,12 +40,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     curl_close($ch);
 
     if ($httpCode >= 200 && $httpCode < 300) {
-        echo "<script>alert('Aluno cadastrado com sucesso!'); window.location.href='perfil.php';</script>";
+        echo "<script>alert('Aluno $nome cadastrado com sucesso!'); window.location.href='cadastro.php';</script>";
     } else {
-        echo "<h3>Erro ao cadastrar no Firebase</h3>";
-        echo "Código HTTP: " . $httpCode . "<br>";
-        echo "Resposta do Google: " . $resposta;
-        exit;
+        echo "Erro ao cadastrar. Código HTTP: " . $httpCode;
     }
 }
 ?>

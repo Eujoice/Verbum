@@ -1,3 +1,13 @@
+<?php
+session_start();
+require 'config.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $matricula = $_POST['matricula'];
+    $senhaDigitada = $_POST['senha'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -22,6 +32,16 @@
 
         </div>
         <div class="div-entradas">
+    
+            <?php if (isset($_GET['erro'])): ?>
+                <div class="mensagem-erro">
+                    <?php 
+                        if ($_GET['erro'] == 'senha') echo "Senha incorreta! Tente novamente.";
+                        if ($_GET['erro'] == 'usuario') echo "Usuário não encontrado!";
+                    ?>
+                </div>
+            <?php endif; ?>
+
 
             <form action="login.php" method="post">
                 <label id="label-login" class="matr-login" for="matricula">Matrícula</label>
@@ -34,11 +54,11 @@
                     <button class="btn-login" type="submit" id="btn-login">Entrar</button><br>
 
                     <a class="a-log-sup" id="a-login" href="">Esqueceu a senha ou o usuário?</a>
-                    <a class="a-log-inf" id="a-login" href="">Entrada para servidores</a>
             </form>
         </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="script.js"></script>
 </body>
 </html>

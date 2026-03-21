@@ -5,7 +5,6 @@ $baseUrl = "https://firestore.googleapis.com/v1/projects/{$projetoID}/databases/
 
 function buscarUsuario($matricula) {
     global $baseUrl;
-    // Remove espaços extras da matrícula
     $url = $baseUrl . trim($matricula);
 
     $ch = curl_init();
