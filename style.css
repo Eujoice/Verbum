@@ -447,6 +447,7 @@
     font-size: 13px;
     font-weight: 600;
     margin-top: 6px;
+    color: #517463;
 }
 
 .livro .autor {
@@ -606,14 +607,10 @@
     color: #517463;
 }
 
-.autor-livro, .nota-livro, .resenha {
+.autor-livro, .resenha {
     color: #939393;
     font-weight: 500;
     font-size: 16px;
-}
-
-.nota-livro, .nota-livro-img {
-    display: inline;
 }
 
 #mais {
@@ -680,11 +677,6 @@
 .form-avaliar {
     padding-left: 12%;
     padding-bottom: 8%;
-}
-
-.nota-user {
-    display: inline;
-    padding-left: 10px;
 }
 
 #input-avaliar {
@@ -907,12 +899,6 @@
 .estrelas {
     color: #FFD700;
     font-size: 1.1rem;
-}
-
-.nota-texto {
-    color: #8a8a8a;
-    font-size: 0.85rem;
-    margin-left: 8px;
 }
 
 .detalhes-lista {
