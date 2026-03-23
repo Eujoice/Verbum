@@ -3,7 +3,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: index.html");
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -21,7 +21,9 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 <div class="container-acervo">
 
 <header class="header">
-    <div class="logo">Verbum</div>
+    <div class="logo">
+        <a href="acervo.php" style="text-decoration: none; color: inherit;">Verbum</a>
+    </div>
 
     <div class="busca">
         <img src="imgs/lupa.png" class="icone-lupa">
@@ -55,49 +57,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
  <div class="populares-container">
     <h2>Populares</h2>
 
-    <div class="lista-livros">
-
-        <div class="livro">
-            <img src="imgs/crime-e-castigo.jpg">
-            <p class="titulo">Crime e Castigo</p>
-            <p class="autor">Fiódor Dostoiévski</p>
-            <p class="avaliacao">★★★★★</p>
-        </div>
-
-        <div class="livro">
-            <img src="imgs/sete-maridos.jpg">
-            <p class="titulo">Os sete maridos de Evelyn Hugo</p>
-            <p class="autor">Taylor Jenkins Reid</p>
-            <p class="avaliacao">★★★★★</p>
-        </div>
-
-        <div class="livro">
-            <img src="imgs/dom-quixote.jpg">
-            <p class="titulo">Dom Quixote</p>
-            <p class="autor">Miguel de Cervantes</p>
-            <p class="avaliacao">★★★★★</p>
-        </div>
-
-        <div class="livro">
-            <img src="imgs/metamorfose.jpg">
-            <p class="titulo">A Metamorfose</p>
-            <p class="autor">Franz Kafka</p>
-            <p class="avaliacao">★★★★★</p>
-        </div>
-
-        <div class="livro">
-            <img src="imgs/noites-brancas.jpg">
-            <p class="titulo">Noites Brancas</p>
-            <p class="autor">Fiódor Dostoiévski</p>
-            <p class="avaliacao">★★★★★</p>
-        </div>
-
-        <div class="livro" id="meiaNoiteAcervo">
-            <img src="imgs/biblioteca-meia-noite.jpg">
-            <p class="titulo">A Biblioteca da Meia-Noite</p>
-            <p class="autor">Matt Haig</p>
-            <p class="avaliacao">★★★★★</p>
-        </div>
+    <div class="lista-livros" id="lista-livros-firebase">
 
     </div>
  </div>
@@ -106,5 +66,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 </div>
 
 <script src="script.js"></script>
+<script type="module" src="acervo_logic.js"></script>
 </body>
 </html>

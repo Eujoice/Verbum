@@ -1,4 +1,13 @@
 <!--Tela de Detalhes de Livro-->
+<?php
+session_start();
+
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) { 
+    header("Location: index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,10 +17,11 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="body-det-livro">
-
     <div class="container-dl-cheio">
         <header class="header">
-        <div class="logo">Verbum</div>
+        <div class="logo">
+            <a href="acervo.php" style="text-decoration: none; color: inherit;">Verbum</a>
+        </div>
         <div class="busca">
             <img src="imgs/lupa.png" class="icone-lupa">
             <input type="text" placeholder="O que você quer ler?">
@@ -26,13 +36,11 @@
         </header>
             <br>
         <div class="div-livro">
-            <img class="capa-livro-det" src="imgs/capa-biblioteca-meia-noite.png">
-            <div class="info-livro">
-                <h2 class="ttl-livro">A biblioteca da Meia-Noite</h2>
-                <p class="autor-livro">Matt Haig</p>
-                <p class="nota-livro-img">Nota com stars</p><!--nota do livro com estrelinhas e numeros-->
-                <p class="nota-livro">4,0</p>
-                <p class="resenha">
+            <img class="capa-livro-det" id="capa-livro-det" src="imgs/capa-biblioteca-meia-noite.png">
+            <div class="info-livro" id="info-livro">
+                <h2 class="ttl-livro" id="ttl-livro"></h2>
+                <p class="autor-livro" id="autor-livro">Matt Haig</p>
+                <p class="resenha" id="resenha">
                     Aos 35 anos, Nora Seed é uma mulher cheia de talentos e poucas conquistas. Arrependida 
                     das escolhas que fez no passado, ela vive se perguntando o que poderia ter acontecido 
                     caso tivesse vivido de maneira diferente.<span id="pontos">...</span>
@@ -45,15 +53,13 @@
                 <div id="div-detalhes">
                     <div class="ttl-detalhes">
                         <p>PUBLICAÇÃO</p>
-                        <P>EDIÇÃO</P>
-                        <P>DESCRIÇÃO</P>
+                        <P>EDITORA</P>
                         <P>ISBN</P>
                     </div>
                     <div class="info-detalhes">
-                        <P>Rio de Janeiro : Bertrand Brasil, 2021.</P>
-                        <p>1.ed.</p>
-                        <p>305 p. ; 23 cm.</p>
-                        <p>9786558380542</p>
+                        <P id="publicacao">Rio de Janeiro : Bertrand Brasil, 2021.</P>
+                        <p id="editora">1.ed.</p>
+                        <p id="isbn">9786558380542</p>
                     </div>
                 </div>
                 <br>
@@ -63,13 +69,14 @@
                 </div>
             </div>
         </div>
-        <p class="avaliar">Avaliar</p>
+        <!--<p class="avaliar">Avaliar</p>
         <form class="form-avaliar">
             <input type="text" id="input-avaliar" class="inp-avaliar" name="avaliacao" placeholder="Escreva aqui sua avaliação">
-            <p class="nota-user">Nota do usuário com stars</p> <!--nota do usuário com estrelinhas e numero--><br><br>
+            <p class="nota-user">Nota do usuário com stars</p> nota do usuário com estrelinhas e numero<br><br>
             <input type="submit" id="inp-submit-avaliacao" class="inp-submit-avaliacao" name="btn-submit-avaliacao">
-        </form>
+        </form>-->
     </div>
     <script src="script.js"></script>
+    <script type="module" src="acervo_logic.js"></script>
 </body>
 </html>

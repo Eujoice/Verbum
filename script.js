@@ -31,12 +31,3 @@ function leiaMais() {
         btnLerMais.innerHTML = "Leia menos";
     }
 }
-
-// Livro clicável: Acervo --> Detalhes
-let livroAcervo = document.getElementById("meiaNoiteAcervo");
-
-if (livroAcervo) {
-    livroAcervo.addEventListener("click", function() {
-        window.location.href = "detalheslivro.html";
-    }) 
-}
