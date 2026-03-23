@@ -487,12 +487,13 @@
     margin-bottom: 18px;
 }
 /* TELA -- DADOS PESSOAIS */
-.body-perfil {
+.body-dp {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     background-color: #6C9467;
+    margin: 0;
 }
 
 .container-dp {
@@ -571,7 +572,6 @@
     margin: 0; 
     font-size: 14px;
 }
-
 /* TELA -- DETALHES -- LIVROS */
 
 .body-det-livro {
