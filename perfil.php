@@ -40,7 +40,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         <div class="botoes">
             <a class="btn-titulos">Títulos Pendentes</a>
             <a class="btn-historico">Histórico de Empréstimos</a>
-            <a class="btn-dados" href="dpessoais.html">Dados Pessoais</a>
+            <a class="btn-dados" href="dpessoais.php">Dados Pessoais</a>
             <a class="btn-favoritos">Favoritos e Avaliações</a>
             <a href="logout.php" class="btn-sair" style="text-decoration: none; text-align: center;">Sair</a>
         </div>
