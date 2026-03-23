@@ -700,6 +700,81 @@
     font-family: "Poppins", sans-serif;
 }
 
+/* TELA -- MULTA*/
+.bodym{
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+.fundo {
+  width: 70%;
+  height: 100vh;
+  margin: auto;
+  margin-top: 0px;
+  background-color: #6f8f68;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.voltar {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  border: 2px solid #6f8f68;
+  background-color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.card {
+  text-align: center;
+  width: 60%;
+}
+
+h1 {
+  color: white;
+  font-size: 30px;
+  margin-bottom: 20px;
+  font-family: "Poppins", sans-serif;
+
+  
+}
+
+.sub {
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 40px;
+  font-family: "Poppins", sans-serif;
+
+
+}
+
+.sub a {
+  color: white;
+  text-decoration: underline;
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+
+
+}
+
+.caixa {
+  background-color: #ffffff;
+  padding: 50px;
+  border-radius: 20px;
+  margin: 25px auto;
+  width: 70%;
+  font-size: 18px;
+  color: #354A2B;
+  font-weight: bold;
+
 /* Telas de ADM */
 
 .form-container {
