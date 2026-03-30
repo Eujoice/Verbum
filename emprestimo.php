@@ -1,5 +1,3 @@
-<!--Tela ADM - Emprestimo -->
-
 <?php
 session_start();
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
@@ -12,7 +10,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Verbum | Acervo</title>
+    <title>Verbum | Empréstimos</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -20,58 +18,58 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
 <div class="container-acervo">
 
-<header class="header">
-    <div class="logo">
-        <a href="acervo.php" style="text-decoration: none; color: inherit;">Verbum</a>
-    </div>
-    <span class="badge-admin">Painel Administrativo</span>
-    <div class="icones">
-        <span class="favoritos">Favoritos <img src="imgs/Heart.png" class="icone-coracao"></span>
-        <a href="perfil.php">
-            <img id="iconeUsuario" src="imgs/usuario.png" class="icone-usuario">
-        </a>
-    </div>
-</header>
+    <header class="header">
+        <div class="logo">
+            <a href="acervo.php" style="text-decoration: none; color: inherit;">Verbum</a>
+        </div>
+        <span class="badge-admin">Painel Administrativo</span>
+        <div class="icones">
+            <span class="favoritos">Favoritos <img src="imgs/Heart.png" class="icone-coracao"></span>
+            <a href="perfil.php">
+                <img id="iconeUsuario" src="imgs/usuario.png" class="icone-usuario">
+            </a>
+        </div>
+    </header>
 
-<nav class="menu">
-    <a class= "ativo" href="emprestimo.php">Empréstimo e devolução</a>
-    <a href="armario.php">Armários</a>
-    <a href="cadastro.php">Cadastro de usuário</a>
-    <a href="consulta.php">Consultar exemplares</a>
-</nav>
+    <nav class="menu">
+        <a class="ativo" href="emprestimo.php">Empréstimo e devolução</a>
+        <a href="armario.php">Armários</a>
+        <a href="cadastro.php">Cadastro de usuário</a>
+        <a href="consulta.php">Consultar exemplares</a>
+    </nav>
 
     <div class="form-container">
-        <form>
+        <form id="formEmprestimo">
             <div class="linha radio-group">
                 <label>Emprestado por:</label>
-                <label><input type="radio" name="tipo" checked> Usuário da instituição</label>
-                <label><input type="radio" name="tipo"> Visitante</label>
+                <label><input type="radio" name="tipo" value="Instituição" checked> Usuário da instituição</label>
+                <label><input type="radio" name="tipo" value="Visitante"> Visitante</label>
             </div>
 
             <div class="linha">
                 <label>Pesquisar usuário:</label>
-                <input type="text" style="flex: 1;" placeholder="Digite o nome do usuário..."> 
+                <input type="text" id="nomeUsuario" style="flex: 1;" placeholder="Digite o nome do usuário..."> 
             </div>
 
             <div class="linha">
                 <label>Senha do usuário:</label>
-                <input type="password">
+                <input type="password" id="senhaUsuario">
                 <label>Código do livro:</label>
-                <input type="text" style="width: 150px;">
+                <input type="text" id="codigoLivro" style="width: 150px;">
             </div>
 
             <hr class="divisor">
 
             <div class="linha">
                 <label>Data de empréstimo:</label>
-                <input type="date">
+                <input type="date" id="dataEmp">
                 <label>Data de devolução prevista:</label>
-                <input type="date">
+                <input type="date" id="dataPrev">
             </div>
 
             <div class="linha">
                 <label>Data de devolução</label>
-                <input type="date">
+                <input type="date" id="dataDevolucaoEfetiva">
                 <label>Valor da multa:</label>
                 <input type="text" class="input-readonly" placeholder="R$ 0,00" readonly>
                 <label>Dias de atraso:</label>
@@ -79,12 +77,15 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             </div>
 
             <div class="area-botoes">
-                <button type="button" class="btn-acao verde-claro">Emprestar</button>
+                <button type="button" id="btnEmprestar" class="btn-acao verde-claro">Emprestar</button>
                 <button type="button" class="btn-acao verde-claro">⟲ Renovar</button>
                 <button type="button" class="btn-acao verde-escuro">Pagar multa</button>
             </div>
         </form>
     </div>
-    <script src="script.js"></script>
+
+
+</div>
+
 </body>
 </html>

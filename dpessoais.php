@@ -2,35 +2,37 @@
 session_start();
 require 'config.php';
 
-// Se não houver matrícula na sessão, redireciona para o login
 if (!isset($_SESSION['usuario_matricula'])) {
     header("Location: index.php");
     exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Pega a matrícula da SESSÃO (quem está logado)
     $matricula = trim($_SESSION['usuario_matricula']);
     
-    // Pega os novos dados do formulário
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
     $endereco = $_POST['endereco'];
 
-    // URL igual ao seu exemplo de sucesso
+    // --- CORREÇÃO AQUI ---
+    // Precisamos buscar os dados atuais para não perder a SENHA
+    $dadosAtuais = buscarUsuario($matricula);
+    $senhaAtual = $dadosAtuais['fields']['senha']['stringValue']; 
+    // ----------------------
+
     $url = $baseUrl . $matricula; 
     
-    // Montamos o JSON exatamente como no seu exemplo
     $dados = [
         'fields' => [
             'nome' => ['stringValue' => $nome],
             'email' => ['stringValue' => $email],
             'telefone' => ['stringValue' => $telefone],
             'endereco' => ['stringValue' => $endereco],
-            // IMPORTANTE: Mantemos os campos fixos para não dar erro no Firestore
             'tipo' => ['stringValue' => $_SESSION['usuario_tipo'] ?? 'aluno'],
-            'matricula' => ['stringValue' => $matricula]
+            'matricula' => ['stringValue' => $matricula],
+            // REENVIANDO A SENHA PARA NÃO PERDÊ-LA:
+            'senha' => ['stringValue' => $senhaAtual] 
         ]
     ];
 
@@ -47,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     curl_close($ch);
 
     if ($httpCode >= 200 && $httpCode < 300) {
-        // ATUALIZA A SESSÃO para refletir a mudança na tela imediatamente
         $_SESSION['usuario_nome'] = $nome;
         $_SESSION['usuario_email'] = $email;
         $_SESSION['usuario_telefone'] = $telefone;

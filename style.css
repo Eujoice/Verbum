@@ -1016,3 +1016,33 @@ h1 {
   color: #354A2B;
   font-weight: bold;
 }
+.lista-container {
+    margin-top: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.tabela-listagem {
+    width: 100%;
+    border-collapse: collapse; /* Isso faz as bordas ficarem bonitas */
+    margin-top: 10px;
+}
+
+.tabela-listagem th {
+    text-align: left;
+    padding: 12px 8px; /* Dá espaço entre as colunas */
+    border-bottom: 2px solid #eee;
+    font-weight: bold;
+}
+
+.tabela-listagem td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.titulo-sessao {
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
