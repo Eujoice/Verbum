@@ -2,23 +2,35 @@
 session_start();
 require 'config.php';
 
+// Se não houver matrícula na sessão, redireciona para o login
+if (!isset($_SESSION['usuario_matricula'])) {
+    header("Location: index.php");
+    exit();
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
-    $matricula = $_SESSION['usuario_matricula'];
-
+    // Pega a matrícula da SESSÃO (quem está logado)
+    $matricula = trim($_SESSION['usuario_matricula']);
+    
+    // Pega os novos dados do formulário
     $nome = $_POST['nome'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
     $endereco = $_POST['endereco'];
 
-    $url = $baseUrl . $matricula;
-
+    // URL igual ao seu exemplo de sucesso
+    $url = $baseUrl . $matricula; 
+    
+    // Montamos o JSON exatamente como no seu exemplo
     $dados = [
         'fields' => [
             'nome' => ['stringValue' => $nome],
             'email' => ['stringValue' => $email],
             'telefone' => ['stringValue' => $telefone],
-            'endereco' => ['stringValue' => $endereco]
+            'endereco' => ['stringValue' => $endereco],
+            // IMPORTANTE: Mantemos os campos fixos para não dar erro no Firestore
+            'tipo' => ['stringValue' => $_SESSION['usuario_tipo'] ?? 'aluno'],
+            'matricula' => ['stringValue' => $matricula]
         ]
     ];
 
@@ -30,16 +42,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
-    curl_exec($ch);
+    $resposta = curl_exec($ch);
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    $_SESSION['usuario_nome'] = $nome;
-    $_SESSION['usuario_email'] = $email;
-
-    $_SESSION['sucesso'] = true;
-
-    header("Location: dpessoais.php");
-    exit();
+    if ($httpCode >= 200 && $httpCode < 300) {
+        // ATUALIZA A SESSÃO para refletir a mudança na tela imediatamente
+        $_SESSION['usuario_nome'] = $nome;
+        $_SESSION['usuario_email'] = $email;
+        $_SESSION['usuario_telefone'] = $telefone;
+        $_SESSION['usuario_endereco'] = $endereco;
+        $_SESSION['sucesso'] = true;
+        
+        header("Location: dpessoais.php");
+        exit();
+    } else {
+        echo "Erro ao atualizar. Código HTTP: " . $httpCode;
+    }
 }
 ?>
 
@@ -68,30 +87,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </div>
 
     <div class="dados-entrada-dp">
-        <a id="nomeUsuario"><?php echo $_SESSION['usuario_nome']; ?></a>  
-        <p id="emailUsuario"><?php echo $_SESSION['usuario_email'] ?? ''; ?></p>
+        <a id="nomeUsuario"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></a>  
+        <p id="emailUsuario"><?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
     </div>
 
     <form method="POST" class="formulario">
 
         <div class="campo">
             <label class="label-dp">Nome:</label>
-            <input type="text" name="nome" class="formu" value="<?php echo $_SESSION['usuario_nome']; ?>">
+            <input type="text" name="nome" class="formu" value="<?php echo htmlspecialchars($_SESSION['usuario_nome']); ?>">
         </div>
 
         <div class="campo">
             <label class="label-dp">Email:</label>
-            <input type="text" name="email" class="formu" value="<?php echo $_SESSION['usuario_email'] ?? ''; ?>">
+            <input type="text" name="email" class="formu" value="<?php echo htmlspecialchars($_SESSION['usuario_email']); ?>">
         </div>
 
         <div class="campo">
             <label class="label-dp">Telefone:</label>
-            <input type="text" name="telefone" class="formu">
+            <input type="text" name="telefone" class="formu" value="<?php echo htmlspecialchars($_SESSION['usuario_telefone'] ?? ''); ?>">
         </div>
 
         <div class="campo">
             <label class="label-dp">Endereço:</label>
-            <input type="text" name="endereco" class="formu">
+            <input type="text" name="endereco" class="formu" value="<?php echo htmlspecialchars($_SESSION['usuario_endereco'] ?? ''); ?>">
         </div>
 
         <button type="submit" class="btn">Salvar</button>
@@ -102,4 +121,3 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </body>
 </html>
-

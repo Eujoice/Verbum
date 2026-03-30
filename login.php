@@ -9,34 +9,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $dadosFirebase = buscarUsuario($matricula);
 
     if (isset($dadosFirebase['fields'])) {
-        $senhaNoBanco = $dadosFirebase['fields']['senha']['stringValue'];
-        $nomeNoBanco = $dadosFirebase['fields']['nome']['stringValue'];
+        $f = $dadosFirebase['fields']; // Atalho para facilitar
+        $senhaNoBanco = $f['senha']['stringValue'];
         
-        $tipoUsuario = isset($dadosFirebase['fields']['tipo']['stringValue']) ? $dadosFirebase['fields']['tipo']['stringValue'] : 'aluno';
-
         if (password_verify($senhaDigitada, $senhaNoBanco)){
             $_SESSION['logado'] = true;
-            $_SESSION['usuario_nome'] = $nomeNoBanco;
             $_SESSION['usuario_matricula'] = $matricula; 
-            $_SESSION['usuario_tipo'] = $tipoUsuario; 
+            $_SESSION['usuario_tipo'] = $f['tipo']['stringValue'] ?? 'aluno'; 
+            
+            // --- MUDANÇA AQUI: Puxando os dados que o ADM cadastrou ---
+            $_SESSION['usuario_nome'] = $f['nome']['stringValue'] ?? '';
+            $_SESSION['usuario_email'] = $f['email']['stringValue'] ?? '';
+            $_SESSION['usuario_telefone'] = $f['telefone']['stringValue'] ?? '';
+            $_SESSION['usuario_endereco'] = $f['endereco']['stringValue'] ?? '';
+            // ---------------------------------------------------------
 
-            // Tipo
-            // -> aluno: acervo
-            // -> administrador -> consulta.php
-            // Se não existir o campo no banco, ele assume aluno por padrão
-            if ($tipoUsuario === 'administrador') {
-                header("Location: consulta.php"); // pag inical de adm
+            if ($_SESSION['usuario_tipo'] === 'administrador') {
+                header("Location: consulta.php");
             } else {
-                header("Location: acervo.php"); // Pag inical de aluno
+                header("Location: acervo.php");
             }
             exit();
         } else {
-                header("Location: index.php?erro=senha");
-                exit();
-            }
-        } else {
-            header("Location: index.php?erro=usuario");
+            header("Location: index.php?erro=senha");
             exit();
         }
+    } else {
+        header("Location: index.php?erro=usuario");
+        exit();
+    }
 }
 ?>
