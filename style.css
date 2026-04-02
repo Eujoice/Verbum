@@ -391,14 +391,14 @@
 }
 
 .banner {
-    padding: 30px 0;
+    padding: 20px 0;
     display: flex;
     justify-content: center;
 }
 
 .banner img {
-    width: 75%;
-    max-height: 220px;
+    width: 55%;          
+    max-height: 160px;   
     object-fit: cover;
     border-radius: 15px;
 }
