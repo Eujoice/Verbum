@@ -1,0 +1,597 @@
+/* ─── consulta.css ─── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* { box-sizing: border-box; }
+
+body { margin: 0; padding: 0; }
+
+.body-acervo {
+    background-color: #f7faf7;
+    font-family: 'Poppins', 'DM Sans', sans-serif;
+    min-height: 100vh;
+    font-size: 16px;
+
+}
+
+.container-acervo {
+    width: 100%;
+    background-color: #f7faf7;
+    margin: 0;
+}
+
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* ── Header ── */
+.header {
+    background: #1e3a1f;
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-family: "Milonga", serif;
+    font-size: 26px;
+    margin: 0;
+}
+
+.logo a {
+    color: #e8f2e8 !important;
+    text-decoration: none;
+}
+
+.logo-vb {
+    width: 50px;
+    height: 50px;
+    margin-left: -16px;
+}
+
+.badge-admin {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(200, 223, 201, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(200, 223, 201, 0.25);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 5px;
+}
+
+.icones {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    color: #c8dfc9;
+}
+
+.favoritos {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+.icone-coracao {
+    width: 16px;
+    filter: brightness(0) invert(1) opacity(0.7);
+}
+
+.icone-usuario {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(200, 223, 201, 0.4);
+    display: block;
+}
+
+/* ── Nav ── */
+.menu {
+    display: flex;
+    background: #ffffff;
+    border-bottom: 1px solid #d4e4d5;
+    padding: 0 40px;
+    justify-content: center;
+    gap: 15px;
+    
+}
+
+.menu a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8a8a8a;
+    padding: 20px 16px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.menu a:hover { color: #2d5a30; }
+
+.menu a.ativo {
+    color: #2d5a30;
+    font-weight: 600;
+    border-bottom: 2px solid #2d5a30;
+}
+
+/* ── Conteúdo principal ── */
+.consulta-content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 36px 24px 60px;
+}
+
+/* ── Busca ── */
+.secao-busca {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.secao-busca label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #5a7a5c;
+    white-space: nowrap;
+}
+
+.input-busca-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #d4e4d5;
+    border-radius: 10px;
+    flex: 1;
+    background: #ffffff;
+    overflow: hidden;
+    transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.input-busca-container:focus-within {
+    border-color: #4a7c4e;
+    box-shadow: 0 0 0 3px rgba(74,124,78,0.1);
+}
+
+.input-busca-container input {
+    border: none;
+    outline: none;
+    padding: 11px 16px;
+    font-size: 14px;
+    flex: 1;
+    font-family: 'Poppins', sans-serif;
+    color: #1a2b1b;
+    background: transparent;
+}
+
+.input-busca-container input::placeholder { color: #a0b8a2; }
+
+.btn-lupa {
+    background: #2d5a30;
+    border: none;
+    padding: 11px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.btn-lupa:hover { background: #1e3a1f; }
+
+.btn-lupa img { width: 18px; filter: brightness(0) invert(1); }
+
+/* ── Abas ── */
+.tabs-container {
+    border-bottom: 1px solid #d4e4d5;
+    margin-bottom: 24px;
+}
+
+.tabs {
+    display: flex;
+    gap: 0;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #8a8a8a;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover { color: #2d5a30; }
+
+.tab.ativo {
+    color: #2d5a30;
+    border-bottom: 2px solid #2d5a30;
+}
+
+.tab-count {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    background: #eef5ee;
+    color: #27500A;
+    transition: background 0.15s, color 0.15s;
+}
+
+.tab.ativo .tab-count {
+    background: #2d5a30;
+    color: #e8f2e8;
+}
+
+/* ── Painéis ── */
+.panel { display: none; }
+.panel.ativo { display: block; }
+
+/* ── Lista de resultados ── */
+.lista-resultados {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* ── Card de exemplar ── */
+.card-exemplar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #d4e4d5;
+    padding: 24px 28px;
+    gap: 24px;
+    transition: all 0.2s ease;
+}
+
+.card-exemplar:hover { border-color: #4a7c4e; }
+
+.info-exemplar { flex: 1; }
+
+.info-exemplar h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e3a1f;
+    margin: 0 0 4px;
+}
+
+.info-exemplar .autor {
+    font-size: 15px;
+    color: #5a7a5c;
+    margin-bottom: 10px;
+}
+
+.avaliacao-stars {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.estrelas {
+    color: #f5cc53;
+    font-size: 22px;
+}
+
+.nota-texto {
+    font-size: 15px;
+    color: #8a8a8a;
+}
+
+.detalhes-lista {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.detalhes-lista li {
+    font-size: 14px;
+    color: #5a7a5c;
+}
+
+.detalhes-lista li strong {
+    color: #121d12;
+    font-weight: 500;
+}
+
+.localizacao {
+    font-size: 14;
+    color: #8a8a8a;
+}
+
+.localizacao a {
+    color: #2d5a30;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.localizacao a:hover { text-decoration: underline; }
+
+.capa-exemplar img {
+    width: 130px;
+    height: 190px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #d4e4d5;
+    flex-shrink: 0;
+    margin-right: 22px;
+}
+
+.capa-placeholder {
+    width: 90px;
+    height: 125px;
+    border-radius: 8px;
+    background: #eef5ee;
+    border: 1px solid #d4e4d5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.capa-placeholder svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* ── Card de empréstimo ── */
+.card-emprestimo {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: #ffffff;
+    border-radius: 14px;
+    border: 1px solid #d4e4d5;
+    padding: 18px 24px;
+    transition: border-color 0.15s;
+}
+
+
+.card-emprestimo:hover { border-color: #4a7c4e; }
+
+.emp-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #eef5ee;
+    border: 1px solid #c8dfc9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: #27500A;
+    flex-shrink: 0;
+}
+
+.emp-info { flex: 1; }
+
+.emp-nome {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e3a1f;
+    margin: 0 0 2px;
+}
+
+.emp-matricula {
+    font-size: 14px;
+    color: #8a8a8a;
+    margin: 0 0 4px;
+}
+
+.emp-livro {
+    font-size: 14px;
+    color: #5a7a5c;
+    margin: 0;
+}
+
+.emp-datas {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+}
+
+.emp-data {
+    font-size: 14px;
+    color: #8a8a8a;
+    margin: 0;
+}
+
+.emp-data strong {
+    color: #1a2b1b;
+    font-weight: 500;
+}
+
+/* ── Badges de status ── */
+.badge-status {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 4px;
+}
+
+.badge-status.ok       { background: #eef5ee; color: #27500A; }
+.badge-status.atrasado { background: #fdf0f0; color: #922b21; }
+.badge-status.hoje     { background: #fef9ec; color: #7a5c00; }
+.badge-status.proximo  { background: #fff4e5; color: #8a4a00; }
+
+/* ── Paginação ── */
+.paginacao { margin-top: 28px; }
+
+.paginacao-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pag-info {
+    font-size: 12px;
+    color: #8a8a8a;
+    margin-right: 8px;
+}
+
+.paginacao { margin-top: 28px; }
+
+.paginacao-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.pag-btn {
+    min-width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid #d4e4d5;
+    background: #ffffff;
+    color: #5a7a5c;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+    padding: 0 10px;
+}
+
+.pag-btn:hover {
+    background: #eef5ee;
+    border-color: #4a7c4e;
+    color: #1e3a1f;
+}
+
+.pag-btn.ativo {
+    background: #2d5a30;
+    border-color: #2d5a30;
+    color: #e8f2e8;
+    font-weight: 600;
+}
+
+.pag-ellipsis {
+    font-size: 13px;
+    color: #8a8a8a;
+    padding: 0 4px;
+}
+
+/* ── Estado vazio ── */
+.sem-resultado {
+    text-align: center;
+    color: #8a8a8a;
+    font-size: 14px;
+    padding: 48px 0;
+}
+
+.estado-vazio {
+    text-align: center;
+    padding: 60px 0;
+    color: #8a8a8a;
+}
+
+.estado-vazio svg {
+    width: 48px;
+    height: 48px;
+    stroke: #c8dfc9;
+    fill: none;
+    stroke-width: 1.5;
+    margin-bottom: 12px;
+}
+
+.estado-vazio p {
+    font-size: 14px;
+}
+
+
+.card-link-wrapper {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.card-link-wrapper:hover .card-exemplar {
+    border-color: #4a7c4e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.card-exemplar {
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.detalhes-lista li strong {
+    color: #1a2b1b;
+}
+
+.badge-status-simples {
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    text-transform: uppercase;
+}
+
+.status-emprestado { color: #d9534f; background: #f9ebeb; }
+.status-disponivel { color: #4a7c4e; background: #eef5ee; }
+
+.emp-nome-titulo {
+    margin: 0;
+    font-size: 16px;
+    color: #346736;
+    font-weight: 600;
+}
+
+.emp-matricula-sub {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: #666;
+}
+
+.emp-detalhes-livro p {
+    margin: 2px 0;
+    font-size: 14px;
+    color: #444;
+}
+
+.card-emprestimo.historico-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box; 
+}
+

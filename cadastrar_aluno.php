@@ -3,13 +3,12 @@ require 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $matricula = trim($_POST['matricula']);
-    
     $nome = $_POST['nome'];
     $cpf = $_POST['cpf'];
     $email = $_POST['email'];
     $telefone = $_POST['telefone'];
     $endereco = $_POST['rua'] . ", " . $_POST['numero'] . " - " . $_POST['bairro'];
-    $cidade_uf = $_POST['cidade'] . "/" . $_POST['uf'];
+    $localidade = $_POST['cidade'] . "/" . ($_POST['uf'] ?? 'ES');
 
     $url = $baseUrl . $matricula; 
     
@@ -21,9 +20,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'email' => ['stringValue' => $email],
             'telefone' => ['stringValue' => $telefone],
             'endereco' => ['stringValue' => $endereco],
-            'localidade' => ['stringValue' => $cidade_uf],
+            'localidade' => ['stringValue' => $localidade],
             'tipo' => ['stringValue' => 'aluno'],
-            'senha' => ['stringValue' => password_hash("12345678", PASSWORD_DEFAULT)] // Senha padrão inicial
+            'senha' => ['stringValue' => password_hash("12345678", PASSWORD_DEFAULT)]
         ]
     ];
 
@@ -40,9 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     curl_close($ch);
 
     if ($httpCode >= 200 && $httpCode < 300) {
-        echo "<script>alert('Aluno $nome cadastrado com sucesso!'); window.location.href='cadastro.php';</script>";
+        header("Location: cadastro.php?sucesso=1");
     } else {
-        echo "Erro ao cadastrar. Código HTTP: " . $httpCode;
+        header("Location: cadastro.php?erro=1");
     }
+    exit();
 }
-?>

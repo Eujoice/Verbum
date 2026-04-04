@@ -1,0 +1,314 @@
+/* ─── consulta.css ─── */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+* { box-sizing: border-box; }
+
+body { margin: 0; padding: 0; }
+
+.body-acervo {
+    background-color: #f7faf7;
+    font-family: 'Poppins', 'DM Sans', sans-serif;
+    min-height: 100vh;
+    font-size: 16px;
+
+}
+
+.container-acervo {
+    width: 100%;
+    background-color: #f7faf7;
+    margin: 0;
+}
+
+.topo {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* ── Header ── */
+.header {
+    background: #1e3a1f;
+    padding: 0 40px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-family: "Milonga", serif;
+    font-size: 26px;
+    margin: 0;
+}
+
+.logo a {
+    color: #e8f2e8 !important;
+    text-decoration: none;
+}
+
+.logo-vb {
+    width: 50px;
+    height: 50px;
+    margin-left: -16px;
+}
+
+.badge-admin {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(200, 223, 201, 0.15);
+    color: #ffffff;
+    border: 1px solid rgba(200, 223, 201, 0.25);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 5px;
+}
+
+.icones {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    color: #c8dfc9;
+}
+
+.favoritos {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    opacity: 0.85;
+}
+
+.icone-coracao {
+    width: 16px;
+    filter: brightness(0) invert(1) opacity(0.7);
+}
+
+.icone-usuario {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(200, 223, 201, 0.4);
+    display: block;
+}
+
+/* ── Nav ── */
+.menu {
+    display: flex;
+    background: #ffffff;
+    border-bottom: 1px solid #d4e4d5;
+    padding: 0 40px;
+    justify-content: center;
+    gap: 15px;
+    
+}
+
+.menu a {
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: #8a8a8a;
+    padding: 20px 16px;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s, border-color 0.15s;
+}
+
+.menu a:hover { color: #2d5a30; }
+
+.menu a.ativo {
+    color: #2d5a30;
+    font-weight: 600;
+    border-bottom: 2px solid #2d5a30;
+}
+
+/* ── Form container ── */
+.form-container {
+    padding: 36px 40px;
+    color: #1a2b1b;
+}
+
+.form-card {
+    background: #ffffff;
+    border: 1px solid #d4e4d5;
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.form-grid-verbum {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.campo-box {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.span-2 { grid-column: span 2; }
+.span-3 { grid-column: span 3; }
+
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #4a7c4e;
+    margin-bottom: 20px;
+}
+
+.campo-box label {
+    font-size: 15px;
+    color: #5a7a5c;
+}
+
+input, select {
+    height: 38px;
+    padding: 0 14px;
+    border: 1px solid #d4e4d5;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1a2b1b;
+    outline: none;
+    background: #ffffff;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    border-color: #4a7c4e;
+}
+
+.divisor {
+    border: none;
+    border-top: 1px solid #d4e4d5;
+    margin: 28px 0;
+}
+
+/* ── Botões e Ações ── */
+.area-botoes-cadastro {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-acao {
+    height: 40px;
+    padding: 0 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    border: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background 0.15s, transform 0.1s;
+}
+
+.btn-acao:active {
+    transform: scale(0.98);
+}
+
+.verde-claro {
+    background-color: #2d5a30 !important;
+    color: #ffffff !important;
+    font-weight: 500;
+}
+
+.verde-claro:hover {
+    background-color: #1e3a1f !important;
+}
+
+.verde-escuro {
+    background-color: #ffffff !important;
+    color: #2d5a30 !important;
+    border: 1px solid #c8dfc9 !important;
+}
+
+.verde-escuro:hover {
+    background-color: #eef5ee !important;
+}
+
+/* ── Spinner ── */
+.spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 0.8s linear infinite;
+    display: none;
+}
+
+.btn-acao.loading .spinner {
+    display: inline-block;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Modais ── */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    width: 380px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: zoomIn 0.2s ease;
+}
+
+@keyframes zoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.modal-icon { font-size: 40px; margin-bottom: 10px; }
+.modal-content h3 { margin: 0; color: #1e3a1f; font-family: 'Poppins', sans-serif; }
+.modal-content p { color: #5a7a5c; font-size: 14px; margin: 15px 0 25px; }
+
+.btn-confirmar {
+    background: #2d5a30;
+    color: white;
+    border: none;
+    padding: 10px 40px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.icone-popup {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+    margin-bottom: -20px;
+}

@@ -1,9 +1,9 @@
-<!-- Tela ADM - Consulta --> 
+<!-- Tela ADM - Consulta -->
 
 <?php
 session_start();
 if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador') {
-    header("Location: index.php"); 
+    header("Location: index.php");
     exit();
 }
 ?>
@@ -13,14 +13,17 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
 <head>
     <meta charset="UTF-8">
     <title>Verbum | Consultar exemplares</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="consulta.css">
 </head>
 <body class="body-acervo">
 
 <div class="container-acervo">
+
+    <div class="topo">
     <header class="header">
-        <div class="logo">
-            <a href="acervo.php" style="text-decoration: none; color: inherit;">Verbum</a>
+        <div class="header-left">
+            <div class="logo"><a href="acervo.php">Verbum</a></div>
+            <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
         </div>
         <span class="badge-admin">Painel Administrativo</span>
         <div class="icones">
@@ -35,63 +38,65 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
         <a href="cadastro.php">Cadastro de usuário</a>
         <a class="ativo" href="consulta.php">Consultar exemplares</a>
     </nav>
-
-    <div class="secao-busca">
-        <label for="pesquisa">Pesquisar Exemplar</label>
-        <div class="input-busca-container">
-            <input type="text" id="pesquisa" placeholder="Digite aqui o nome do livro...">
-            <button class="btn-lupa"><img src="imgs/lupa.png" alt="Buscar"></button>
-        </div>
     </div>
 
-    <div class="lista-resultados">
-        
-        <div class="card-exemplar">
-            <div class="info-exemplar">
-                <h3>Dom Quixote</h3>
-                <p class="autor">Miguel de Cervantes Saavedra</p>
-                <div class="avaliacao-stars">
-                    <span class="estrelas">Estrelas(?)</span>
-                    <span class="nota-texto">5,0 (Ótimo)</span>
-                </div>
-                
-                <ul class="detalhes-lista">
-                    <li><strong>Tipo do Material:</strong> Livros</li>
-                    <li><strong>Edição:</strong> 1. ed.</li>
-                    <li><strong>Ano de Publicação:</strong> 2019</li>
-                </ul>
-                
-                <p class="localizacao">Localização: <a href="#"><img src=" "> Consultar</a></p>
-            </div>
-            <div class="capa-exemplar">
-                <img src="imgs/dom-quixote.jpg" alt="Capa do Livro">
+    <div class="consulta-content">
+
+        <!-- Busca -->
+        <div class="secao-busca">
+            <label for="pesquisa">Pesquisar exemplar</label>
+            <div class="input-busca-container">
+                <input type="text" id="pesquisa" placeholder="Digite o nome do livro, autor ou ISBN...">
+                <button class="btn-lupa">
+                    <img src="imgs/lupa.png" alt="Buscar">
+                </button>
             </div>
         </div>
 
-        <div class="card-exemplar">
-            <div class="info-exemplar">
-                <h3>A Biblioteca da Meia-Noite</h3>
-                <p class="autor">Matt Haig</p>
-                <div class="avaliacao-stars">
-                    <span class="estrelas">Estrelas(?)</span>
-                    <span class="nota-texto">4,0 (Muito bom)</span>
+        <!-- Abas -->
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab ativo" onclick="trocarTab('acervo', this)">
+                    Acervo
+                    <span class="tab-count" id="count-acervo">—</span>
+                </button>
+                <button class="tab" onclick="trocarTab('emprestimos', this)">
+                    Em empréstimo
+                    <span class="tab-count" id="count-emprestimos">—</span>
+                </button>
+                <button class="tab" onclick="trocarTab('reservados', this)">
+                    Reservados
+                    <span class="tab-count" id="count-reservados">—</span>
+                </button>
+                <button class="tab" onclick="trocarTab('historico', this)">
+                    Histórico de Empréstimos 
+                    <span class="tab-count" id="count-historico">0</span>
+                </button>
                 </div>
-                
-                <ul class="detalhes-lista">
-                    <li><strong>Tipo do Material:</strong> Livros</li>
-                    <li><strong>Edição:</strong> 1. ed.</li>
-                    <li><strong>Ano de Publicação:</strong> 2021</li>
-                </ul>
-                
-                <p class="localizacao">Localização: <a href="#"><img src=""> Consultar</a></p>
-            </div>
-            <div class="capa-exemplar">
-                <img src="imgs/biblioteca-meia-noite.jpg" alt="Capa do Livro">
-            </div>
         </div>
 
-    </div>
+        <div id="panel-acervo" class="panel ativo">
+            <div class="lista-resultados" id="lista-acervo"></div>
+            <div class="paginacao" id="paginacao-acervo"></div>
+        </div>
+
+        <div id="panel-emprestimos" class="panel">
+            <div class="lista-resultados" id="lista-emprestimos"></div>
+            <div class="paginacao" id="paginacao-emprestimos"></div>
+        </div>
+
+        <div id="panel-reservados" class="panel">
+            <div class="lista-resultados" id="lista-reservados"></div>
+            <div class="paginacao" id="paginacao-reservados"></div>
+        </div>
+
+        <div id="panel-historico" class="panel">
+            <div class="lista-resultados" id="lista-historico"></div>
+            <div class="paginacao" id="paginacao-historico"></div>
+        </div>
 </div>
+
+<script src="consulta.js"></script>
 
 </body>
 </html>

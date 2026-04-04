@@ -31,3 +31,41 @@ function leiaMais() {
         btnLerMais.innerHTML = "Leia menos";
     }
 }
+
+document.getElementById('buscaUsuario').addEventListener('input', function() {
+    let q = this.value;
+    if (q.length < 3) return;
+
+    fetch(`buscar_usuarios.php?q=${q}`)
+        .then(res => res.json())
+        .then(dados => {
+            let lista = document.getElementById('listaSugestoes');
+            lista.innerHTML = '';
+            dados.forEach(user => {
+                let div = document.createElement('div');
+                div.innerText = `${user.nome} (${user.matricula})`;
+                div.onclick = () => {
+                    document.getElementById('buscaUsuario').value = user.nome;
+                    document.getElementById('usuario_id').value = user.matricula;
+                    lista.innerHTML = '';
+                };
+                lista.appendChild(div);
+            });
+        });
+});
+
+// Envio do Formulário via AJAX
+document.getElementById('formEmprestimo').onsubmit = function(e) {
+    e.preventDefault();
+    const formData = new FormData(this);
+
+    fetch('processar_emprestimo.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(res => res.text())
+    .then(msg => {
+        alert(msg);
+        if(msg.includes("Sucesso")) location.reload();
+    });
+};
