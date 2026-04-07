@@ -301,12 +301,28 @@
 
 /* TELA -- ACERVO */
 .body-acervo {
-    margin: 0;
+    background-color: #6C9467;
     font-family: "Poppins", sans-serif;
-    background-color: #ffffff;
+    overflow-x: hidden; /* Evita que a tela crie barra de rolagem horizontal ao abrir o menu */
 }
 
+/* =========================================
+   CONTAINER PRINCIPAL CENTRALIZADO
+   ========================================= */
+   .container-acervo {
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    border-radius: 25px;
+    margin: 18px auto;
+    min-height: calc(100vh - 36px); /* ocupa a tela toda menos as margens */
+    padding-bottom: 40px;
+    position: relative; /* mantém mas sem z-index */
+}
 
+/* =========================================
+   CABEÇALHO (HEADER)
+   ========================================= */
 .header {
     display: flex;
     align-items: center;
@@ -323,15 +339,13 @@
 .busca {
     position: relative;
 }
+
 .busca input {
     width: 520px;
     padding: 10px 15px;
     border-radius: 20px;
     border: 1px solid #ccc;
     outline: none;
-}
-
-.busca input {
     box-shadow: 0 3px 6px rgba(0,0,0,0.12);
 }
 
@@ -351,13 +365,28 @@
     color: #6C9467;
     cursor: pointer;
 }
+
 .icone-usuario {
     width: 40px;
     height: 40px;
     cursor: pointer;
 }
 
+.favoritos {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
 
+.icone-coracao {
+    width: 20px;
+    height: 20px;
+}
+
+/* =========================================
+   MENU SUPERIOR HORIZONTAL
+   ========================================= */
 .menu {
     display: flex;
     justify-content: center;
@@ -390,6 +419,9 @@
     border-radius: 50%;
 }
 
+/* =========================================
+   BANNER PERCY JACKSON
+   ========================================= */
 .banner {
     padding: 20px 0;
     display: flex;
@@ -397,12 +429,15 @@
 }
 
 .banner img {
-    width: 55%;          
-    max-height: 160px;   
+    width: 55%;
+    max-height: 160px;
     object-fit: cover;
     border-radius: 15px;
 }
 
+/* =========================================
+   SEÇÃO DE LIVROS POPULARES
+   ========================================= */
 .populares {
     display: flex;
     justify-content: center;
@@ -411,7 +446,7 @@
 
 .populares-container {
     width: 100%;
-    max-width: 900px; 
+    max-width: 900px;
 }
 
 .populares h2 {
@@ -460,62 +495,237 @@
     color: #f4b400;
 }
 
-.favoritos {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 600;
+/* =========================================
+   BOTÃO DE EXPANDIR (Três Barrinhas)
+   ========================================= */
+.btn-expandir {
+    position: fixed;
+    top: 28px;
+    right: 28px;
+    z-index: 10000;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    /* ESSENCIAL: garante que fique acima do container branco */
+    isolation: isolate;
 }
 
-.icone-coracao {
-    width: 20px;
-    height: 20px;
+.btn-expandir i {
+    color: #6C9467;
+    font-size: 30px;
+    display: block;
+    transition: transform 0.2s;
+    line-height: 1;
 }
 
-.body-acervo{
-    margin: 0;
-    padding: 0;
+.btn-expandir i:hover {
+    transform: scale(1.1);
+}
+
+.btn-expandir i:hover {
+    transform: scale(1.1);
+}
+
+/* =========================================
+   OVERLAY (fundo escurecido ao abrir)
+   ========================================= */
+.overlay-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.overlay-menu.ativo {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* =========================================
+   MENU LATERAL (Gaveta da Direita)
+   ========================================= */
+nav.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -27vw;           /* começa escondido */
+    width: 25vw;            /* ocupa 1/4 da tela */
+    min-width: 260px;
+    height: 100vh;
     background-color: #6C9467;
-    font-family: "Poppins", sans-serif;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.25);
+    transition: right 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+    overflow-y: auto;
 }
 
-.container-acervo{
-    width: 100vw;
-    background-color: white;
-    border-radius: 25px;
-    margin-top: 18px;
-    margin-bottom: 18px;
+nav.menu-lateral.expandir {
+    right: 0;
+}
+
+/* =========================================
+   PERFIL NO MENU
+   ========================================= */
+.conteudo-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.foto img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background-color: #fff;
+}
+
+.dados-entrada-perfil {
+    color: #ffffff;
+    text-align: center;
+    margin-top: 14px;
+    margin-bottom: 28px;
+}
+
+.dados-entrada-perfil #nomeUsuario {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+
+.dados-entrada-perfil #matriculaUsuario {
+    font-size: 12px;
+    color: #dceadb;
+    margin: 0;
+}
+
+/* Linha divisória */
+.dados-entrada-perfil::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 2px;
+    background: rgba(255,255,255,0.4);
+    margin: 12px auto 0;
+    border-radius: 2px;
+}
+
+/* =========================================
+   BOTÕES DO MENU LATERAL
+   ========================================= */
+.botoes {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    gap: 10px;
+    padding-bottom: 30px;
+}
+
+.botoes a {
+    background-color: #ffffff;
+    color: #517463;
+    text-decoration: none;
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    display: block;
+}
+
+.botoes a:hover {
+    background-color: #f0f5f0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+.botoes .btn-sair {
+    background-color: #c0392b;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.botoes .btn-sair:hover {
+    background-color: #a93226;
+    color: #fff;
 }
 /* TELA -- DADOS PESSOAIS */
 .body-dp {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #6C9467;
+    min-height: 100vh;
+    background-color: #6C9467; 
     margin: 0;
+    font-family: "Poppins", sans-serif;
 }
+
 
 .container-dp {
     background-color: white;
     border-radius: 20px;
     padding: 40px;
     width: 400px;
-    box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
-    position: relative;
-    z-index: 2;
+    box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+}
+
+.header-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-bottom: 25px;
+    text-align: center;
 }
 
 .foto3 {
     display: flex;
     justify-content: center;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.foto3 img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dados-entrada-dp {
+    color: #687661;
+}
+
+#nomeUsuario {
+    display: block;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #354A2B;
+    text-decoration: none;
+}
+
+#emailUsuario {
+    margin: 0;
+    font-size: 14px;
+    font-family: "ABeeZee", sans-serif;
+    opacity: 0.8;
 }
 
 .formulario {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 18px;
 }
 
 .campo {
@@ -524,53 +734,63 @@
 }
 
 .label-dp {
-    font-size: 18px;
-    font-family: "Poppins", serif;
+    font-size: 16px;
+    font-weight: 600;
     color: #6C9467;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
+    margin-left: 5px;
 }
 
 .formu {
     border-radius: 15px;
-    padding: 10px;
+    padding: 12px 15px;
     width: 100%;
-    border: 2px solid #6C9467;
+    border: 1.5px solid #6C9467;
     box-sizing: border-box;
-    border: 1px solid #6C9467;
     outline: none;
+    font-family: "Poppins", sans-serif;
+    color: #354A2B;
+    transition: all 0.3s ease;
 }
 
+.formu:focus {
+    border-color: #354A2B;
+    box-shadow: 0 0 5px rgba(108, 148, 103, 0.3);
+}
+
+.formu::placeholder {
+    color: rgba(104, 118, 97, 0.4);
+}
 
 .btn {
-    margin: 10px auto 0 auto; 
-    padding: 10px;
-    border-radius: 15px;
+    margin: 10px auto 0 auto;
+    padding: 12px;
+    border-radius: 20px;
     border: none;
     background-color: #354A2B;
     cursor: pointer;
-    font-weight: bold;
-    color: #ffffff;
-    width: 150px;
-    font-size: 15px;
-}
-.formu:focus::placeholder {
-    color: rgba(104, 118, 97, 0.3);
-}
-.dados-entrada-dp{
-    font-family: "ABeeZee", serif;
-    color: #687661;
-    text-align: center;
-    margin-bottom: 25px; 
-}
-#nomeUsuario {
-    margin: 0;
-    font-size: 20px;
     font-weight: 600;
+    color: #ffffff;
+    width: 180px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-#emailUsuario {
-    margin: 0; 
-    font-size: 14px;
+.btn:hover {
+    background-color: #26361f;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* RESPONSIVIDADE SIMPLES */
+@media (max-width: 450px) {
+    .container-dp {
+        width: 90%;
+        padding: 25px;
+    }
 }
 /* TELA -- DETALHES -- LIVROS */
 

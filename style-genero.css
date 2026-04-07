@@ -1,0 +1,344 @@
+/* =========================================
+   PÁGINA DE GÊNEROS — GRID
+   ========================================= */
+   .pg-generos {
+    padding: 36px 48px 48px;
+}
+
+.pg-header {
+    margin-bottom: 28px;
+}
+
+.pg-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-bottom: 6px;
+}
+
+.pg-sub {
+    font-size: 13px;
+    color: #9aaa98;
+}
+
+.generos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.genero-card {
+    border-radius: 20px;
+    padding: 32px 26px 26px;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+    min-height: 190px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.genero-card:hover {
+    transform: translateY(-7px);
+    box-shadow: 0 20px 44px rgba(0,0,0,0.22);
+}
+
+.genero-card:hover .genero-deco {
+    transform: scale(1.15);
+}
+
+/* Círculo decorativo de fundo */
+.genero-deco {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    opacity: 0.22;
+    transition: transform 0.4s ease;
+}
+
+/* Segundo círculo menor */
+.genero-card::before {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+}
+
+/* Linha brilhante no topo */
+.genero-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+}
+
+.genero-icon {
+    font-size: 36px;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+    line-height: 1;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+}
+
+.genero-nome {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    position: relative;
+    z-index: 1;
+    line-height: 1.25;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.genero-qtd {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.6);
+    margin-top: 6px;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Bolinha antes da contagem */
+.genero-qtd::before {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    flex-shrink: 0;
+}
+
+/* Skeleton */
+.genero-skeleton {
+    border-radius: 20px;
+    min-height: 190px;
+    background: #eef2ed;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+}
+/* =========================================
+   PÁGINA DE LIVROS DO GÊNERO
+   ========================================= */
+.pg-livros {
+    padding: 28px 48px 48px;
+}
+
+.btn-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #6C9467;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    padding: 8px 0;
+    margin-bottom: 20px;
+    transition: opacity 0.2s;
+}
+
+.btn-voltar:hover {
+    opacity: 0.7;
+}
+
+.btn-voltar svg {
+    width: 18px;
+    height: 18px;
+}
+
+.livros-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.genero-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.livros-header h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-bottom: 4px;
+}
+
+.genero-desc {
+    font-size: 13px;
+    color: #9aaa98;
+}
+
+/* Barra de filtros */
+.filtros-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filtros-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9aaa98;
+}
+
+.filtro-pill {
+    padding: 7px 18px;
+    border-radius: 50px;
+    border: 1.5px solid #dde8dc;
+    background: #f7f9f7;
+    font-size: 12px;
+    font-weight: 600;
+    color: #517463;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filtro-pill:hover,
+.filtro-pill.ativo {
+    background: #6C9467;
+    border-color: #6C9467;
+    color: #fff;
+}
+
+.livros-count {
+    font-size: 12px;
+    color: #9aaa98;
+    margin-bottom: 20px;
+}
+
+/* Grid de livros */
+.livros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    gap: 28px 20px;
+}
+
+.livro-card {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.livro-card:hover {
+    transform: translateY(-6px);
+}
+
+.livro-capa {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    display: block;
+}
+
+.livro-capa-placeholder {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    line-height: 1.35;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.livro-titulo {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-top: 10px;
+    line-height: 1.35;
+}
+
+.livro-autor {
+    font-size: 11px;
+    color: #9aaa98;
+    margin-top: 3px;
+}
+
+.livro-stars {
+    font-size: 11px;
+    color: #e8a020;
+    margin-top: 3px;
+}
+
+.livro-skeleton {
+    border-radius: 12px;
+    aspect-ratio: 2 / 3;
+    background: #eef2ed;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+/* Estado vazio */
+.estado-vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #9aaa98;
+}
+
+.estado-vazio svg {
+    width: 48px;
+    height: 48px;
+    fill: #cddacc;
+    display: block;
+    margin: 0 auto 16px;
+}
+
+.estado-vazio p {
+    font-size: 14px;
+}
+
+.sb-avatar svg,
+.nav-ic svg {
+    display: block;
+    flex-shrink: 0;
+}
+
+svg {
+    max-width: 100%;
+}
+

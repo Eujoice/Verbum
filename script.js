@@ -69,3 +69,35 @@ document.getElementById('formEmprestimo').onsubmit = function(e) {
         if(msg.includes("Sucesso")) location.reload();
     });
 };
+
+const btnExp = document.getElementById('btn-exp');
+const menuLateral = document.querySelector('.menu-lateral');
+
+// Cria o overlay dinamicamente se não existir
+let overlay = document.querySelector('.overlay-menu');
+if (!overlay) {
+    overlay = document.createElement('div');
+    overlay.classList.add('overlay-menu');
+    document.body.appendChild(overlay);
+}
+
+function abrirMenu() {
+    menuLateral.classList.add('expandir');
+    overlay.classList.add('ativo');
+}
+
+function fecharMenu() {
+    menuLateral.classList.remove('expandir');
+    overlay.classList.remove('ativo');
+}
+
+btnExp.addEventListener('click', () => {
+    if (menuLateral.classList.contains('expandir')) {
+        fecharMenu();
+    } else {
+        abrirMenu();
+    }
+});
+
+// Fechar ao clicar fora (no overlay)
+overlay.addEventListener('click', fecharMenu);
