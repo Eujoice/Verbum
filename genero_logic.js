@@ -62,28 +62,21 @@ const PATTERNS = {
         <circle cx="0" cy="0" r="70" stroke="white" stroke-width="1.5" fill="none"/>
     </svg>`,
 };
-
 const CONFIG_GENEROS = {
-    'Ficção':               { cor: '#1a2a5e', icon: 'rocket',  pattern: 'arcs',     desc: 'Universos futuristas, tecnologia e imaginação além dos limites.' },
-    'Fantasia':             { cor: '#2a1a5e', icon: 'sword',   pattern: 'diagonal', desc: 'Mundos mágicos, criaturas e aventuras épicas.' },
-    'Romance':              { cor: '#5e1a2a', icon: 'heart',   pattern: 'dots',     desc: 'Histórias de amor, paixão e relacionamentos humanos.' },
-    'Terror':               { cor: '#1a1a1a', icon: 'ghost',   pattern: 'lines',    desc: 'Suspense, mistério e histórias que arrepiam a espinha.' },
-    'Clássico':             { cor: '#3d2800', icon: 'scroll',  pattern: 'diagonal', desc: 'Obras imortais que moldaram a literatura mundial.' },
-    'Autoajuda':            { cor: '#1a4a2a', icon: 'star',    pattern: 'dots',     desc: 'Desenvolvimento pessoal, motivação e bem-estar.' },
-    'História':             { cor: '#2a1a00', icon: 'columns', pattern: 'cross',    desc: 'Fatos, civilizações e personagens que mudaram o mundo.' },
-    'Policial':             { cor: '#001a2a', icon: 'search',  pattern: 'arcs',     desc: 'Crimes, investigações e reviravoltas surpreendentes.' },
-    'Biografia':            { cor: '#1a1a3a', icon: 'person',  pattern: 'lines',    desc: 'Vidas extraordinárias que inspiram e ensinam.' },
-    'HQ':                   { cor: '#3a0a1a', icon: 'comic',   pattern: 'dots',     desc: 'Quadrinhos, graphic novels e mangás de todos os estilos.' },
-    'Ficção Clássica':      { cor: '#2a1a00', icon: 'ship',    pattern: 'diagonal', desc: 'A ficção que resistiu ao tempo e se tornou patrimônio da humanidade.' },
-    'Ficção Científica':    { cor: '#002a3a', icon: 'atom',    pattern: 'arcs',     desc: 'Ciência, futuro e os limites da imaginação humana.' },
-    'Naturalismo':          { cor: '#1a3a1a', icon: 'plant',   pattern: 'lines',    desc: 'Realismo cru e a influência do meio sobre o ser humano.' },
-    'Distopia':             { cor: '#2a0a00', icon: 'city',    pattern: 'cross',    desc: 'Sociedades opressivas e futuros onde a liberdade foi perdida.' },
-    'Literatura Brasileira':{ cor: '#3a2000', icon: 'brazil',  pattern: 'diagonal', desc: 'A riqueza e diversidade da literatura produzida no Brasil.' },
-    'Romance Gótico':       { cor: '#1a001a', icon: 'castle',  pattern: 'arcs',     desc: 'Atmosfera sombria, paixões intensas e o sobrenatural.' },
-    'Suspense Psicológico': { cor: '#001a1a', icon: 'brain',   pattern: 'cross',    desc: 'Tensão mental, reviravoltas e narrativas que perturbam.' },
-    'Outros':               { cor: '#2a2a2a', icon: 'books',   pattern: 'dots',     desc: 'Obras que escapam das categorias tradicionais.' },
+    'Ficção':             { cor: 'linear-gradient(135deg, #9a4ff0, #c046ba)', icon: 'rocket',  pattern: 'arcs',     desc: 'Universos futuristas, tecnologia e imaginação além dos limites.' },
+    'Fantasia':           { cor: 'linear-gradient(135deg, #ab6de0, #6b31df)', icon: 'sword',   pattern: 'diagonal', desc: 'Mundos mágicos, criaturas e aventuras épicas.' },
+    'Romance':            { cor: 'linear-gradient(135deg, #ff0844, #ffb199)', icon: 'heart',   pattern: 'dots',     desc: 'Histórias de amor, paixão e relacionamentos humanos.' },
+    'Terror':             { cor: 'linear-gradient(135deg, #2c3e50, #000000)', icon: 'ghost',   pattern: 'lines',    desc: 'Suspense, mistério e histórias que arrepiam a espinha.' },
+    'Clássico':           { cor: 'linear-gradient(135deg, #f2994a, #f2c94c)', icon: 'scroll',  pattern: 'diagonal', desc: 'Obras imortais que moldaram a literatura mundial.' },
+    'Autoajuda':          { cor: 'linear-gradient(135deg, #11998e, #5cf095)', icon: 'star',    pattern: 'dots',     desc: 'Desenvolvimento pessoal, motivação e bem-estar.' },
+    'História':           { cor: 'linear-gradient(135deg, #8b4513, #5d2906)', icon: 'columns', pattern: 'cross',    desc: 'Fatos, civilizações e personagens que mudaram o mundo.' },
+    'Policial':           { cor: 'linear-gradient(135deg, #0f2027, #2c5364)', icon: 'search',  pattern: 'arcs',     desc: 'Crimes, investigações e reviravoltas surpreendentes.' },
+    'Biografia':          { cor: 'linear-gradient(135deg, #4facfe, #00f2fe)', icon: 'person',  pattern: 'lines',    desc: 'Vidas extraordinárias que inspiram e ensinam.' },
+    'HQ':                 { cor: 'linear-gradient(135deg, #f093fb, #f5576c)', icon: 'comic',   pattern: 'dots',     desc: 'Quadrinhos, graphic novels e mangás de todos os estilos.' },
+    'Literatura Brasileira': { cor: 'linear-gradient(135deg, #14b19e, #7eaa32)', icon: 'brazil', pattern: 'diagonal', desc: 'A riqueza e diversidade da literatura produzida no Brasil.' },
+    'Suspense Psicológico': { cor: 'linear-gradient(135deg, #30cfd0, #6122ad)', icon: 'brain', pattern: 'cross',    desc: 'Tensão mental, reviravoltas e narrativas que perturbam.' },
+    'Outros':             { cor: 'linear-gradient(135deg, #6C9467, #4e6b4a)', icon: 'books',   pattern: 'dots',     desc: 'Obras que escapam das categorias tradicionais.' },
 };
-
 var filtroAtual = 'titulo';
 var livrosBrutos = [];
 
