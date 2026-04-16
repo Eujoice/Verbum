@@ -120,13 +120,21 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             </div>
         </section>
 
-        <section class="populares">
-            <div class="sec-header">
-                <h2>Populares</h2>
-                <span class="ver-todos">Ver todos →</span>
-            </div>
-            <div class="lista-livros" id="lista-livros-firebase"></div>
-        </section>
+ <section class="populares">
+    <div class="sec-header">
+        <h2>Populares</h2>
+        <a href="populares_lista.php" class="ver-todos">Ver todos →</a>
+    </div>
+    <div class="lista-livros" id="lista-populares"></div> 
+</section>
+
+<section class="classicos">
+    <div class="sec-header">
+        <h2>Clássicos</h2>
+        <a href="classicos_lista.php" class="ver-todos">Ver todos →</a>
+    </div>
+    <div class="lista-livros" id="lista-classicos"></div>
+</section>
     </div>
 
     <script src="script-acervo.js"></script>

@@ -267,28 +267,28 @@
 /* =========================================
    SEÇÃO POPULARES
    ========================================= */
-.populares {
-    padding: 20px 48px;
-
+/* Container das seções */
+.populares, .classicos {
+    width: 100%;
+    max-width: 1100px; 
+    margin: 40px auto; 
+    padding: 0 20px;
 }
 
 .sec-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    color: #3a8036;
+    /* Isso garante que o título comece alinhado com o primeiro livro */
 }
 
-.sec-header h2 {
-    font-size: 17px;
-    font-weight: 700;
-    color: #6C9467;
-}
-
+/* Estilo do link Ver Todos */
 .ver-todos {
-    font-size: 12px;
+    font-size: 13px;
     color: #9aaa98;
-    cursor: pointer;
+    text-decoration: none;
     font-weight: 600;
     transition: color 0.2s;
 }
@@ -299,38 +299,25 @@
 
 .lista-livros {
     display: flex;
-    gap: 24px;
-    overflow-x: auto;
-    padding-bottom: 10px;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 20px;
+    overflow: visible; 
+    padding: 20px 0; /* Espaço para o zoom não bater no título acima */
 }
 
-.lista-livros::-webkit-scrollbar {
-    height: 4px;
-}
-
-.lista-livros::-webkit-scrollbar-track {
-    background: #f7f9f7;
-    border-radius: 2px;
-}
-
-.lista-livros::-webkit-scrollbar-thumb {
-    background: #dde8dc;
-    border-radius: 2px;
-}
-
-/* Cards de livro gerados pelo acervo_logic.js */
+/* Mantemos o tamanho original do livro que você já tinha no código */
 .livro {
-    flex: 0 0 148px;
-    cursor: pointer;
-    transition: transform 0.2s;
+    flex: 0 0 148px; 
     text-align: center;
+    transition: transform 0.3s ease; /* Transição da animação */
+    cursor: pointer;
+    position: relative;
 }
-
+/* Efeito de aumento (Zoom) sem cortar */
 .livro:hover {
-    transform: translateY(-6px);
+    transform: scale(1.1); /* Aumenta 10% */
+    z-index: 10; /* Fica na frente dos outros ao aumentar */
 }
-
 .livro img {
     width: 148px;
     height: 210px;

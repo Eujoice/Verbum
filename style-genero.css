@@ -2,7 +2,7 @@
    PÁGINA DE GÊNEROS — REDESIGN EDITORIAL
    ========================================= */
 
-   .pg-generos {
+.pg-generos {
     padding: 36px 48px 48px;
 }
 
@@ -36,17 +36,19 @@
     transition: transform 0.22s ease, box-shadow 0.22s ease;
     position: relative;
     overflow: hidden;
-    min-height: 170px;
+    min-height: 200px;
     display: flex;
+    opacity: 0.93;
     flex-direction: column;
     justify-content: flex-end;
     text-decoration: none;
-    border: 1px solid rgba(38, 146, 79, 0.11);
+    border: none;
 }
 
 .genero-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+    box-shadow: 0 18px 40px rgba(31, 80, 90, 0.3);
+    opacity: 1;
 }
 
 /* Linha de acento lateral */
@@ -57,8 +59,21 @@
     top: 0;
     bottom: 0;
     width: 3px;
-    background: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.22);
     border-radius: 0 2px 2px 0;
+}
+
+/* Overlay de profundidade no rodapé do card */
+.genero-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.28), transparent);
+    border-radius: 0 0 16px 16px;
+    pointer-events: none;
 }
 
 /* Padrão geométrico no canto superior direito */
@@ -68,7 +83,7 @@
     right: 0;
     width: 110px;
     height: 110px;
-    opacity: 0.12;
+    opacity: 0.13;
     overflow: hidden;
     pointer-events: none;
 }
@@ -77,51 +92,43 @@
 .genero-icon-wrap {
     position: relative;
     z-index: 1;
-    margin-bottom: 20px;
-    width: 38px;
-    height: 38px;
+    margin-bottom: 18px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,255,255,0.1);
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.14);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(4px);
 }
 
 .genero-icon-wrap svg {
-    width: 20px;
-    height: 20px;
-    fill: rgba(255,255,255,0.9);
+    width: 22px;
+    height: 22px;
     display: block;
     flex-shrink: 0;
 }
 
+/* Nome do gênero — estilizado com Milonga + sombra suave */
 .genero-nome {
-    font-size: 16px;
-    font-weight: 700;
+    font-family: 'Milonga', serif;
+    font-size: 18px;
+    font-weight: 400;
     color: #fff;
     position: relative;
-    z-index: 1;
-    line-height: 1.25;
-    letter-spacing: -0.01em;
-}
-
-.genero-qtd {
-    font-size: 11px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.5);
-    margin-top: 5px;
-    position: relative;
-    z-index: 1;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    z-index: 2;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 
 /* Skeleton */
 .genero-skeleton {
     border-radius: 16px;
-    min-height: 170px;
-    background: #eef2ed;
+    min-height: 200px;
+    background: linear-gradient(135deg, #dce8db, #eef2ed);
     animation: pulse 1.4s ease-in-out infinite;
 }
 
@@ -160,7 +167,6 @@
     height: 18px;
 }
 
-/* Cabeçalho da subtela — sem repetir o título grande */
 .livros-header {
     margin-bottom: 24px;
     border-bottom: 1px solid #e8ede7;
@@ -183,7 +189,6 @@
 .genero-badge-icon svg {
     width: 22px;
     height: 22px;
-    fill: #fff;
     display: block;
 }
 
@@ -192,7 +197,7 @@
     font-weight: 700;
     color: #1e2b1d;
     margin-bottom: 2px;
-    display: none; /* título retirado conforme solicitado */
+    display: none;
 }
 
 .genero-desc {
@@ -201,7 +206,6 @@
     margin: 0;
 }
 
-/* Esconde o badge antigo */
 .genero-badge { display: none; }
 
 /* Barra de filtros */
@@ -245,7 +249,7 @@
     margin-bottom: 20px;
 }
 
-/* Grid de livros — igual ao acervo */
+/* Grid de livros */
 .livros-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
