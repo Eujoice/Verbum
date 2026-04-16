@@ -29,9 +29,9 @@ body { margin: 0; padding: 0; }
 
 /* ── Header ── */
 .header {
-    background: #1e3a1f;
+    background: #477740;
     padding: 0 40px;
-    height: 64px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -64,10 +64,10 @@ body { margin: 0; padding: 0; }
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(200, 223, 201, 0.15);
+    background: #477740;
     color: #ffffff;
-    border: 1px solid rgba(200, 223, 201, 0.25);
-    font-size: 13px;
+    border: 1px solid rgba(255, 255, 255);
+    font-size: 15px;
     font-weight: 500;
     letter-spacing: 0.10em;
     text-transform: uppercase;
@@ -140,65 +140,40 @@ body { margin: 0; padding: 0; }
     padding: 36px 24px 60px;
 }
 
-/* ── Busca ── */
-.secao-busca {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 32px;
-}
-
-.secao-busca label {
-    font-size: 15px;
-    font-weight: 600;
-    color: #5a7a5c;
-    white-space: nowrap;
-}
-
-.input-busca-container {
-    display: flex;
-    align-items: center;
-    border: 1px solid #d4e4d5;
-    border-radius: 10px;
+.busca {
+    position: relative;
     flex: 1;
+    max-width: 630px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.busca input {
+    width: 100%;
+    padding: 11px 52px 11px 18px;
+    border-radius: 50px;
+    border: 1.5px solid #91a78e;
     background: #ffffff;
-    overflow: hidden;
-    transition: border-color 0.15s, box-shadow 0.15s;
-}
-
-.input-busca-container:focus-within {
-    border-color: #4a7c4e;
-    box-shadow: 0 0 0 3px rgba(74,124,78,0.1);
-}
-
-.input-busca-container input {
-    border: none;
-    outline: none;
-    padding: 11px 16px;
-    font-size: 14px;
-    flex: 1;
     font-family: 'Poppins', sans-serif;
-    color: #1a2b1b;
-    background: transparent;
+    font-size: 14px;
+    color: #1e2b1d;
+    outline: none;
+
 }
 
-.input-busca-container input::placeholder { color: #a0b8a2; }
-
-.btn-lupa {
-    background: #2d5a30;
-    border: none;
-    padding: 11px 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.15s;
+.busca input:focus {
+    border-color: #587954;
 }
 
-.btn-lupa:hover { background: #1e3a1f; }
-
-.btn-lupa img { width: 18px; filter: brightness(0) invert(1); }
-
+.icone-lupa {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+}
 /* ── Abas ── */
 .tabs-container {
     border-bottom: 1px solid #d4e4d5;
@@ -379,7 +354,6 @@ body { margin: 0; padding: 0; }
 }
 
 
-.card-emprestimo:hover { border-color: #4a7c4e; }
 
 .emp-avatar {
     width: 44px;
@@ -595,3 +569,16 @@ body { margin: 0; padding: 0; }
     box-sizing: border-box; 
 }
 
+.linha {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    align-items: center;
+    gap: 5px;
+}
+
+.linha label {
+    font-size: 15px;
+    font-weight: bolder;
+    color: #5a7a5c;
+    text-align: right;
+}

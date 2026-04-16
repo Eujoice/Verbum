@@ -27,8 +27,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
         </div>
         <span class="badge-admin">Painel Administrativo</span>
         <div class="icones">
-            <span class="favoritos">Favoritos <img src="imgs/Heart.png" class="icone-coracao"></span>
-            <a href="perfil.php"><img src="imgs/usuario.png" class="icone-usuario"></a>
+            
         </div>
     </header>
 
@@ -44,12 +43,12 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
 
         <!-- Busca -->
         <div class="secao-busca">
+            <div class="linha">
             <label for="pesquisa">Pesquisar exemplar</label>
-            <div class="input-busca-container">
-                <input type="text" id="pesquisa" placeholder="Digite o nome do livro, autor ou ISBN...">
-                <button class="btn-lupa">
-                    <img src="imgs/lupa.png" alt="Buscar">
-                </button>
+            <div class="busca">
+                <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+                <input type="text" id="pesquisa" placeholder="Digite o nome do livro, autor...">
+            </div>
             </div>
         </div>
 
