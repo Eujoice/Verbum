@@ -1,12 +1,13 @@
 /* =========================================
-   PÁGINA DE GÊNEROS — GRID
+   PÁGINA DE GÊNEROS — REDESIGN EDITORIAL
    ========================================= */
-   .pg-generos {
+
+.pg-generos {
     padding: 36px 48px 48px;
 }
 
 .pg-header {
-    margin-bottom: 28px;
+    margin-bottom: 32px;
 }
 
 .pg-header h1 {
@@ -23,116 +24,111 @@
 
 .generos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
 }
 
+/* ---- CARD ---- */
 .genero-card {
-    border-radius: 20px;
-    padding: 32px 26px 26px;
+    border-radius: 16px;
+    padding: 28px 24px 24px;
     cursor: pointer;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
     position: relative;
     overflow: hidden;
-    min-height: 190px;
+    min-height: 200px;
     display: flex;
+    opacity: 0.93;
     flex-direction: column;
     justify-content: flex-end;
     text-decoration: none;
-    border: 1px solid rgba(255,255,255,0.08);
+    border: none;
 }
 
 .genero-card:hover {
-    transform: translateY(-7px);
-    box-shadow: 0 20px 44px rgba(0,0,0,0.22);
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(31, 80, 90, 0.3);
+    opacity: 1;
 }
 
-.genero-card:hover .genero-deco {
-    transform: scale(1.15);
-}
-
-/* Círculo decorativo de fundo */
-.genero-deco {
-    position: absolute;
-    top: -30px;
-    right: -30px;
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    opacity: 0.22;
-    transition: transform 0.4s ease;
-}
-
-/* Segundo círculo menor */
+/* Linha de acento lateral */
 .genero-card::before {
     content: '';
     position: absolute;
-    bottom: -20px;
-    left: -20px;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 0 2px 2px 0;
 }
 
-/* Linha brilhante no topo */
+/* Overlay de profundidade no rodapé do card */
 .genero-card::after {
     content: '';
     position: absolute;
-    top: 0;
+    bottom: 0;
     left: 0;
     right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.28), transparent);
+    border-radius: 0 0 16px 16px;
+    pointer-events: none;
 }
 
-.genero-icon {
-    font-size: 36px;
-    margin-bottom: 14px;
-    position: relative;
-    z-index: 1;
-    line-height: 1;
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.3));
+/* Padrão geométrico no canto superior direito */
+.genero-card-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 110px;
+    height: 110px;
+    opacity: 0.13;
+    overflow: hidden;
+    pointer-events: none;
 }
 
-.genero-nome {
-    font-size: 18px;
-    font-weight: 700;
-    color: #fff;
+/* Ícone SVG */
+.genero-icon-wrap {
     position: relative;
     z-index: 1;
-    line-height: 1.25;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.3);
-}
-
-.genero-qtd {
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.6);
-    margin-top: 6px;
-    position: relative;
-    z-index: 1;
+    margin-bottom: 18px;
+    width: 42px;
+    height: 42px;
     display: flex;
     align-items: center;
-    gap: 5px;
+    justify-content: center;
+    background: rgba(255,255,255,0.14);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.2);
+    backdrop-filter: blur(4px);
 }
 
-/* Bolinha antes da contagem */
-.genero-qtd::before {
-    content: '';
-    display: inline-block;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.5);
+.genero-icon-wrap svg {
+    width: 22px;
+    height: 22px;
+    display: block;
     flex-shrink: 0;
+}
+
+/* Nome do gênero — estilizado com Milonga + sombra suave */
+.genero-nome {
+    font-family: 'Milonga', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #fff;
+    position: relative;
+    z-index: 2;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 
 /* Skeleton */
 .genero-skeleton {
-    border-radius: 20px;
-    min-height: 190px;
-    background: #eef2ed;
+    border-radius: 16px;
+    min-height: 200px;
+    background: linear-gradient(135deg, #dce8db, #eef2ed);
     animation: pulse 1.4s ease-in-out infinite;
 }
 
@@ -140,8 +136,9 @@
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.5; }
 }
+
 /* =========================================
-   PÁGINA DE LIVROS DO GÊNERO
+   SUBTELA DE LIVROS — MODELO ACERVO
    ========================================= */
 .pg-livros {
     padding: 28px 48px 48px;
@@ -159,13 +156,11 @@
     font-weight: 600;
     font-family: 'Poppins', sans-serif;
     padding: 8px 0;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     transition: opacity 0.2s;
 }
 
-.btn-voltar:hover {
-    opacity: 0.7;
-}
+.btn-voltar:hover { opacity: 0.7; }
 
 .btn-voltar svg {
     width: 18px;
@@ -173,35 +168,45 @@
 }
 
 .livros-header {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
     margin-bottom: 24px;
+    border-bottom: 1px solid #e8ede7;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
 }
 
-.genero-badge {
-    display: inline-flex;
+.genero-badge-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
     align-items: center;
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #fff;
-    white-space: nowrap;
+    justify-content: center;
     flex-shrink: 0;
 }
 
-.livros-header h2 {
-    font-size: 22px;
+.genero-badge-icon svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.livros-header-text h2 {
+    font-size: 17px;
     font-weight: 700;
     color: #1e2b1d;
-    margin-bottom: 4px;
+    margin-bottom: 2px;
+    display: none;
 }
 
 .genero-desc {
-    font-size: 13px;
+    font-size: 12px;
     color: #9aaa98;
+    margin: 0;
 }
+
+.genero-badge { display: none; }
 
 /* Barra de filtros */
 .filtros-bar {
@@ -256,9 +261,7 @@
     transition: transform 0.2s;
 }
 
-.livro-card:hover {
-    transform: translateY(-6px);
-}
+.livro-card:hover { transform: translateY(-6px); }
 
 .livro-capa {
     width: 100%;
@@ -328,17 +331,13 @@
     margin: 0 auto 16px;
 }
 
-.estado-vazio p {
-    font-size: 14px;
-}
+.estado-vazio p { font-size: 14px; }
 
+/* Misc */
 .sb-avatar svg,
 .nav-ic svg {
     display: block;
     flex-shrink: 0;
 }
 
-svg {
-    max-width: 100%;
-}
-
+svg { max-width: 100%; }

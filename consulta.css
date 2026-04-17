@@ -183,6 +183,8 @@ body { margin: 0; padding: 0; }
 .tabs {
     display: flex;
     gap: 0;
+    align-items: center;
+    margin-left: 58px;
 }
 
 .tab {
@@ -255,7 +257,7 @@ body { margin: 0; padding: 0; }
 .info-exemplar h3 {
     font-size: 16px;
     font-weight: 600;
-    color: #1e3a1f;
+    color: #336435;
     margin: 0 0 4px;
 }
 
@@ -581,4 +583,264 @@ body { margin: 0; padding: 0; }
     font-weight: bolder;
     color: #5a7a5c;
     text-align: right;
+}
+
+
+/* =========================================
+   MENU HAMBÚRGUER E LATERAL (ADICIONADO)
+   ========================================= */
+
+/* Estilo do Botão Hambúrguer */
+.hambtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: background 0.15s;
+    z-index: 10001; /* Fica acima de tudo */
+}
+
+.hambtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.bar {
+    width: 24px;
+    height: 2.5px;
+    background: #e8f2e8; /* Cor clara para contrastar com o header verde do ADM */
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+/* Animação para o "X" quando aberto */
+.hambtn.aberto .bar:nth-child(1) {
+    transform: translateY(7.5px) rotate(45deg);
+}
+
+.hambtn.aberto .bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hambtn.aberto .bar:nth-child(3) {
+    transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* Overlay (Fundo escurecido) */
+.overlay-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    pointer-events: none;
+    transition: background 0.38s ease;
+    z-index: 9000;
+}
+
+.overlay-menu.ativo {
+    background: rgba(0,0,0,0.4);
+    pointer-events: all;
+}
+
+/* Menu Lateral */
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -28vw;
+    width: 25vw;
+    min-width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+    border-left: 1px solid #eaede9;
+}
+
+.menu-lateral.aberto {
+    right: 0;
+}
+
+/* Perfil dentro do Menu */
+.sb-profile {
+    padding: 36px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #f7f9f7;
+    border-bottom: 1px solid #eaede9;
+}
+
+.sb-profile::after {
+    display: none;
+}
+
+.sb-avatar {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: #eef4ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    border: 3px solid #6C9467;
+    box-shadow: 0 4px 14px rgba(108,148,103,0.25);
+}
+
+.sb-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sb-avatar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.sb-avatar-icon svg {
+    width: 38px;
+    height: 38px;
+    fill: #6C9467;
+}
+
+.sb-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1e2b1d;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.4;
+}
+
+.sb-mat {
+    font-size: 14px;
+    color: #9aaa98;
+    margin-top: 4px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.sb-divider {
+    display: none;
+}
+
+.sb-nav {
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.nav-sep {
+    height: 1px;
+    background: #eaede9;
+    margin: 6px 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    background: transparent;
+    color: #3d4f3c;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid transparent;
+}
+
+.nav-item:hover {
+    background: #f0f5ef;
+    color: #1e2b1d;
+    border-color: #dde8dc;
+}
+
+.nav-ic {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #eef4ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.18s;
+}
+
+.nav-item:hover .nav-ic {
+    background: #ddeedd;
+}
+
+.nav-ic svg {
+    width: 15px;
+    height: 15px;
+    fill: #6C9467;
+}
+
+.nav-admin {
+    background: #fffbeb;
+    color: #854d0e;
+    border-color: #fde68a;
+}
+
+.nav-admin:hover {
+    background: #fef3c7;
+    color: #713f12;
+    border-color: #fcd34d;
+}
+
+.nav-admin .nav-ic {
+    background: #fef3c7;
+}
+
+.nav-admin:hover .nav-ic {
+    background: #fde68a;
+}
+
+.nav-admin .nav-ic svg {
+    fill: #d97706;
+}
+
+.nav-sair {
+    background: #fff5f5;
+    color: #991b1b;
+    border-color: #fecaca;
+    margin-top: 8px;
+}
+
+.nav-sair:hover {
+    background: #fee2e2;
+    color: #7f1d1d;
+    border-color: #fca5a5;
+}
+
+.nav-sair .nav-ic {
+    background: #fee2e2;
+}
+
+.nav-sair:hover .nav-ic {
+    background: #fecaca;
+}
+
+.nav-sair .nav-ic svg {
+    fill: #dc2626;
 }

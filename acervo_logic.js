@@ -5,33 +5,54 @@ import { collection, getDocs, doc, getDoc, query, limit } from "https://www.gsta
 console.log("Script carregou");
 
 // TELA DE ACERVO
-
 async function carregarAcervo() {
-    const lista = document.getElementById('lista-livros-firebase');
-    if (!lista) return; // Só executa se estiver na pág de acervo
+    // Pegamos os dois containers que criamos no HTML
+    const listaPopulares = document.getElementById('lista-populares');
+    const listaClassicos = document.getElementById('lista-classicos');
+
+    // Se nenhum dos dois existir, o script para aqui para evitar erros
+    if (!listaPopulares && !listaClassicos) return;
 
     try {
-        const q = query(collection(db, "obras"), limit(6)); // Limita a exibição de livros à 6
+        // Buscamos 12 obras no total (6 para cada seção)
+        const q = query(collection(db, "obras"), limit(12));
         const querySnapshot = await getDocs(q);
-        lista.innerHTML = ""; // Limpa o container antes de carregar
-
+        
+        const livros = [];
         querySnapshot.forEach((doc) => {
-        const livro = doc.data();
-        console.log("renderizando livro");
-        lista.innerHTML += `
+            livros.push({ id: doc.id, ...doc.data() });
+        });
+
+        // Função auxiliar para criar o HTML de cada card de livro
+        const gerarCardHTML = (livro) => `
             <div class="livro">
-                <a href="detalheslivro.php?id=${doc.id}" style="text-decoration: none; color: inherit; display: block";>
-                    <img src="${livro.capa}">
+                <a href="detalheslivro.php?id=${livro.id}" style="text-decoration: none; color: inherit; display: block;">
+                    <img src="${livro.capa}" alt="${livro.titulo}">
                     <p class="titulo">${livro.titulo}</p>
                     <p class="autor">${livro.autor}</p>
                 </a>
             </div>
-        `
-});
+        `;
+
+        // Lógica para preencher a Seção POPULARES (índices 0 a 5)
+        if (listaPopulares) {
+            const popularesData = livros.slice(0, 6);
+            listaPopulares.innerHTML = popularesData.map(gerarCardHTML).join('');
+        }
+
+        // Lógica para preencher a Seção CLÁSSICOS (índices 6 a 11)
+        if (listaClassicos) {
+            // Se o banco tiver menos de 12 livros, ele pegará o que sobrar após o índice 6
+            const classicosData = livros.slice(6, 12);
+            listaClassicos.innerHTML = classicosData.map(gerarCardHTML).join('');
+        }
+
+        console.log("Livros renderizados com sucesso!");
+
     } catch (error) {
-    console.error("Erro ao carregar acervo:", error);
+        console.error("Erro ao carregar dados do Firebase:", error);
+    }
 }
-} 
 
 // TELA DE DETALHES
 // Pega o ID da URL (ex: detalhes.php?id=id_do_livro)

@@ -352,3 +352,23 @@ function trocarTab(id, btn) {
     document.getElementById('panel-' + id).classList.add('ativo');
     btn.classList.add('ativo');
 }
+
+function toggleMenu() {
+    const menu = document.getElementById('menuLateral');
+    const overlay = document.getElementById('overlayMenu');
+    const btn = document.getElementById('hambtn');
+    
+    menu.classList.toggle('aberto');
+    overlay.classList.toggle('ativo');
+    btn.classList.toggle('aberto');
+}
+
+function fecharMenu() {
+    const menu = document.getElementById('menuLateral');
+    const overlay = document.getElementById('overlayMenu');
+    const btn = document.getElementById('hambtn');
+    
+    menu.classList.remove('aberto');
+    overlay.classList.remove('ativo');
+    btn.classList.remove('aberto');
+}

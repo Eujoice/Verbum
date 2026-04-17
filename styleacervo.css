@@ -10,38 +10,34 @@
    BODY E CONTAINER PRINCIPAL
    ========================================= */
 .body-acervo {
-    background-color: #6C9467;
-    font-family: 'Poppins', sans-serif;
+    background-color: #f7faf7;
+    font-family: 'Poppins', 'DM Sans', sans-serif;
     min-height: 100vh;
-    padding: 14px;
+    font-size: 16px;
 }
 
 .container-acervo {
-    background-color: #fff;
-    border-radius: 22px;
-    margin: 0 auto;
     width: 100%;
-    max-width: 1800px;
-    min-height: calc(100vh - 28px);
-    padding-bottom: 48px;
-    position: relative;
+    background-color: #f7faf7;
+    margin: 0;
 }
 
 /* =========================================
    HEADER
    ========================================= */
 .header {
+    padding: 0 40px;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 48px;
-    border-bottom: 1px solid #eaede9;
+    background-color: #477740;
 }
 
 .logo a {
     font-family: 'Milonga', serif;
     font-size: 30px;
-    color: #6C9467;
+    color: #fff;
     text-decoration: none;
 }
 
@@ -54,7 +50,7 @@
 
 .busca input {
     width: 100%;
-    padding: 11px 44px 11px 18px;
+    padding: 11px 52px 11px 18px;
     border-radius: 50px;
     border: 1.5px solid #dde8dc;
     background: #f7f9f7;
@@ -74,30 +70,14 @@
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    width: 16px;
-    height: 16px;
+    width: 22px;
+    height: 22px;
 }
 
 .icones {
     display: flex;
     align-items: center;
     gap: 24px;
-}
-
-.favoritos {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    font-size: 13px;
-    font-weight: 600;
-    color: #6C9467;
-    cursor: pointer;
-}
-
-.favoritos svg {
-    width: 18px;
-    height: 18px;
-    fill: #e05a6a;
 }
 
 /* =========================================
@@ -122,7 +102,7 @@
 .bar {
     width: 24px;
     height: 2.5px;
-    background: #6C9467;
+    background: #fff;
     border-radius: 2px;
     transition: all 0.3s ease;
     display: block;
@@ -149,11 +129,12 @@
     padding: 0 48px;
     border-bottom: 1px solid #eaede9;
     gap: 0;
+    justify-content: center;
 }
 
 .tab {
-    padding: 14px 20px;
-    font-size: 13px;
+    padding: 16px 28px;
+    font-size: 15px;
     font-weight: 600;
     color: #9aaa98;
     text-decoration: none;
@@ -176,16 +157,18 @@
    CARROSSEL DE BANNERS
    ========================================= */
 .banner-section {
-    padding: 24px 48px 8px;
+    padding: 28px 120px 8px;
 }
 
 .carousel {
     position: relative;
     border-radius: 18px;
     overflow: hidden;
-    height: 185px;
+    height: 200px;
     cursor: grab;
     user-select: none;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .carousel:active {
@@ -204,72 +187,24 @@
     position: relative;
     display: flex;
     align-items: center;
+    background: #111;
 }
 
-.slide-1 { background: #0d4a40; }
-.slide-2 { background: #1a1a3e; }
-.slide-3 { background: #3d1a0a; }
-.slide-4 { background: #0a2a4a; }
-.slide-5 { background: #2a0a3d; }
-
-.slide-deco {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-}
-
-.slide-content {
-    position: relative;
-    z-index: 2;
-    padding: 0 44px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* Each slide is now a full image */
+.slide-img {
     width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
 }
 
-.slide-tag {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 7px;
-}
+/* Hide old slide color backgrounds */
+.slide-1, .slide-2, .slide-3, .slide-4, .slide-5 { background: #111; }
 
-.slide-title {
-    font-size: 30px;
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.05;
-    letter-spacing: -0.5px;
-    font-style: italic;
-}
-
-.slide-title span {
-    font-size: 18px;
-    font-weight: 600;
-    font-style: normal;
-    opacity: 0.7;
-}
-
-.slide-sub {
-    font-size: 12px;
-    color: rgba(255,255,255,0.55);
-    margin-top: 8px;
-}
-
-.slide-pill {
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.22);
-    border-radius: 50px;
-    padding: 8px 20px;
-    font-size: 12px;
-    font-weight: 600;
-    color: rgba(255,255,255,0.85);
-    white-space: nowrap;
-    flex-shrink: 0;
-}
+.slide-deco { display: none; }
+.slide-content { display: none; }
+.slide-cover { display: none; }
+.slide-cover-placeholder { display: none; }
 
 .carr-prev,
 .carr-next {
@@ -308,6 +243,8 @@
     justify-content: center;
     gap: 8px;
     padding: 14px 0 4px;
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .dot {
@@ -330,27 +267,28 @@
 /* =========================================
    SEÇÃO POPULARES
    ========================================= */
-.populares {
-    padding: 20px 48px;
+/* Container das seções */
+.populares, .classicos {
+    width: 100%;
+    max-width: 1100px; 
+    margin: 40px auto; 
+    padding: 0 20px;
 }
 
 .sec-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 18px;
+    margin-bottom: 20px;
+    color: #3a8036;
+    /* Isso garante que o título comece alinhado com o primeiro livro */
 }
 
-.sec-header h2 {
-    font-size: 17px;
-    font-weight: 700;
-    color: #6C9467;
-}
-
+/* Estilo do link Ver Todos */
 .ver-todos {
-    font-size: 12px;
+    font-size: 13px;
     color: #9aaa98;
-    cursor: pointer;
+    text-decoration: none;
     font-weight: 600;
     transition: color 0.2s;
 }
@@ -361,37 +299,25 @@
 
 .lista-livros {
     display: flex;
-    gap: 24px;
-    overflow-x: auto;
-    padding-bottom: 10px;
+    justify-content: space-between;
+    gap: 20px;
+    overflow: visible; 
+    padding: 20px 0; /* Espaço para o zoom não bater no título acima */
 }
 
-.lista-livros::-webkit-scrollbar {
-    height: 4px;
-}
-
-.lista-livros::-webkit-scrollbar-track {
-    background: #f7f9f7;
-    border-radius: 2px;
-}
-
-.lista-livros::-webkit-scrollbar-thumb {
-    background: #dde8dc;
-    border-radius: 2px;
-}
-
-/* Cards de livro gerados pelo acervo_logic.js */
+/* Mantemos o tamanho original do livro que você já tinha no código */
 .livro {
-    flex: 0 0 148px;
-    cursor: pointer;
-    transition: transform 0.2s;
+    flex: 0 0 148px; 
     text-align: center;
+    transition: transform 0.3s ease; /* Transição da animação */
+    cursor: pointer;
+    position: relative;
 }
-
+/* Efeito de aumento (Zoom) sem cortar */
 .livro:hover {
-    transform: translateY(-6px);
+    transform: scale(1.1); /* Aumenta 10% */
+    z-index: 10; /* Fica na frente dos outros ao aumentar */
 }
-
 .livro img {
     width: 148px;
     height: 210px;
@@ -402,7 +328,7 @@
 }
 
 .livro .titulo {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     color: #1e2b1d;
     margin-top: 10px;
@@ -410,7 +336,7 @@
 }
 
 .livro .autor {
-    font-size: 11px;
+    font-size: 13px;
     color: #9aaa98;
     margin-top: 3px;
 }

@@ -13,7 +13,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styleacervo.css?v=2">
+    <link rel="stylesheet" href="styleacervo.css">
 </head>
 <body class="body-acervo">
 
@@ -22,7 +22,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <nav class="menu-lateral" id="menuLateral">
         <div class="sb-profile">
             <div class="sb-avatar">
-              
                 <div class="sb-avatar-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
                 </div>
@@ -71,10 +70,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 <input type="text" placeholder="O que você quer ler?">
             </div>
             <div class="icones">
-                <span class="favoritos">
-                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                    Favoritos
-                </span>
                 <button class="hambtn" id="hambtn" onclick="toggleMenu()">
                     <div class="bar"></div>
                     <div class="bar"></div>
@@ -94,59 +89,19 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             <div class="carousel" id="carousel">
                 <div class="slides" id="slides">
                     <div class="slide slide-1">
-                        <div class="slide-deco"></div>
-                        <div class="slide-content">
-                            <div class="slide-text">
-                                <div class="slide-tag">Em destaque</div>
-                                <div class="slide-title">Percy Jackson<br><span>e os Olimpianos</span></div>
-                                <div class="slide-sub">O Ladrão de Raios — Rick Riordan</div>
-                            </div>
-                            <div class="slide-pill">Aventura · Fantasia</div>
-                        </div>
+                        <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
                     </div>
                     <div class="slide slide-2">
-                        <div class="slide-deco"></div>
-                        <div class="slide-content">
-                            <div class="slide-text">
-                                <div class="slide-tag">Clássico mundial</div>
-                                <div class="slide-title">Crime e<br>Castigo</div>
-                                <div class="slide-sub">Fiódor Dostoiévski</div>
-                            </div>
-                            <div class="slide-pill">Romance · Filosofia</div>
-                        </div>
+                        <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
                     </div>
                     <div class="slide slide-3">
-                        <div class="slide-deco"></div>
-                        <div class="slide-content">
-                            <div class="slide-text">
-                                <div class="slide-tag">Mais emprestado</div>
-                                <div class="slide-title">Os Sete Maridos<br><span>de Evelyn Hugo</span></div>
-                                <div class="slide-sub">Taylor Jenkins Reid</div>
-                            </div>
-                            <div class="slide-pill">Drama · Romance</div>
-                        </div>
+                        <img class="slide-img" src="imgs/h.png" alt="Os Sete Maridos de Evelyn Hugo">
                     </div>
                     <div class="slide slide-4">
-                        <div class="slide-deco"></div>
-                        <div class="slide-content">
-                            <div class="slide-text">
-                                <div class="slide-tag">Novidade no acervo</div>
-                                <div class="slide-title">A Biblioteca<br><span>da Meia-Noite</span></div>
-                                <div class="slide-sub">Matt Haig</div>
-                            </div>
-                            <div class="slide-pill">Ficção · Reflexão</div>
-                        </div>
+                        <div style="width:100%;height:100%;background:#0a2a4a;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:13px;font-family:'Poppins',sans-serif;">A Biblioteca da Meia-Noite — capa em breve</div>
                     </div>
                     <div class="slide slide-5">
-                        <div class="slide-deco"></div>
-                        <div class="slide-content">
-                            <div class="slide-text">
-                                <div class="slide-tag">Recomendação da semana</div>
-                                <div class="slide-title">A Metamorfose</div>
-                                <div class="slide-sub">Franz Kafka</div>
-                            </div>
-                            <div class="slide-pill">Clássico · Surrealismo</div>
-                        </div>
+                        <div style="width:100%;height:100%;background:#2a0a3d;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:13px;font-family:'Poppins',sans-serif;">A Metamorfose — capa em breve</div>
                     </div>
                 </div>
                 <button class="carr-prev" onclick="mudarSlide(-1)">
@@ -165,13 +120,21 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             </div>
         </section>
 
-        <section class="populares">
-            <div class="sec-header">
-                <h2>Populares</h2>
-                <span class="ver-todos">Ver todos →</span>
-            </div>
-            <div class="lista-livros" id="lista-livros-firebase"></div>
-        </section>
+ <section class="populares">
+    <div class="sec-header">
+        <h2>Populares</h2>
+        <a href="populares_lista.php" class="ver-todos">Ver todos →</a>
+    </div>
+    <div class="lista-livros" id="lista-populares"></div> 
+</section>
+
+<section class="classicos">
+    <div class="sec-header">
+        <h2>Clássicos</h2>
+        <a href="classicos_lista.php" class="ver-todos">Ver todos →</a>
+    </div>
+    <div class="lista-livros" id="lista-classicos"></div>
+</section>
     </div>
 
     <script src="script-acervo.js"></script>

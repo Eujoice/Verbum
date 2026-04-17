@@ -27,7 +27,7 @@ function renderGrid() {
         cell.className = `armario-cell ${info.ocupado ? 'ocupado' : (isSel ? 'selecionado' : 'disponivel')}`;
         cell.innerHTML = `
             <span class="armario-num">${numStr}</span>
-            <span class="armario-sub">${info.ocupado ? 'ocupado' : (isSel ? 'selecionado' : 'livre')}</span>
+            <span class="armario-sub">${info.ocupado ? 'ocupado' : (isSel ? 'livre' : 'livre')}</span>
         `;
 
         cell.onclick = () => {
