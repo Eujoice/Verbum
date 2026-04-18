@@ -44,6 +44,7 @@ if (isset($dadosObras['documents'])) {
         $status = $f['status']['stringValue'] ?? 'Indisponível';
         $emprestado_por = $f['emprestado_por']['stringValue'] ?? '';
         $data_prevista = $f['data_devolucao_prevista']['stringValue'] ?? '';
+        $capa = $f['capa']['stringValue'] ?? '';
 
         if (strpos(mb_strtolower($id), $termo) !== false || strpos(mb_strtolower($titulo), $termo) !== false) {
             $resultados[] = [
@@ -52,6 +53,7 @@ if (isset($dadosObras['documents'])) {
                 'status' => $status,
                 'emprestado_por' => $emprestado_por,
                 'data_prevista' => $data_prevista,
+                'capa' => $capa,
                 'id_emprestimo_atual' => $mapaEmprestimos[$id] ?? '' 
             ];
         }

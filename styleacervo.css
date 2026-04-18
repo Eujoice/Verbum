@@ -24,21 +24,38 @@
 
 /* =========================================
    HEADER
-   ========================================= */
+   ========================================*/
+   
 .header {
+    background: #477740;
     padding: 0 40px;
     height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #477740;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.logo {
+    font-family: "Milonga", serif;
+    font-size: 26px;
+    margin: 0;
 }
 
 .logo a {
-    font-family: 'Milonga', serif;
-    font-size: 30px;
-    color: #fff;
+    color: #e8f2e8 !important;
     text-decoration: none;
+}
+
+.logo-vb {
+    width: 50px;
+    height: 50px;
+    margin-left: -16px;
 }
 
 .busca {
