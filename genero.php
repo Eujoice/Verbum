@@ -60,8 +60,8 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
             </div>
             Histórico de Empréstimos
         </a>
-        <a class="nav-item" href="dpessoais.php">
-            <div class="nav-ic">
+        <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
+        <div class="nav-ic">
                 <svg viewBox="0 0 24 24" width="15" height="15" fill="#6C9467">
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                 </svg>
@@ -106,13 +106,13 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
             <a class="tab" href="acervo.php">Acervo</a>
             <a class="tab ativo" href="genero.php">Gênero</a>
             <a class="tab" href="historico.php">Histórico</a>
-            <a class="tab" href="#">Títulos pendentes</a>
+            <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
         <!-- TELA 1: GRID DE GÊNEROS -->
         <section class="pg-generos" id="tela-generos" <?php if($genero_id) echo 'style="display:none"'; ?>>
             <div class="pg-header">
-                <h1>Explorar por Gênero</h1>
+                <h1 class="h11">Explorar por Gênero</h1>
                 <p class="pg-sub">Escolha um gênero para ver todos os títulos disponíveis</p>
             </div>
             <div class="generos-grid" id="generos-grid">
@@ -132,15 +132,13 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
             <div class="livros-header">
                 <div class="genero-badge" id="badge-genero"></div>
                 <div>
-                    <h2 id="titulo-genero"><?php echo $genero_nome; ?></h2>
+                    <h2 id="titulo-genero" ><?php echo $genero_nome; ?></h2>
                     <p class="genero-desc" id="desc-genero"></p>
                 </div>
             </div>
             <div class="filtros-bar">
                 <span class="filtros-label">Ordenar por:</span>
                 <button class="filtro-pill ativo" data-filtro="titulo">A–Z</button>
-                <button class="filtro-pill" data-filtro="avaliacao">Melhor avaliados</button>
-                <button class="filtro-pill" data-filtro="recente">Mais recentes</button>
             </div>
             <p class="livros-count" id="livros-count"></p>
             <div class="livros-grid" id="livros-grid">
@@ -151,6 +149,7 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
             </div>
         </section>
     </div>
+    <?php include 'dp_modal.php'; ?>
 
     <script>
         var GENERO_INICIAL = '<?php echo $genero_id; ?>';

@@ -9,12 +9,12 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Verbum | Histórico</title>
+    <title>Verbum | Títulos Pendentes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styleacervo.css">
-    <link rel="stylesheet" href="style-historico.css">
+    <link rel="stylesheet" href="style-pendentes.css">
 </head>
 <body class="body-acervo">
 
@@ -23,10 +23,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <nav class="menu-lateral" id="menuLateral">
         <div class="sb-profile">
             <div class="sb-avatar">
-            <div class="sb-avatar-icon">
+                <div class="sb-avatar-icon">
                     <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
-                
-            
                 </div>
             </div>
             <div class="sb-name"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></div>
@@ -40,11 +38,11 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 Acessar Painel
             </a>
             <?php endif; ?>
-            <a class="nav-item" href="titulos-pendentes.php">
+            <a class="nav-item nav-ativo" href="titulos-pendentes.php">
                 <div class="nav-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="#6C9467"><path d="M19 3H5c-1.1 0-2 .9-2 2v14l4-4h12c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div>
                 Títulos Pendentes
             </a>
-            <a class="nav-item nav-ativo" href="historico.php">
+            <a class="nav-item" href="historico.php">
                 <div class="nav-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="#6C9467"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
                 Histórico de Empréstimos
             </a>
@@ -70,55 +68,61 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
                 <input type="text" placeholder="O que você quer ler?">
             </div>
-        
-  
-                <button class="hambtn" id="hambtn" onclick="toggleMenu()">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                </button>
-            </div>
+            <button class="hambtn" id="hambtn" onclick="toggleMenu()">
+                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            </button>
         </header>
 
         <nav class="menu-tabs">
             <a class="tab" href="acervo.php">Acervo</a>
-           
             <a class="tab" href="genero.php">Gênero</a>
-            <a class="tab ativo" href="historico.php">Histórico</a>
-            <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
+            <a class="tab" href="historico.php">Histórico</a>
+            <a class="tab ativo" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
-        <section class="hist-body">
-            <div class="hist-top">
-                <div class="hist-titulo">
-                    <h1>Histórico de Empréstimos</h1>
-                    <p>Todos os livros que você já pegou emprestado</p>
+        <section class="pend-body">
+
+            <!-- Cabeçalho + slots -->
+            <div class="pend-top">
+                <div class="pend-titulo">
+                    <h1>Títulos Pendentes</h1>
+                    <p>Você pode ter até 3 livros emprestados ao mesmo tempo</p>
                 </div>
-                <div class="hist-stats">
-                    <div class="stat-card"><div class="stat-num" id="stat-total">—</div><div class="stat-label">Total</div></div>
-                    <div class="stat-card"><div class="stat-num verde" id="stat-devolvidos">—</div><div class="stat-label">Devolvidos</div></div>
-                    <div class="stat-card"><div class="stat-num amarelo" id="stat-ativos">—</div><div class="stat-label">Ativos</div></div>
-                    <div class="stat-card"><div class="stat-num vermelho" id="stat-atrasados">—</div><div class="stat-label">Atrasados</div></div>
+                <div class="slots-wrap" id="slots-wrap">
+                    <div class="slot-loading"></div>
+                    <div class="slot-loading"></div>
+                    <div class="slot-loading"></div>
                 </div>
             </div>
 
-            <div class="filtros">
-                <span class="filtros-label">Filtrar:</span>
-                <button class="filtro-pill ativo" data-filtro="todos">Todos</button>
-                <button class="filtro-pill" data-filtro="ativo">Ativos</button>
-                <button class="filtro-pill" data-filtro="inativo">Devolvidos</button>
-                <button class="filtro-pill" data-filtro="atrasado">Atrasados</button>
+            <!-- Seção: Empréstimos ativos -->
+            <div class="pend-secao">
+                <div class="secao-header">
+                    <span class="secao-titulo">Em mãos</span>
+                    <span class="secao-badge badge-ativo" id="count-ativos">—</span>
+                </div>
+                <div class="pend-lista" id="lista-ativos">
+                    <div class="emp-skeleton"></div>
+                    <div class="emp-skeleton"></div>
+                </div>
             </div>
 
-            <div class="hist-lista" id="hist-lista">
-                <div class="emp-skeleton"></div>
-                <div class="emp-skeleton"></div>
-                <div class="emp-skeleton"></div>
+            <!-- Seção: Atrasados -->
+            <div class="pend-secao" id="secao-atrasados" style="display:none">
+                <div class="secao-header">
+                    <span class="secao-titulo secao-titulo-atrasado">Atrasados</span>
+                    <span class="secao-badge badge-atrasado" id="count-atrasados">—</span>
+                </div>
+                <div class="pend-lista" id="lista-atrasados"></div>
             </div>
+
         </section>
     </div>
+
     <script>
-    var MATRICULA_USUARIO = '<?php echo htmlspecialchars($_SESSION["usuario_matricula"]); ?>';
-</script>
-<script src="script-acervo.js"></script>
-<script type="module" src="historico_logic.js"></script>
+        var MATRICULA_USUARIO = '<?php echo htmlspecialchars($_SESSION["usuario_matricula"]); ?>';
+    </script>
+    <script src="script-acervo.js"></script>
+    <script type="module" src="pendentes_logic.js"></script>
 </body>
 </html>

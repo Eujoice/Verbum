@@ -2,8 +2,14 @@
    PÁGINA DE GÊNEROS — REDESIGN EDITORIAL
    ========================================= */
 
-.pg-generos {
+   .pg-generos {
     padding: 36px 48px 48px;
+}
+.h11{
+    color:#3a8036;
+}
+h2{
+    color:#3a8036;
 }
 
 .pg-header {
@@ -21,34 +27,37 @@
     font-size: 13px;
     color: #9aaa98;
 }
-
 .generos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(5, 1fr);
     gap: 16px;
+    width: 100%;
 }
 
 /* ---- CARD ---- */
 .genero-card {
     border-radius: 16px;
-    padding: 28px 24px 24px;
     cursor: pointer;
     transition: transform 0.22s ease, box-shadow 0.22s ease;
     position: relative;
     overflow: hidden;
-    min-height: 200px;
+
     display: flex;
-    opacity: 0.93;
-    flex-direction: column;
-    justify-content: flex-end;
-    text-decoration: none;
-    border: none;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 20px;
+    min-height: 130px;
 }
 
 .genero-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 18px 40px rgba(31, 80, 90, 0.3);
     opacity: 1;
+}
+
+.genero-card:hover .genero-icon-wrap {
+    transform: translateY(calc(-50% - 4px)) rotate(-6deg);
 }
 
 /* Linha de acento lateral */
@@ -88,33 +97,34 @@
     pointer-events: none;
 }
 
-/* Ícone SVG */
+/* Ícone — grande, à direita, saindo levemente do card */
 .genero-icon-wrap {
-    position: relative;
-    z-index: 1;
-    margin-bottom: 18px;
-    width: 42px;
-    height: 42px;
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(8deg);
+    transition: transform 0.22s ease;
+    z-index: 3;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255,255,255,0.14);
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.2);
-    backdrop-filter: blur(4px);
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.28));
 }
 
-.genero-icon-wrap svg {
-    width: 22px;
-    height: 22px;
-    display: block;
-    flex-shrink: 0;
+.genero-icon-wrap svg,
+.genero-icon-wrap img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
 }
 
 /* Nome do gênero — estilizado com Milonga + sombra suave */
 .genero-nome {
     font-family: 'Milonga', serif;
-    font-size: 18px;
+    font-size: 22px;
     font-weight: 400;
     color: #fff;
     position: relative;
@@ -122,12 +132,13 @@
     line-height: 1.2;
     letter-spacing: 0.01em;
     text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    max-width: calc(100% - 70px); /* evita sobrepor o ícone */
 }
 
 /* Skeleton */
 .genero-skeleton {
     border-radius: 16px;
-    min-height: 200px;
+    min-height: 130px;
     background: linear-gradient(135deg, #dce8db, #eef2ed);
     animation: pulse 1.4s ease-in-out infinite;
 }
@@ -195,7 +206,7 @@
 .livros-header-text h2 {
     font-size: 17px;
     font-weight: 700;
-    color: #1e2b1d;
+    color: #3a8036;
     margin-bottom: 2px;
     display: none;
 }
@@ -251,68 +262,62 @@
 
 /* Grid de livros */
 .livros-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(148px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 28px 20px;
+    justify-content: flex-start;
 }
 
+/* Card de Livro — Estilo Tela Inicial */
 .livro-card {
+    flex: 0 0 148px; 
+    text-align: center;
+    transition: transform 0.3s ease; 
     cursor: pointer;
-    transition: transform 0.2s;
+    position: relative;
+    text-decoration: none;
 }
 
-.livro-card:hover { transform: translateY(-6px); }
+/* Efeito de aumento (Zoom) idêntico à home */
+.livro-card:hover {
+    transform: scale(1.1); 
+    z-index: 10; 
+}
 
+/* Capa do Livro */
 .livro-capa {
-    width: 100%;
-    aspect-ratio: 2 / 3;
+    width: 148px;
+    height: 210px;
     border-radius: 12px;
     object-fit: cover;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.2);
     display: block;
 }
 
-.livro-capa-placeholder {
-    width: 100%;
-    aspect-ratio: 2 / 3;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px;
-    font-weight: 700;
-    color: #fff;
-    text-align: center;
-    padding: 12px;
-    line-height: 1.35;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
-}
-
+/* Tipografia — Ajustada para os tamanhos da home */
 .livro-titulo {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 700;
     color: #1e2b1d;
     margin-top: 10px;
     line-height: 1.35;
+    /* Mantém o texto alinhado ao centro como na home */
+    text-align: center; 
 }
 
 .livro-autor {
-    font-size: 11px;
+    font-size: 13px;
     color: #9aaa98;
     margin-top: 3px;
+    text-align: center;
 }
 
+/* Estrelas de avaliação (se houver no seu JS) */
 .livro-stars {
     font-size: 11px;
     color: #e8a020;
-    margin-top: 3px;
-}
-
-.livro-skeleton {
-    border-radius: 12px;
-    aspect-ratio: 2 / 3;
-    background: #eef2ed;
-    animation: pulse 1.4s ease-in-out infinite;
+    margin-top: 4px;
+    text-align: center;
 }
 
 /* Estado vazio */

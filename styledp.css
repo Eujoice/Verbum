@@ -1,373 +1,387 @@
-/* TELA -- DADOS PESSOAIS (reformulada) */
+/* =========================================
+   DADOS PESSOAIS — OVERLAY / MODAL
+   ========================================= */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=ABeeZee&display=swap');
+   @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=ABeeZee&display=swap');
 
-.body-dp {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background-color: #f0f4ee;
-    background-image:
-        radial-gradient(circle at 20% 10%, rgba(108, 148, 103, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 80% 90%, rgba(53, 74, 43, 0.08) 0%, transparent 40%);
-    overflow: hidden;
-    position: relative;
-}
-.star {
-    position: absolute;
-    width: 10vw;       
-    max-width: 180px;   
-    min-width: 60px;    
-    animation: girar linear infinite;
-    opacity: 1;
-
-    z-index: 0;         
-    pointer-events: none; 
-}
-
-@keyframes girar {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-/* posições espalhadas */
-
-.star1 {
-    top: 5%;
-    left: 3%;
-    animation-duration: 40s;
-}
-
-.star2 {
-    top: 8%;
-    right: 8%;
-    animation-duration: 50s;
-}
-
-.star3 {
-    bottom: 5%;
-    left: 10%;
-    animation-duration: 45s;
-}
-
-.star4 {
-    top: 65%;
-    right: 5%;
-    animation-duration: 55s;
-}
-
-.star5 {
-    top: 35%;
-    left: 2%;
-    animation-duration: 48s;
-}
-
-.star6 {
-    bottom: 25%;
-    right: 12%;
-    animation-duration: 60s;
-}
-
-/* NOVAS ESTRELAS NO CENTRO */
-
-.star7 {
-    top: 2%;
-    left: 48%;
-    transform: translateX(-50%);
-    animation-duration: 52s;
-}
-
-.star8 {
-    bottom: 3%;
-    left: 52%;
-    transform: translateX(-50%);
-    animation-duration: 47s;
-}
-
-/* ─── Card principal ─── */
-.container-dp {
-    position: relative;
-    z-index: 1;
-    background-color: #ffffff;
-    border-radius: 24px;
-    width: 460px;
-    overflow: hidden;
-    box-shadow:
-        0 4px 6px rgba(0,0,0,0.04),
-        0 10px 40px rgba(53, 74, 43, 0.12);
-    box-sizing: border-box;
-    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-@keyframes slideUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ─── Header com banner ─── */
-.header-perfil {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0 0 24px 0;
-    text-align: center;
-}
-
-.header-banner {
-    width: 100%;
-    height: 90px;
-    background: linear-gradient(135deg, #354A2B 0%, #4e6e41 60%, #6C9467 100%);
-    position: relative;
-    overflow: hidden;
-}
-
-.header-banner::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.06) 0%, transparent 60%);
-}
-
-.foto3 {
-    position: relative;
-    margin-top: -44px;
-    z-index: 2;
-}
-
-.foto3 img {
-    width: 88px;
-    height: 88px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #ffffff;
-    box-shadow: 0 4px 16px rgba(53, 74, 43, 0.2);
-    background: #eef2ec;
-}
-
-.dados-entrada-dp {
-    margin-top: 10px;
-}
-
-#nomeUsuario {
-    display: block;
-    font-size: 18px;
-    font-weight: 700;
-    color: #354A2B;
-    text-decoration: none;
-    letter-spacing: -0.3px;
-    line-height: 1.2;
-}
-
-#emailUsuario {
-    margin: 4px 0 0 0;
-    font-size: 13px;
-    font-family: "ABeeZee", sans-serif;
-    color: #6C9467;
-    letter-spacing: 0.1px;
-}
-
-/* ─── Divisor ─── */
-.divider {
-    width: calc(100% - 48px);
-    height: 1px;
-    background: linear-gradient(to right, transparent, #e4ede2, transparent);
-    margin: 0 24px 24px;
-}
-
-/* ─── Formulário ─── */
-.formulario {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 0 32px 32px;
-}
-
-.campo {
-    display: flex;
-    flex-direction: column;
-}
-
-.label-dp {
-    font-size: 11px;
-    font-weight: 600;
-    color: #6C9467;
-    margin-bottom: 6px;
-    margin-left: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
-
-.formu {
-    border-radius: 12px;
-    padding: 11px 14px;
-    width: 100%;
-    border: 1.5px solid #dde8db;
-    box-sizing: border-box;
-    outline: none;
-    font-family: "Poppins", sans-serif;
-    font-size: 14px;
-    color: #354A2B;
-    background-color: #f8fbf7;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
-}
-
-.formu:hover {
-    border-color: #b2c9ae;
-    background-color: #f4f9f3;
-}
-
-.formu:focus {
-    border-color: #6C9467;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(108, 148, 103, 0.15);
-}
-
-.formu::placeholder {
-    color: rgba(104, 118, 97, 0.4);
-}
-
-/* ─── Botão ─── */
-.btn-wrapper {
-    margin-top: 8px;
-}
-
-.btn {
-    width: 100%;
-    padding: 13px;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(135deg, #354A2B 0%, #4a6a38 100%);
-    cursor: pointer;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    color: #ffffff;
-    letter-spacing: 0.3px;
-    transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
-    box-shadow: 0 4px 14px rgba(53, 74, 43, 0.3);
-}
-
-.btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(53, 74, 43, 0.35);
-}
-
-.btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(53, 74, 43, 0.25);
-}
-
-/* ─── Modal popup de sucesso ─── */
-.modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 100;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.25s ease;
-}
-
-.modal-overlay.ativo {
-    display: flex;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-}
-
-.modal-content {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 36px 32px 28px;
-    width: 340px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-    position: relative;
-}
-
-@keyframes popIn {
-    from { opacity: 0; transform: scale(0.85) translateY(20px); }
-    to   { opacity: 1; transform: scale(1)    translateY(0); }
-}
-
-.modal-img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #e4ede2;
-    margin-bottom: 16px;
-}
-
-.modal-icon {
-    font-size: 48px;
-    margin-bottom: 12px;
-    line-height: 1;
-}
-
-.modal-content h3 {
-    font-size: 18px;
-    font-weight: 700;
-    color: #354A2B;
-    margin: 0 0 8px 0;
-}
-
-.modal-content p {
-    font-size: 13px;
-    color: #6C9467;
-    margin: 0 0 24px 0;
-    line-height: 1.5;
-}
-
-.btn-confirmar {
-    background: linear-gradient(135deg, #354A2B 0%, #4a6a38 100%);
-    color: #ffffff;
-    border: none;
-    border-radius: 10px;
-    padding: 11px 40px;
-    font-family: "Poppins", sans-serif;
-    font-weight: 600;
-    font-size: 14px;
-    cursor: pointer;
-    box-shadow: 0 4px 14px rgba(53, 74, 43, 0.3);
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
-}
-
-.btn-confirmar:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(53, 74, 43, 0.35);
-}
-
-/* ─── Responsividade ─── */
-@media (max-width: 500px) {
-    .container-dp {
-        width: 94vw;
-        border-radius: 20px;
-    }
-
-    .formulario {
-        padding: 0 20px 24px;
-    }
-
-    .divider {
-        width: calc(100% - 40px);
-        margin: 0 20px 20px;
-    }
-
-    .modal-content {
-        width: 88vw;
-        padding: 28px 20px 22px;
-    }
-}
+   /* ─── Overlay escurecido com blur ─── */
+   .dp-overlay {
+       display: none;
+       position: fixed;
+       inset: 0;
+       background: rgba(30, 43, 29, 0.45);
+       backdrop-filter: blur(6px);
+       -webkit-backdrop-filter: blur(6px);
+       z-index: 10000;
+       justify-content: center;
+       align-items: center;
+       animation: dpFadeIn 0.25s ease;
+   }
+   
+   .dp-overlay.ativo {
+       display: flex;
+   }
+   
+   @keyframes dpFadeIn {
+       from { opacity: 0; }
+       to   { opacity: 1; }
+   }
+   
+   /* ─── Card principal ─── */
+   .container-dp {
+       position: relative;
+       background-color: #ffffff;
+       border-radius: 24px;
+       width: 460px;
+       max-height: 92vh;
+       overflow-y: auto;
+       overflow-x: hidden;
+       box-shadow:
+           0 4px 6px rgba(0,0,0,0.06),
+           0 24px 60px rgba(53, 74, 43, 0.22);
+       box-sizing: border-box;
+       animation: dpSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+       scrollbar-width: none;
+   }
+   
+   .container-dp::-webkit-scrollbar {
+       display: none;
+   }
+   
+   @keyframes dpSlideUp {
+       from { opacity: 0; transform: translateY(28px) scale(0.97); }
+       to   { opacity: 1; transform: translateY(0)    scale(1); }
+   }
+   
+   /* ─── Botão fechar / voltar ─── */
+   .dp-btn-fechar {
+       position: absolute;
+       top: 14px;
+       right: 14px;
+       z-index: 10;
+       background: rgba(255,255,255,0.85);
+       border: 1.5px solid #dde8db;
+       border-radius: 50%;
+       width: 34px;
+       height: 34px;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       cursor: pointer;
+       transition: background 0.18s, transform 0.15s, border-color 0.18s;
+       box-shadow: 0 2px 8px rgba(53,74,43,0.1);
+   }
+   
+   .dp-btn-fechar:hover {
+       background: #f0f5ef;
+       border-color: #b2c9ae;
+       transform: scale(1.08);
+   }
+   
+   .dp-btn-fechar svg {
+       width: 16px;
+       height: 16px;
+       stroke: #354A2B;
+       fill: none;
+   }
+   
+   /* ─── Header com banner ─── */
+   .header-perfil {
+       position: relative;
+       display: flex;
+       flex-direction: column;
+       align-items: center;
+       padding: 0 0 24px 0;
+       text-align: center;
+   }
+   
+   .header-banner {
+       width: 100%;
+       height: 90px;
+       background: linear-gradient(135deg, #354A2B 0%, #4e6e41 60%, #6C9467 100%);
+       position: relative;
+       overflow: hidden;
+       border-radius: 24px 24px 0 0;
+   }
+   
+   .header-banner::before {
+       content: '';
+       position: absolute;
+       inset: 0;
+       background-image: radial-gradient(circle at 70% 50%, rgba(255,255,255,0.07) 0%, transparent 60%);
+   }
+   
+   .foto3 {
+       position: relative;
+       margin-top: -44px;
+       z-index: 2;
+   }
+   
+   /* removido — avatar agora é SVG */
+   .foto3-img-legacy {
+       width: 88px;
+       height: 88px;
+       border-radius: 50%;
+       object-fit: cover;
+       border: 4px solid #ffffff;
+       box-shadow: 0 4px 16px rgba(53, 74, 43, 0.2);
+       background: #eef2ec;
+   }
+   
+   .dados-entrada-dp {
+       margin-top: 10px;
+   }
+   
+   #nomeUsuario {
+       display: block;
+       font-size: 18px;
+       font-weight: 700;
+       color: #354A2B;
+       text-decoration: none;
+       letter-spacing: -0.3px;
+       line-height: 1.2;
+       font-family: "Poppins", sans-serif;
+   }
+   
+   #emailUsuario {
+       margin: 4px 0 0 0;
+       font-size: 13px;
+       font-family: "ABeeZee", sans-serif;
+       color: #6C9467;
+       letter-spacing: 0.1px;
+   }
+   
+   /* ─── Divisor ─── */
+   .divider {
+       width: calc(100% - 48px);
+       height: 1px;
+       background: linear-gradient(to right, transparent, #e4ede2, transparent);
+       margin: 0 24px 24px;
+   }
+   
+   /* ─── Formulário ─── */
+   .formulario {
+       display: flex;
+       flex-direction: column;
+       gap: 16px;
+       padding: 0 32px 32px;
+       font-family: "Poppins", sans-serif;
+   }
+   
+   .campo {
+       display: flex;
+       flex-direction: column;
+   }
+   
+   .label-dp {
+       font-size: 11px;
+       font-weight: 600;
+       color: #6C9467;
+       margin-bottom: 6px;
+       margin-left: 2px;
+       text-transform: uppercase;
+       letter-spacing: 0.8px;
+   }
+   
+   .formu {
+       border-radius: 12px;
+       padding: 11px 14px;
+       width: 100%;
+       border: 1.5px solid #dde8db;
+       box-sizing: border-box;
+       outline: none;
+       font-family: "Poppins", sans-serif;
+       font-size: 14px;
+       color: #354A2B;
+       background-color: #f8fbf7;
+       transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+   }
+   
+   .formu:hover {
+       border-color: #b2c9ae;
+       background-color: #f4f9f3;
+   }
+   
+   .formu:focus {
+       border-color: #6C9467;
+       background-color: #ffffff;
+       box-shadow: 0 0 0 3px rgba(108, 148, 103, 0.15);
+   }
+   
+   .formu::placeholder {
+       color: rgba(104, 118, 97, 0.4);
+   }
+   
+   /* ─── Botão salvar ─── */
+   .btn-wrapper {
+       margin-top: 8px;
+   }
+   
+   .btn {
+       width: 100%;
+       padding: 13px;
+       border-radius: 12px;
+       border: none;
+       background: linear-gradient(135deg, #354A2B 0%, #4a6a38 100%);
+       cursor: pointer;
+       font-family: "Poppins", sans-serif;
+       font-weight: 600;
+       font-size: 14px;
+       color: #ffffff;
+       letter-spacing: 0.3px;
+       transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+       box-shadow: 0 4px 14px rgba(53, 74, 43, 0.3);
+   }
+   
+   .btn:hover {
+       transform: translateY(-2px);
+       box-shadow: 0 6px 20px rgba(53, 74, 43, 0.35);
+   }
+   
+   .btn:active {
+       transform: translateY(0);
+       box-shadow: 0 2px 8px rgba(53, 74, 43, 0.25);
+   }
+   
+   /* ─── Modal popup de sucesso (dentro do overlay) ─── */
+   .modal-overlay {
+       display: none;
+       position: fixed;
+       inset: 0;
+       background: rgba(0, 0, 0, 0.5);
+       z-index: 10100;
+       justify-content: center;
+       align-items: center;
+       animation: fadeIn 0.25s ease;
+   }
+   
+   .modal-overlay.ativo {
+       display: flex;
+   }
+   
+   @keyframes fadeIn {
+       from { opacity: 0; }
+       to   { opacity: 1; }
+   }
+   
+   .modal-content {
+       background: #ffffff;
+       border-radius: 20px;
+       padding: 36px 32px 28px;
+       width: 340px;
+       text-align: center;
+       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+       animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+       position: relative;
+   }
+   
+   @keyframes popIn {
+       from { opacity: 0; transform: scale(0.85) translateY(20px); }
+       to   { opacity: 1; transform: scale(1)    translateY(0); }
+   }
+   
+   .modal-img {
+       width: 80px;
+       height: 80px;
+       border-radius: 50%;
+       object-fit: cover;
+       border: 3px solid #e4ede2;
+       margin-bottom: 16px;
+   }
+   
+   .modal-content h3 {
+       font-size: 18px;
+       font-weight: 700;
+       color: #354A2B;
+       margin: 0 0 8px 0;
+       font-family: "Poppins", sans-serif;
+   }
+   
+   .modal-content p {
+       font-size: 13px;
+       color: #6C9467;
+       margin: 0 0 24px 0;
+       line-height: 1.5;
+       font-family: "Poppins", sans-serif;
+   }
+   
+   .btn-confirmar {
+       background: linear-gradient(135deg, #354A2B 0%, #4a6a38 100%);
+       color: #ffffff;
+       border: none;
+       border-radius: 10px;
+       padding: 11px 40px;
+       font-family: "Poppins", sans-serif;
+       font-weight: 600;
+       font-size: 14px;
+       cursor: pointer;
+       box-shadow: 0 4px 14px rgba(53, 74, 43, 0.3);
+       transition: transform 0.15s ease, box-shadow 0.2s ease;
+   }
+   
+   .btn-confirmar:hover {
+       transform: translateY(-2px);
+       box-shadow: 0 6px 18px rgba(53, 74, 43, 0.35);
+   }
+   
+   /* ─── Responsividade ─── */
+   @media (max-width: 500px) {
+       .container-dp {
+           width: 94vw;
+           border-radius: 20px;
+           max-height: 96vh;
+       }
+   
+       .formulario {
+           padding: 0 20px 24px;
+       }
+   
+       .divider {
+           width: calc(100% - 40px);
+           margin: 0 20px 20px;
+       }
+   
+       .modal-content {
+           width: 88vw;
+           padding: 28px 20px 22px;
+       }
+   }
+   
+   /* ─── Avatar SVG (igual ao menu lateral) ─── */
+   .dp-avatar {
+       width: 88px;
+       height: 88px;
+       border-radius: 50%;
+       background: #eef4ed;
+       border: 4px solid #ffffff;
+       box-shadow: 0 4px 16px rgba(53, 74, 43, 0.2);
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       overflow: hidden;
+   }
+   
+   .dp-avatar svg {
+       width: 46px;
+       height: 46px;
+       fill: #6C9467;
+   }
+   
+   /* ─── Avatar SVG no modal de sucesso ─── */
+   .modal-avatar {
+       width: 80px;
+       height: 80px;
+       border-radius: 50%;
+       background: #eef4ed;
+       border: 3px solid #e4ede2;
+       display: flex;
+       align-items: center;
+       justify-content: center;
+       margin: 0 auto 16px;
+   }
+   
+   .modal-avatar svg {
+       width: 42px;
+       height: 42px;
+       fill: #6C9467;
+   }
