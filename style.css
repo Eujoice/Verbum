@@ -10,7 +10,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: serif;
+    font-family: 'Milonga', serif;
     position: relative;
     z-index: 2;
 }

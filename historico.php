@@ -65,11 +65,13 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
     <div class="container-acervo">
         <header class="header">
-            <div class="logo"><a href="acervo.php">Verbum</a></div>
+            <div class="header-left">
+                    <div class="logo"><a href="acervo.php">Verbum</a></div>
+                    <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
+                </div>
             <div class="busca">
                 <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                <input type="text" placeholder="O que você quer ler?">
-            </div>
+<input type="text" id="pesquisa" placeholder="O que você quer ler?">            </div>
         
   
                 <button class="hambtn" id="hambtn" onclick="toggleMenu()">
@@ -118,6 +120,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <script>
     var MATRICULA_USUARIO = '<?php echo htmlspecialchars($_SESSION["usuario_matricula"]); ?>';
 </script>
+    <script src="busca_detalhes.js"></script>
+
 <script src="script-acervo.js"></script>
 <script type="module" src="historico_logic.js"></script>
 </body>

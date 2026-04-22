@@ -13,7 +13,9 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styleacervo.css">
+    <link rel="stylesheet" href="styleacervo.css"
+    
+    >
 </head>
 <body class="body-acervo">
 
@@ -71,8 +73,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 </div>
             <div class="busca">
                 <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                <input type="text" placeholder="O que você quer ler?">
-            </div>
+                <input type="text" id="pesquisa" placeholder="O que você quer ler?">            </div>
             <div class="icones">
                 <button class="hambtn" id="hambtn" onclick="toggleMenu()">
                     <div class="bar"></div>
@@ -143,7 +144,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
     <!-- ↓ Overlay de Dados Pessoais incluído aqui -->
     <?php include 'dp_modal.php'; ?>
-
+    <script src="busca_detalhes.js"></script>
     <script src="script-acervo.js"></script>
     <script type="module" src="acervo_logic.js"></script>
 </body>
