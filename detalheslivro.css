@@ -862,3 +862,9 @@
         transform: translateY(0);
     }
 }
+
+.btn-reservar:disabled {
+    cursor: not-allowed;
+    opacity: 0.8;
+    transform: none !important; /* Remove efeitos de hover se houver */
+}

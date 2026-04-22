@@ -19,11 +19,12 @@ $dadosObras = buscarColecao("obras");
 $dadosEmprestimos = buscarColecao("emprestimos");
 $dadosUsuarios = buscarColecao("usuarios"); 
 $dadosHistorico = buscarColecao("historico");
+$dadosReservas = buscarColecao("reservas"); 
 
 echo json_encode([
     'obras' => $dadosObras['documents'] ?? [],
     'emprestimos' => $dadosEmprestimos['documents'] ?? [],
-    'reservas' => $dadosReservas['documents'] ?? [],
+    'reservas' => $dadosReservas['documents'] ?? [], 
     'usuarios' => $dadosUsuarios['documents'] ?? [],
     'historico' => $dadosHistorico['documents'] ?? [] 
 ]);

@@ -190,8 +190,12 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                         <span class="detalhe-val" id="det-adicionado">—</span>
                     </div>
                     <div class="detalhe-row">
-                        <span class="detalhe-key"> Idioma original</span>
+                        <span class="detalhe-key">Idioma original</span>
                         <span class="detalhe-val" id="det-idioma">—</span>
+                    </div>
+                    <div class="detalhe-row">
+                        <span class="detalhe-key">Tradução</span>
+                        <span class="detalhe-val" id="det-traducao">—</span>
                     </div>
                      <div class="detalhe-row">
                         <span class="detalhe-key">Prazo de empréstimo</span>
@@ -231,27 +235,79 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         }   
 
         const observarInfos = setInterval(() => {
-    const ttl = document.getElementById('ttl-livro');
-    const genero = document.getElementById('tag-genero');
+        const ttl = document.getElementById('ttl-livro');
+        const genero = document.getElementById('tag-genero');
 
-    if (
-        ttl && ttl.innerText.trim() !== '' &&
-        genero && genero.innerText.trim() !== ''
-    ) {
-        const titulo = ttl.innerText;
-        const generoTexto = formatarGenero(genero.innerText);
+            if (
+                ttl && ttl.innerText.trim() !== '' &&
+                genero && genero.innerText.trim() !== ''
+            ) {
+                const titulo = ttl.innerText;
+                const generoTexto = formatarGenero(genero.innerText);
 
-        document.getElementById('breadcrumb-titulo').innerHTML = `
-            <a href="genero.php?g=${encodeURIComponent(generoTexto)}">
-                ${generoTexto}
-            </a>
-            <span>›</span>
-            <span>${titulo}</span>
-        `;
+                document.getElementById('breadcrumb-titulo').innerHTML = `
+                    <a href="genero.php?g=${encodeURIComponent(generoTexto)}">
+                        ${generoTexto}
+                    </a>
+                    <span>›</span>
+                    <span>${titulo}</span>
+                `;
 
-        clearInterval(observarInfos);
-    }
-}, 300);
+                clearInterval(observarInfos);
+            }
+        }, 300);
+
+            // Monitorar o status do livro para mudar o texto do botão
+        // Monitorar o status do livro e a existência de reserva do usuário
+        const observarStatusEReserva = setInterval(async () => {
+            const statusEl = document.getElementById('status');
+            const btnReservar = document.querySelector('.btn-reservar');
+            const urlParams = new URLSearchParams(window.location.search);
+            const livroId = urlParams.get('id');
+
+            if (statusEl && statusEl.innerText.trim() !== '' && livroId) {
+                const status = statusEl.innerText.toLowerCase().trim();
+                const matricula = "<?php echo $_SESSION['usuario_matricula']; ?>";
+
+                try {
+                    // 1. Verificar se o usuário já tem uma reserva ativa para este livro
+                    // Fazemos uma busca rápida no Firestore via JS ou criamos um pequeno PHP de consulta
+                    const resp = await fetch(`consultar_minha_reserva.php?livro_id=${livroId}`);
+                    const dados = await resp.json();
+
+                    if (dados.jaReservado) {
+                        btnReservar.disabled = true;
+                        if (dados.tipo === 'Direta') {
+                            btnReservar.innerHTML = 'Reservado';
+                            btnReservar.style.backgroundColor = '#27ae60';
+                        } else {
+                            btnReservar.innerHTML = `Na fila (Posição: ${dados.posicao}º)`;
+                            btnReservar.style.backgroundColor = '#f39c12';
+                        }
+                        clearInterval(observarStatusEReserva);
+                        return;
+                    }
+
+                    // 2. Se não estiver reservado, aplica a lógica normal de status do acervo
+                    if (status === 'emprestado') {
+                        btnReservar.innerHTML = 'Entrar na fila de espera';
+                        btnReservar.style.backgroundColor = '#f39c12';
+                    } else if (status === 'disponivel') {
+                        btnReservar.innerHTML = 'Reservar exemplar';
+                        btnReservar.style.backgroundColor = '';
+                    } else if (status === 'reservado') {
+                        // Se o status geral for reservado por OUTRA pessoa
+                        btnReservar.innerHTML = 'Entrar na fila de espera';
+                        btnReservar.style.backgroundColor = '#f39c12';
+                    }
+
+                } catch (e) {
+                    console.error("Erro ao validar reserva existente", e);
+                }
+                
+                clearInterval(observarStatusEReserva);
+            }
+        }, 500);
 
         // ─── Toast ───────────────────────────────────────────────────
         function showToast(msg) {
@@ -262,8 +318,55 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         }
 
         // ─── Reservar ────────────────────────────────────────────────
-        function reservarLivro() {
-            showToast('✓ Reserva realizada! Retire em até 2 dias úteis.');
+        async function reservarLivro() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const livroId = urlParams.get('id');
+            const btnReservar = document.querySelector('.btn-reservar');
+            
+            if (!livroId) return showToast("Erro: ID do livro não encontrado.");
+
+            // Desabilita o botão para evitar cliques múltiplos
+            btnReservar.disabled = true;
+            btnReservar.innerText = "Processando...";
+
+            const formData = new FormData();
+            formData.append('acao', 'reservar');
+            formData.append('livro_id', livroId);
+
+            try {
+                const response = await fetch('processar_reserva.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const resultado = await response.json();
+                
+                if (resultado.sucesso) {
+                    showToast('✓ ' + resultado.mensagem);
+
+                    // Se for reserva direta
+                    if (resultado.tipo === 'Direta') {
+                        btnReservar.innerText = 'Reservado';
+                        btnReservar.style.backgroundColor = '#27ae60'; // Verde
+                    } 
+                    // Se for fila de espera
+                    else {
+                        btnReservar.innerText = `Sua posição na fila: ${resultado.posicao}º`;
+                        btnReservar.style.backgroundColor = '#f39c12'; // Laranja
+                    }
+                    
+                    // Recarrega a página após 3 segundos para atualizar os dados gerais
+                    setTimeout(() => location.reload(), 3000);
+                } else {
+                    showToast('✕ ' + resultado.mensagem);
+                    btnReservar.disabled = false;
+                    btnReservar.innerText = "Reservar exemplar";
+                }
+            } catch (e) {
+                console.error("Erro na reserva:", e);
+                showToast("Erro ao conectar com o servidor.");
+                btnReservar.disabled = false;
+            }
         }
 
         // ─── Favorito ────────────────────────────────────────────────

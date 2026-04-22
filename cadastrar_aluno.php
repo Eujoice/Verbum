@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             'endereco' => ['stringValue' => $endereco],
             'localidade' => ['stringValue' => $localidade],
             'tipo' => ['stringValue' => 'aluno'],
+            'primeiro_acesso' => ['booleanValue' => true], 
             'senha' => ['stringValue' => password_hash("12345678", PASSWORD_DEFAULT)]
         ]
     ];

@@ -1,0 +1,267 @@
+@import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap'); /*Fonte do título*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee&display=swap');
+
+/* TELA -- LOGIN */
+.body-login {
+    background-color: #477740;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: serif;
+    position: relative;
+    z-index: 2;
+}
+
+#titulo {
+    font-family: "Milonga", serif;
+    color: #6C9467;
+}
+
+.titulo-login {
+    font-size: 96px;
+    font-weight: lighter;
+}
+
+.div-central {
+    display: flex;
+    flex-direction: row;
+}
+
+.div-titulo {
+    background-color: white;
+    text-align: center;
+    padding-top: 95px;
+    padding-bottom: 95px;
+    padding-left: 32px;
+    padding-right: 32px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
+    left: 11px;
+    box-shadow: -10px 2px 30px -5px rgb(0, 0, 0, 0.4);
+}
+
+.div-entradas {
+    background-color: #354A2B;
+    padding: 30px;
+    border-radius: 0px 15px 15px 0px;
+    box-shadow: 10px 2px 30px -5px rgb(0, 0, 0, 0.4);
+    position: relative;
+    max-width: 350px;
+    width: 100%;
+}
+
+.div-log-inf {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.matr-login {
+    color: white;
+    font-size: 15px;
+    font-family: poppins, serif;
+}
+
+label {
+    cursor: default;
+}
+
+.senha-login {
+    color: white;
+    font-size: 15px;
+    font-family: poppins, serif;
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.input-login {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+    width: 100%;
+    max-width: 280px;
+    height: 25px;
+    outline: none;
+    color: white;
+}
+
+.btn-login {
+    margin-top: 60px;
+    background-color: white;
+    color: #354A2B;
+    font-family: "Poppins", serif;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-login:hover {
+    background: #e3eae2;
+    transform: translateY(-1px);
+    cursor: pointer;
+}
+
+.btn-login:active { transform: scale(0.98); }
+
+.btn-enviar {
+    margin-top: 15px;
+    background-color: white;
+    color: #354A2B;
+    font-family: "Poppins", serif;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-enviar:hover {
+    background: #e3eae2;
+    transform: translateY(-1px);
+    cursor: pointer;
+}
+
+.btn-enviar:active { transform: scale(0.98); }
+
+.link-rec{
+    margin-top: 25px; 
+    text-align: center; 
+    color: rgb(201, 201, 201); 
+    font-size: 16px;
+}
+
+#a-login {
+    color: white;
+    font-size: 12px;
+    font-family: "poppins", serif;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.mensagem-erro {
+    background-color: rgba(255, 0, 0, 0.871);
+    color: #fdfdfd;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ff4d4d;
+    margin-bottom: 15px;
+    font-size: 16px;
+    text-align: center;
+    animation: shake 0.4s; 
+
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.star {
+    position: absolute;
+    width: 10vw;       
+    max-width: 180px;   
+    min-width: 60px;    
+    animation: girar linear infinite;
+    opacity: 1;
+
+    z-index: 0;         
+    pointer-events: none; 
+}
+
+@keyframes girar {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* posições espalhadas */
+
+.star1 {
+    top: 5%;
+    left: 8%;
+    animation-duration: 40s;
+}
+
+.star2 {
+    top: 8%;
+    right: 8%;
+    animation-duration: 50s;
+}
+
+.star3 {
+    bottom: 5%;
+    left: 10%;
+    animation-duration: 45s;
+}
+
+.star4 {
+    top: 75%;
+    right: 5%;
+    animation-duration: 55s;
+}
+
+.star5 {
+    top: 45%;
+    left: 2%;
+    animation-duration: 48s;
+}
+
+.star6 {
+    bottom: 39%;
+    right: 14%;
+    animation-duration: 60s;
+}
+
+/* NOVAS ESTRELAS NO CENTRO */
+
+.star7 {
+    top: 2%;
+    left: 48%;
+    transform: translateX(-50%);
+    animation-duration: 52s;
+}
+
+.star8 {
+    bottom: 3%;
+    left: 52%;
+    transform: translateX(-50%);
+    animation-duration: 47s;
+}
+
+#requisitos-senha li {
+    transition: color 0.3s ease;
+    margin-bottom: 0px;
+    margin-top: -3px;
+    color: #8c8b8b ; /* Cor padrão (erro) */
+}
+
+.requisito-valido {
+    color: #2ecc71 !important; /* Verde (sucesso) */
+    font-weight: bold;
+}
+
+/* Impede que o SweetAlert desloque o layout ao esconder a scrollbar */
+body.swal2-shown {
+    overflow: hidden !important;
+    padding-right: 0 !important;
+}

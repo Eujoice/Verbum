@@ -135,6 +135,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
             </div>
 
             <div id="panel-historico" class="panel">
+                <div id="hist-toolbar-container"></div>
+                <div id="hist-stats-container"></div>
                 <div class="lista-resultados" id="lista-historico"></div>
                 <div class="paginacao" id="paginacao-historico"></div>
             </div>

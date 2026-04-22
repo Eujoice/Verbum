@@ -142,7 +142,8 @@ async function carregarDadosLivro() {
                 document.getElementById('det-adicionado').innerText = dados.data_adicao || "---";
             if(document.getElementById('det-idioma')) 
                 document.getElementById('det-idioma').innerText = dados.idioma_original || "Português";
-
+            if(document.getElementById('det-traducao')) 
+                document.getElementById('det-traducao').innerText = dados.traducao || "---";
             // 6. Chamada para Recomendações
             buscarRecomendacoes(dados.genero, dados.colecao, idLivro);
 

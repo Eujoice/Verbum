@@ -42,10 +42,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 </div>
             <?php endif; ?>
 
-
+            <h2 style="color: white; text-align: center; margin-top: -15px; ">Boas-vindas ao Verbum!</h2> <br>
             <form action="login.php" method="post">
                 <label id="label-login" class="matr-login" for="matricula">Matrícula</label>
-                <input type="text" class="input-login" id="matricula" name="matricula"><br>
+                <input style="margin-bottom: 18px; " type="text" class="input-login" id="matricula" name="matricula"><br>
 
                 <label id="label-login" class="senha-login" for="senha">Senha</label>
                 <input type="password" class="input-login" id="senha" name="senha" minlength="8"><br>
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="div-log-inf">
                     <button class="btn-login" type="submit" id="btn-login">Entrar</button><br>
 
-                    <a class="a-log-sup" id="a-login" href="">Esqueceu a senha ou o usuário?</a>
+                    <a class="a-log-sup" id="a-login" href="esqueceu_senha.php">Esqueceu a senha? Clique aqui!</a>
             </form>
         </div>
         </div>
