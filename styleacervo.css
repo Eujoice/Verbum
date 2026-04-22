@@ -181,10 +181,10 @@
     position: relative;
     border-radius: 18px;
     overflow: hidden;
-    height: 200px;
+    height: 230px;
     cursor: grab;
     user-select: none;
-    max-width: 900px;
+    max-width: 750px;
     margin: 0 auto;
 }
 

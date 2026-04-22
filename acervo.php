@@ -45,10 +45,13 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
                 Histórico de Empréstimos
             </a>
-            <a class="nav-item" href="dpessoais.php">
+
+            <!-- ↓ Agora abre o overlay em vez de navegar para outra página -->
+            <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 Dados Pessoais
             </a>
+
             <a class="nav-item" href="favoritos.php">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
                 Favoritos e Avaliações
@@ -83,7 +86,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             <a class="tab ativo" href="acervo.php">Acervo</a>
             <a class="tab" href="genero.php">Gênero</a>
             <a class="tab" href="historico.php">Histórico</a>
-            <a class="tab" href="#">Títulos pendentes</a>
+            <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
         <section class="banner-section">
@@ -96,13 +99,13 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                         <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
                     </div>
                     <div class="slide slide-3">
-                        <img class="slide-img" src="imgs/h.png" alt="Os Sete Maridos de Evelyn Hugo">
+                        <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
                     </div>
                     <div class="slide slide-4">
-                        <div style="width:100%;height:100%;background:#0a2a4a;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:13px;font-family:'Poppins',sans-serif;">A Biblioteca da Meia-Noite — capa em breve</div>
+                        <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
                     </div>
                     <div class="slide slide-5">
-                        <div style="width:100%;height:100%;background:#2a0a3d;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.4);font-size:13px;font-family:'Poppins',sans-serif;">A Metamorfose — capa em breve</div>
+                        <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
                     </div>
                 </div>
                 <button class="carr-prev" onclick="mudarSlide(-1)">
@@ -121,22 +124,25 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             </div>
         </section>
 
- <section class="populares">
-    <div class="sec-header">
-        <h2>Populares</h2>
-        <a href="populares_lista.php" class="ver-todos">Ver todos →</a>
-    </div>
-    <div class="lista-livros" id="lista-populares"></div> 
-</section>
+        <section class="populares">
+            <div class="sec-header">
+                <h2>Populares</h2>
+                <a href="populares_lista.php" class="ver-todos">Ver todos →</a>
+            </div>
+            <div class="lista-livros" id="lista-populares"></div>
+        </section>
 
-<section class="classicos">
-    <div class="sec-header">
-        <h2>Clássicos</h2>
-        <a href="classicos_lista.php" class="ver-todos">Ver todos →</a>
+        <section class="classicos">
+            <div class="sec-header">
+                <h2>Clássicos</h2>
+                <a href="classicos_lista.php" class="ver-todos">Ver todos →</a>
+            </div>
+            <div class="lista-livros" id="lista-classicos"></div>
+        </section>
     </div>
-    <div class="lista-livros" id="lista-classicos"></div>
-</section>
-    </div>
+
+    <!-- ↓ Overlay de Dados Pessoais incluído aqui -->
+    <?php include 'dp_modal.php'; ?>
 
     <script src="script-acervo.js"></script>
     <script type="module" src="acervo_logic.js"></script>

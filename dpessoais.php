@@ -7,9 +7,9 @@ if (!isset($_SESSION['usuario_matricula'])) {
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['salvar_dp'])) {
     $matricula = trim($_SESSION['usuario_matricula']);
-    
+
     $nome     = $_POST['nome'];
     $email    = $_POST['email'];
     $telefone = $_POST['telefone'];
@@ -47,106 +47,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['usuario_email']    = $email;
         $_SESSION['usuario_telefone'] = $telefone;
         $_SESSION['usuario_endereco'] = $endereco;
-        $_SESSION['sucesso']          = true;
-
-        header("Location: dpessoais.php");
-        exit();
+        $_SESSION['sucesso_dp']       = true;
     }
+
+    // Redireciona de volta para a página de origem
+    $redirect = $_POST['pagina_origem'] ?? 'acervo.php';
+    header("Location: " . $redirect);
+    exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dados Pessoais — Verbum</title>
-    <link rel="stylesheet" href="styledp.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=ABeeZee&display=swap" rel="stylesheet">
-</head>
-<body class="body-dp">
-
-
-
-<!-- ─── Card de perfil ─── -->
-<div class="container-dp">
-
-    <div class="header-perfil">
-        <div class="header-banner"></div>
-
-        <div class="foto3">
-            <img src="imgs/icon_perfil.png" alt="Foto de perfil">
-        </div>
-
-        <div class="dados-entrada-dp">
-            <a id="nomeUsuario"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></a>
-            <p id="emailUsuario"><?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
-        </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <form method="POST" class="formulario">
-
-        <div class="campo">
-            <label class="label-dp">Nome</label>
-            <input type="text" name="nome" class="formu"
-                   value="<?php echo htmlspecialchars($_SESSION['usuario_nome']); ?>"
-                   placeholder="Seu nome completo">
-        </div>
-
-        <div class="campo">
-            <label class="label-dp">E-mail</label>
-            <input type="email" name="email" class="formu"
-                   value="<?php echo htmlspecialchars($_SESSION['usuario_email']); ?>"
-                   placeholder="seu@email.com">
-        </div>
-
-        <div class="campo">
-            <label class="label-dp">Telefone</label>
-            <input type="tel" name="telefone" class="formu"
-                   value="<?php echo htmlspecialchars($_SESSION['usuario_telefone'] ?? ''); ?>"
-                   placeholder="(27) 9 0000-0000">
-        </div>
-
-        <div class="campo">
-            <label class="label-dp">Endereço</label>
-            <input type="text" name="endereco" class="formu"
-                   value="<?php echo htmlspecialchars($_SESSION['usuario_endereco'] ?? ''); ?>"
-                   placeholder="Rua, número, bairro">
-        </div>
-
-        <div class="btn-wrapper">
-            <button type="submit" class="btn">Salvar alterações</button>
-        </div>
-
-    </form>
-</div>
-
-<!-- ─── Modal popup de sucesso ─── -->
-<div id="modalSucesso" class="modal-overlay">
-    <div class="modal-content">
-        <img src="imgs/aluna.png" class="modal-img" alt="Sucesso">
-        <h3>Alterações salvas!</h3>
-        <p>Seus dados foram atualizados com sucesso.</p>
-        <button type="button" onclick="fecharModal()" class="btn-confirmar">Ok</button>
-    </div>
-</div>
-
-<script>
-    function fecharModal() {
-        document.getElementById('modalSucesso').classList.remove('ativo');
-    }
-
-    <?php if (isset($_SESSION['sucesso'])): ?>
-    document.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('modalSucesso').classList.add('ativo');
-    });
-    <?php unset($_SESSION['sucesso']); ?>
-    <?php endif; ?>
-</script>
-
-</body>
-</html>

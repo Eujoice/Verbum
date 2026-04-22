@@ -30,29 +30,36 @@
 }
 
 .stat-card {
-    background: #f7f9f7;
-    border-radius: 14px;
-    padding: 14px 22px;
+    background: #f0f5ef;
+    border: 1.5px solid #dce8db;
+    border-radius: 12px; /* Bordas um pouco menores para combinar */
+    padding: 12px 20px;   /* Reduzido (era 20px 32px) */
     text-align: center;
-    min-width: 80px;
+    min-width: 70px;      /* Reduzido (era 110px) */
+    flex: 1;              /* Faz eles crescerem igualitariamente */
+    max-width: 140px;     /* Impede que fiquem gigantes em telas largas */
 }
 
 .stat-num {
-    font-size: 24px;
+    font-size: 20px;      /* Reduzido (era 42px) */
     font-weight: 700;
-    color: #6C9467;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 9px;      /* Reduzido (era 13px) */
+    color: #9aaa98;
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase; /* Dá um ar mais elegante sendo menor */
+    letter-spacing: 0.5px;
 }
 
 .stat-num.verde    { color: #3d6139; }
 .stat-num.amarelo  { color: #8a5f00; }
 .stat-num.vermelho { color: #a32d2d; }
 
-.stat-label {
-    font-size: 11px;
-    color: #9aaa98;
-    margin-top: 2px;
-    font-weight: 600;
-}
+
 
 /* ── Filtros ── */
 .filtros {
