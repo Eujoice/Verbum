@@ -90,40 +90,51 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
-        <section class="banner-section">
-            <div class="carousel" id="carousel">
-                <div class="slides" id="slides">
-                    <div class="slide slide-1">
-                        <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
-                    </div>
-                    <div class="slide slide-2">
-                        <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
-                    </div>
-                    <div class="slide slide-3">
-                        <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
-                    </div>
-                    <div class="slide slide-4">
-                        <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
-                    </div>
-                    <div class="slide slide-5">
-                        <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
-                    </div>
-                </div>
-                <button class="carr-prev" onclick="mudarSlide(-1)">
-                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <button class="carr-next" onclick="mudarSlide(1)">
-                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-            </div>
-            <div class="dots" id="dots">
-                <button class="dot active" onclick="irParaSlide(0)"></button>
-                <button class="dot" onclick="irParaSlide(1)"></button>
-                <button class="dot" onclick="irParaSlide(2)"></button>
-                <button class="dot" onclick="irParaSlide(3)"></button>
-                <button class="dot" onclick="irParaSlide(4)"></button>
-            </div>
-        </section>
+<section class="banner-section">
+    <div class="carousel" id="carousel">
+        <div class="slides" id="slides">
+            <!-- Percy Jackson (Supondo que seja L12 baseando-se na lista) -->
+            <a href="detalheslivro.php?id=L07" class="slide slide-1">
+                <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
+            </a>
+            
+            <!-- Crime e Castigo (Confirmado na imagem como L01) -->
+            <a href="detalheslivro.php?id=L01" class="slide slide-2">
+                <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
+            </a>
+            
+            <!-- A Metamorfose (Ajuste o ID conforme seu Firestore) -->
+            <a href="detalheslivro.php?id=L04" class="slide slide-3">
+                <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
+            </a>
+            
+            <!-- Biblioteca da meia noite (Ajuste o ID conforme seu Firestore) -->
+            <a href="detalheslivro.php?id=L06" class="slide slide-4">
+                <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
+            </a>
+            
+            <!-- Vidas Secas (Ajuste o ID conforme seu Firestore) -->
+            <a href="detalheslivro.php?id=L22" class="slide slide-5">
+                <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
+            </a>
+        </div>
+        
+        <button class="carr-prev" onclick="mudarSlide(-1)">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <button class="carr-next" onclick="mudarSlide(1)">
+            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+    </div>
+    
+    <div class="dots" id="dots">
+        <button class="dot active" onclick="irParaSlide(0)"></button>
+        <button class="dot" onclick="irParaSlide(1)"></button>
+        <button class="dot" onclick="irParaSlide(2)"></button>
+        <button class="dot" onclick="irParaSlide(3)"></button>
+        <button class="dot" onclick="irParaSlide(4)"></button>
+    </div>
+</section>
 
         <section class="populares">
             <div class="sec-header">

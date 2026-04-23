@@ -176,6 +176,9 @@
 /* =========================================
    CARROSSEL DE BANNERS
    ========================================= */
+/* =========================================
+   CARROSSEL DE BANNERS - COMPLETO
+   ========================================= */
 .banner-section {
     padding: 28px 120px 8px;
 }
@@ -183,16 +186,19 @@
 .carousel {
     position: relative;
     border-radius: 18px;
-    overflow: hidden;
+    overflow: hidden; /* Importante para o zoom da imagem não vazar */
     height: 230px;
-    cursor: grab;
-    user-select: none;
     max-width: 750px;
     margin: 0 auto;
+    background: #111;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
 }
 
-.carousel:active {
-    cursor: grabbing;
+/* Efeito de profundidade no carrossel ao passar o mouse */
+.carousel:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
 }
 
 .slides {
@@ -201,81 +207,89 @@
     transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* O slide agora é uma tag <a> */
 .slide {
     min-width: 100%;
     height: 100%;
+    display: block;
+    text-decoration: none;
+    overflow: hidden; /* Garante que o zoom da imagem fique preso aqui dentro */
     position: relative;
-    display: flex;
-    align-items: center;
-    background: #111;
 }
 
-/* Each slide is now a full image */
+/* Estilo da Imagem e Animação */
 .slide-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1), filter 0.4s ease;
 }
 
-/* Hide old slide color backgrounds */
-.slide-1, .slide-2, .slide-3, .slide-4, .slide-5 { background: #111; }
+/* --- ANIMAÇÃO DE HOVER (Quando passa a mão) --- */
+.slide:hover .slide-img {
+    transform: scale(1.08); /* Zoom suave para dentro */
+    filter: brightness(0.85); /* Escurece levemente para destacar */
+}
 
-.slide-deco { display: none; }
-.slide-content { display: none; }
-.slide-cover { display: none; }
-.slide-cover-placeholder { display: none; }
+/* Feedback visual ao clicar */
+.slide:active .slide-img {
+    transform: scale(1.03);
+    transition: transform 0.1s ease;
+}
 
+/* Botões de Navegação (Prev/Next) */
 .carr-prev,
 .carr-next {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     z-index: 10;
-    background: rgba(255,255,255,0.18);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px); /* Efeito de vidro */
     border: none;
     cursor: pointer;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
 }
 
-.carr-prev { left: 14px; }
-.carr-next { right: 14px; }
+.carr-prev { left: 15px; }
+.carr-next { right: 15px; }
 
 .carr-prev:hover,
 .carr-next:hover {
-    background: rgba(255,255,255,0.32);
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
 }
 
 .carr-prev svg,
 .carr-next svg {
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
 }
 
+/* Indicadores (Dots) */
 .dots {
     display: flex;
     justify-content: center;
     gap: 8px;
     padding: 14px 0 4px;
-    max-width: 900px;
     margin: 0 auto;
 }
 
 .dot {
-    width: 7px;
-    height: 7px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #cddacc;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    padding: 0;
 }
 
 .dot.active {

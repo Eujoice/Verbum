@@ -46,8 +46,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 <div class="nav-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="#6C9467"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
                 Histórico de Empréstimos
             </a>
-            <a class="nav-item" href="dpessoais.php">
-                <div class="nav-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="#6C9467"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
+            <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
+                <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 Dados Pessoais
             </a>
             <a class="nav-item" href="favoritos.php">
@@ -62,19 +62,22 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     </nav>
 
     <div class="container-acervo">
-        <header class="header">
-            <div class="header-left">
-                    <div class="logo"><a href="acervo.php">Verbum</a></div>
-                    <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
-                </div>
-            <div class="busca">
-                <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-<input type="text" id="pesquisa" placeholder="O que você quer ler?">            </div>
-            <button class="hambtn" id="hambtn" onclick="toggleMenu()">
-                <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-            </button>
-        </header>
-
+<header class="header">
+    <div class="header-left">
+        <div class="logo"><a href="acervo.php">Verbum</a></div>
+        <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
+    </div>
+    <div class="busca">
+        <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <input type="text" id="pesquisa" placeholder="O que você quer ler?">
+    </div>
+    <!-- Adicionada a div icones para envolver o botão -->
+    <div class="icones">
+        <button class="hambtn" id="hambtn" onclick="toggleMenu()">
+            <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        </button>
+    </div>
+</header>
         <nav class="menu-tabs">
             <a class="tab" href="acervo.php">Acervo</a>
             <a class="tab" href="genero.php">Gênero</a>
@@ -124,6 +127,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <script>
         var MATRICULA_USUARIO = '<?php echo htmlspecialchars($_SESSION["usuario_matricula"]); ?>';
     </script>
+        <?php include 'dp_modal.php'; ?>
+
     <script src="busca_detalhes.js"></script>
     <script src="script-acervo.js"></script>
     <script type="module" src="pendentes_logic.js"></script>

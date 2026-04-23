@@ -247,3 +247,29 @@
     font-size: 14px;
     color: #9aaa98;
 }
+/* Garante que o conteúdo do histórico não cubra o menu */
+/* Garante que o Header e o Botão fiquem sempre no topo */
+.header {
+    z-index: 1000 !important;
+}
+
+.hambtn {
+    position: relative;
+    z-index: 1001 !important;
+    cursor: pointer !important;
+}
+
+/* Garante que o Menu Lateral não abra por baixo dos cards do histórico */
+.menu-lateral {
+    z-index: 9999 !important;
+}
+
+.overlay-menu {
+    z-index: 9998 !important;
+}
+
+/* Força as barras do hambúrguer a serem visíveis no cabeçalho verde */
+.bar {
+    background: #fff !important;
+    display: block;
+}

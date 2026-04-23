@@ -157,6 +157,8 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
         var GENERO_INICIAL = '<?php echo $genero_id; ?>';
         var NOME_INICIAL   = '<?php echo $genero_nome; ?>';
     </script>
+        <?php include 'dp_modal.php'; ?>
+
     <script src="busca_detalhes.js"></script>
 
     <script src="script-acervo.js"></script>

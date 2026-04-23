@@ -323,3 +323,34 @@
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.5; }
 }
+
+/* Correção global para o Header */
+.header {
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    align-items: center;
+    position: relative;
+    z-index: 1000 !important;
+}
+
+/* Garante que o botão hambúrguer seja sempre clicável */
+.hambtn {
+    position: relative;
+    z-index: 1001 !important;
+    cursor: pointer !important;
+}
+
+/* Garante que as barras brancas apareçam */
+.bar {
+    background-color: #ffffff !important;
+    display: block;
+}
+
+/* O Menu Lateral precisa estar no topo absoluto */
+.menu-lateral {
+    z-index: 10000 !important;
+}
+
+.overlay-menu {
+    z-index: 9999 !important;
+}
