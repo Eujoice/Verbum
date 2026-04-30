@@ -868,3 +868,53 @@
     opacity: 0.8;
     transform: none !important; /* Remove efeitos de hover se houver */
 }
+
+/* =========================================
+   AVALIAÇÃO COM MEIA ESTRELA (controlado por JS)
+   ========================================= */
+.rating-input {
+    display: inline-flex;
+    flex-direction: row;
+    border: none;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Cada grupo = 1 estrela. A estrela-cheia fica no fluxo normal;
+   a meia-estrela fica sobreposta na metade esquerda via absolute */
+.star-group {
+    position: relative;
+    display: inline-block;
+    font-size: 30px;
+    line-height: 1;
+    cursor: pointer;
+    /* largura definida pelo star-full que está no fluxo */
+}
+
+/* Estrela cheia — ocupa o espaço e define a largura do grupo */
+.star-group .star-full {
+    display: block;
+    color: #dde8dc;
+    transition: color 0.12s;
+    user-select: none;
+}
+
+/* Meia estrela — sobreposta, corta na metade esquerda */
+.star-group .star-half {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;          /* mostra só a metade esquerda */
+    overflow: hidden;
+    color: #dde8dc;
+    transition: color 0.12s;
+    display: block;
+    user-select: none;
+    /* sem :before, o texto ★ já está inline no HTML */
+}
+
+/* Estados aplicados por JS */
+.star-group .star-full.on   { color: #f5b301; }
+.star-group .star-half.on   { color: #f5b301; }
+.star-group .star-full.hover { color: #f5c842; }
+.star-group .star-half.hover { color: #f5c842; }

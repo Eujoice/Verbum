@@ -118,6 +118,42 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                         <button onclick="leiaMais()" id="btnLerMais">Leia mais</button>
                     </p>
 
+                    <!-- Bloco de Avaliação do Usuário -->
+<div class="card-avaliacao-usuario" style="margin: 20px 0; padding: 20px; background: #fff; border: 1px solid var(--borda); border-radius: 14px;">
+    <p class="card-info-titulo" style="margin-bottom: 15px;">Sua avaliação</p>
+    
+<div class="rating-input" id="rating-stars">
+    <span class="star-group" data-full="1.0" data-half="0.5">
+        <span class="star-full" data-value="1.0">&#9733;</span>
+        <span class="star-half" data-value="0.5">&#9733;</span>
+    </span>
+    <span class="star-group" data-full="2.0" data-half="1.5">
+        <span class="star-full" data-value="2.0">&#9733;</span>
+        <span class="star-half" data-value="1.5">&#9733;</span>
+    </span>
+    <span class="star-group" data-full="3.0" data-half="2.5">
+        <span class="star-full" data-value="3.0">&#9733;</span>
+        <span class="star-half" data-value="2.5">&#9733;</span>
+    </span>
+    <span class="star-group" data-full="4.0" data-half="3.5">
+        <span class="star-full" data-value="4.0">&#9733;</span>
+        <span class="star-half" data-value="3.5">&#9733;</span>
+    </span>
+    <span class="star-group" data-full="5.0" data-half="4.5">
+        <span class="star-full" data-value="5.0">&#9733;</span>
+        <span class="star-half" data-value="4.5">&#9733;</span>
+    </span>
+</div>
+
+    <input type="hidden" id="nota-final-usuario" value="0">
+    
+    <button id="btn-confirmar-avaliacao" class="btn-reservar" onclick="enviarAvaliacao()" 
+            style="margin-top: 15px; background-color: var(--verde-claro); width: auto;" disabled>
+        Confirmar Avaliação
+    </button>
+</div>
+                    
+
                     <div id="div-detalhes">
     
                         <div class="item">
@@ -152,10 +188,9 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
                     </div>
 
-                    <div class="div-reserva">
-                        <button class="btn-reservar" onclick="reservarLivro()">
-                            Reservar exemplar
-                        </button>
+<button id="btn-reserva-principal" class="btn-reservar" onclick="reservarLivro()">
+    Reservar exemplar
+</button>
                         <button class="btn-favorito" id="btnFavorito" onclick="toggleFavorito()" title="Salvar nos favoritos">♡</button>
                     </div>
                 </div>
@@ -259,11 +294,14 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
             // Monitorar o status do livro para mudar o texto do botão
         // Monitorar o status do livro e a existência de reserva do usuário
-        const observarStatusEReserva = setInterval(async () => {
-            const statusEl = document.getElementById('status');
-            const btnReservar = document.querySelector('.btn-reservar');
-            const urlParams = new URLSearchParams(window.location.search);
-            const livroId = urlParams.get('id');
+    const observarStatusEReserva = setInterval(async () => {
+        const statusEl = document.getElementById('status');
+    
+    // MUDANÇA AQUI: Use o ID único que criamos no passo 1
+        const btnReservar = document.getElementById('btn-reserva-principal');
+    
+        const urlParams = new URLSearchParams(window.location.search);
+        const livroId = urlParams.get('id');
 
             if (statusEl && statusEl.innerText.trim() !== '' && livroId) {
                 const status = statusEl.innerText.toLowerCase().trim();
@@ -427,6 +465,125 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 `;
             }).join('');
         };
+// ─── Sistema de Estrelas com Meia Estrela ────────────────────────────────────
+(function() {
+    const container = document.getElementById('rating-stars');
+    if (!container) return;
+
+    const hiddenInput = document.getElementById('nota-final-usuario');
+    const btnConfirmar = document.getElementById('btn-confirmar-avaliacao');
+    let notaSelecionada = 0;
+
+    // Todos os spans clicáveis (half e full dentro de cada grupo)
+    const allSpans = container.querySelectorAll('.star-half, .star-full');
+    // Todos os grupos
+    const allGroups = container.querySelectorAll('.star-group');
+
+    function valorDoSpan(span) {
+        return parseFloat(span.dataset.value);
+    }
+
+    // Pinta as estrelas até o valor informado
+    function pintar(valor, modo) { // modo: 'on' ou 'hover'
+        allGroups.forEach(group => {
+            const halfVal = parseFloat(group.dataset.half);
+            const fullVal = parseFloat(group.dataset.full);
+            const halfSpan = group.querySelector('.star-half');
+            const fullSpan = group.querySelector('.star-full');
+
+            // Remove os dois estados
+            halfSpan.classList.remove('on', 'hover');
+            fullSpan.classList.remove('on', 'hover');
+
+            if (valor >= fullVal) {
+                // Estrela cheia acesa
+                fullSpan.classList.add(modo);
+                halfSpan.classList.add(modo);
+            } else if (valor >= halfVal) {
+                // Só a meia acesa
+                halfSpan.classList.add(modo);
+            }
+        });
+    }
+
+    // Hover
+    allSpans.forEach(span => {
+        span.addEventListener('mouseenter', () => {
+            // Apaga 'on' temporariamente para ver o hover
+            allSpans.forEach(s => s.classList.remove('hover'));
+            pintar(valorDoSpan(span), 'hover');
+        });
+    });
+
+    container.addEventListener('mouseleave', () => {
+        allSpans.forEach(s => s.classList.remove('hover'));
+        if (notaSelecionada > 0) pintar(notaSelecionada, 'on');
+    });
+
+    // Clique
+    allSpans.forEach(span => {
+        span.addEventListener('click', () => {
+            notaSelecionada = valorDoSpan(span);
+            allSpans.forEach(s => s.classList.remove('on', 'hover'));
+            pintar(notaSelecionada, 'on');
+            hiddenInput.value = notaSelecionada;
+            btnConfirmar.disabled = false;
+            btnConfirmar.style.opacity = '1';
+        });
+    });
+})();
+
+function habilitarBotao(valor) {
+    // mantido por compatibilidade, mas não é mais chamado
+    document.getElementById('nota-final-usuario').value = valor;
+    const btn = document.getElementById('btn-confirmar-avaliacao');
+    btn.disabled = false;
+    btn.style.opacity = "1";
+}
+
+async function enviarAvaliacao() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const livroId = urlParams.get('id');
+    const nota = document.getElementById('nota-final-usuario').value;
+    const btn = document.getElementById('btn-confirmar-avaliacao');
+
+    if (!livroId || !nota || parseFloat(nota) <= 0) {
+        showToast("Selecione uma nota antes de confirmar.");
+        return;
+    }
+
+    btn.disabled = true;
+    btn.innerText = "Enviando...";
+
+    const formData = new FormData();
+    formData.append('acao', 'avaliar');
+    formData.append('livro_id', livroId);
+    formData.append('nota', nota);
+
+    try {
+        const response = await fetch('processar_avaliacao.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const resultado = await response.json();
+
+        if (resultado.sucesso) {
+            showToast('★ Avaliação enviada com sucesso!');
+            btn.innerText = "Avaliação enviada ✓";
+            btn.style.backgroundColor = "#27ae60";
+        } else {
+            showToast('✕ ' + resultado.mensagem);
+            btn.disabled = false;
+            btn.innerText = "Confirmar Avaliação";
+        }
+    } catch (e) {
+        console.error("Erro ao enviar avaliação:", e);
+        showToast("Erro ao conectar com o servidor.");
+        btn.disabled = false;
+        btn.innerText = "Confirmar Avaliação";
+    }
+}
     </script>
 </body>
 </html>

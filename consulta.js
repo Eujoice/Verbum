@@ -98,8 +98,7 @@ async function carregarDados() {
                 capa: f.capa?.stringValue || '',
                 status: f.status?.stringValue || 'Disponível',
                 isbn: f.isbn?.stringValue || '—',
-                avaliacao: f.avaliacao?.doubleValue || f.avaliacao?.stringValue || null
-            };
+                avaliacao: f.avaliacao_media?.doubleValue || 0 // Pega o novo campo double que você criou            };
         });
 
         todosEmprestimos = (data.emprestimos || []).map(doc => {
@@ -143,30 +142,28 @@ function htmlCardExemplar(ex) {
     const classeStatus = ex.status === 'Emprestado' ? 'status-emprestado' : 'status-disponivel';
 
     let avaliacaoHtml = '';
-    if (ex.avaliacao) {
+    // Agora usamos ex.avaliacao (que veio do avaliacao_media do banco)
+    if (ex.avaliacao > 0) {
         const nota = parseFloat(ex.avaliacao);
         let estrelas = '';
-        const inteiras = Math.floor(nota);
-        const decimal = nota - inteiras;
-        let meia = 0;
-
-        if (decimal >= 0.75) {
-            estrelas += '★'.repeat(inteiras + 1);
-        } else {
-            estrelas += '★'.repeat(inteiras);
-            if (decimal >= 0.25) {
-                estrelas += '⯨';
-                meia = 1;
+        
+        // Loop para criar as 5 estrelas
+        for (let i = 1; i <= 5; i++) {
+            if (nota >= i) {
+                estrelas += '★'; // Estrela cheia
+            } else if (nota >= i - 0.5) {
+                estrelas += '⯨'; // Meia estrela (seu caractere personalizado)
+            } else {
+                estrelas += '☆'; // Estrela vazia
             }
         }
-        const ocupadas = inteiras + meia + (decimal >= 0.75 ? 1 : 0);
-        const vazias = Math.max(0, 5 - ocupadas);
-        estrelas += '☆'.repeat(vazias);
 
         avaliacaoHtml = `<span class="estrelas">${estrelas}</span> <span class="nota-texto">${nota.toFixed(1)}</span>`;
     } else {
         avaliacaoHtml = `<span class="nota-texto">Sem avaliações</span>`;
     }
+    
+    // ... resto do código da função (capaHtml e return) permanece igual
 
     const capaHtml = ex.capa
         ? `<img src="${ex.capa}" alt="Capa">`
