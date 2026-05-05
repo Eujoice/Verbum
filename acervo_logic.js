@@ -106,34 +106,20 @@ async function carregarDadosLivro() {
             if (document.getElementById('det-avaliacao')) {
             const el = document.getElementById('det-avaliacao');
 
-            if (dados.avaliacao) {
-                const nota = parseFloat(dados.avaliacao);
+            // Usa avaliacao_media (calculada a partir das avaliações dos usuários)
+            // e total_avaliacoes como fonte de verdade
+            const media = parseFloat(dados.avaliacao_media) || 0;
+            const total = parseInt(dados.total_avaliacoes) || 0;
 
-                let estrelas = '';
-
-                const inteiras = Math.floor(nota);
-                const decimal = nota - inteiras;
-
-                let meia = 0;
-
-                if (decimal >= 0.75) {
-                    // vira estrela cheia
-                    estrelas += '★'.repeat(inteiras + 1);
-                } else {
-                    estrelas += '★'.repeat(inteiras);
-
-                    if (decimal >= 0.25) {
-                        estrelas += '⯨'; // meia estrela
-                        meia = 1;
-                    }
-                }
-
-                const totalEstrelas = inteiras + meia + (decimal >= 0.75 ? 1 : 0);
-                const vazias = 5 - totalEstrelas;
-
-                estrelas += '☆'.repeat(vazias);
-
-                el.innerHTML = `<span class="estrelas">${estrelas}</span> — ${nota.toFixed(1)}`;
+            if (media > 0 && total > 0) {
+                const inteiras = Math.floor(media);
+                const decimal  = media - inteiras;
+                let estrelas = '★'.repeat(inteiras);
+                if (decimal >= 0.25 && decimal < 0.75) estrelas += '½';
+                else if (decimal >= 0.75) estrelas += '★';
+                const vazias = 5 - Math.round(media);
+                estrelas += '☆'.repeat(Math.max(0, vazias));
+                el.innerHTML = `<span class="estrelas">${estrelas}</span> — ${media.toFixed(1)} (${total} ${total > 1 ? 'avaliações' : 'avaliação'})`;
             } else {
                 el.innerText = "Sem avaliações";
             }

@@ -1,174 +1,142 @@
 <?php
 session_start();
+require 'config.php';
+
 header('Content-Type: application/json');
 
-// ── Autenticação ─────────────────────────────────────────────────────────────
-if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Usuário não autenticado.']);
+if (!isset($_SESSION['logado'])) {
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Acesso negado.']);
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST' || empty($_POST['acao']) || $_POST['acao'] !== 'avaliar') {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Requisição inválida.']);
-    exit();
-}
+$projeto_id = "verbum-bd";
+$acao       = $_POST['acao']     ?? '';
+$livro_id   = trim($_POST['livro_id'] ?? '');
+$nota       = floatval($_POST['nota']  ?? 0);
+$matricula  = $_SESSION['usuario_matricula'];
 
-// ── Parâmetros ───────────────────────────────────────────────────────────────
-$livro_id  = isset($_POST['livro_id']) ? trim($_POST['livro_id']) : '';
-$nota      = isset($_POST['nota'])     ? floatval($_POST['nota']) : 0;
-$matricula = $_SESSION['usuario_matricula'];
+// ── Funções auxiliares (mesmo padrão de processar_reserva.php) ───────────────
 
-// Validações
-if (empty($livro_id)) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'ID do livro inválido.']);
-    exit();
-}
-if ($nota < 0.5 || $nota > 5.0 || fmod(round($nota * 2), 1) !== 0.0) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Nota inválida.']);
-    exit();
-}
-
-// ── Configuração Firebase ─────────────────────────────────────────────────────
-// Altere PROJECT_ID para o ID do seu projeto Firebase (ex: "verbum-bd-xxxxx")
-define('PROJECT_ID', 'SEU_PROJECT_ID_AQUI');
-define('FIRESTORE_BASE', 'https://firestore.googleapis.com/v1/projects/' . PROJECT_ID . '/databases/(default)/documents');
-
-// Caminho do arquivo de credenciais da service account (JSON baixado do Firebase)
-// Coloque o arquivo na raiz do projeto ou ajuste o caminho
-define('CREDENTIALS_FILE', __DIR__ . '/firebase_credentials.json');
-
-// ── Gerar token de acesso via Service Account ─────────────────────────────────
-function getFirebaseToken() {
-    $creds = json_decode(file_get_contents(CREDENTIALS_FILE), true);
-
-    $now = time();
-    $header  = base64_encode(json_encode(['alg' => 'RS256', 'typ' => 'JWT']));
-    $payload = base64_encode(json_encode([
-        'iss'   => $creds['client_email'],
-        'sub'   => $creds['client_email'],
-        'aud'   => 'https://oauth2.googleapis.com/token',
-        'iat'   => $now,
-        'exp'   => $now + 3600,
-        'scope' => 'https://www.googleapis.com/auth/datastore',
-    ]));
-
-    $header  = str_replace(['+', '/', '='], ['-', '_', ''], $header);
-    $payload = str_replace(['+', '/', '='], ['-', '_', ''], $payload);
-
-    $signing_input = "$header.$payload";
-    openssl_sign($signing_input, $signature, $creds['private_key'], 'SHA256');
-    $signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
-
-    $jwt = "$signing_input.$signature";
-
-    // Troca o JWT pelo access token
-    $ch = curl_init('https://oauth2.googleapis.com/token');
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => http_build_query([
-            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion'  => $jwt,
-        ]),
-    ]);
-    $res   = json_decode(curl_exec($ch), true);
-    curl_close($ch);
-
-    return $res['access_token'] ?? null;
-}
-
-// ── Helper: requisição Firestore ──────────────────────────────────────────────
-function firestoreRequest($method, $url, $token, $body = null) {
+function fsGet($url) {
     $ch = curl_init($url);
-    $headers = [
-        'Authorization: Bearer ' . $token,
-        'Content-Type: application/json',
-    ];
     curl_setopt_array($ch, [
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST  => $method,
-        CURLOPT_HTTPHEADER     => $headers,
+        CURLOPT_SSL_VERIFYPEER => false,
     ]);
-    if ($body !== null) {
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-    }
-    $response = curl_exec($ch);
+    $r = curl_exec($ch);
     curl_close($ch);
-    return json_decode($response, true);
+    return json_decode($r, true);
 }
 
-// ── Lógica principal ──────────────────────────────────────────────────────────
-$token = getFirebaseToken();
-if (!$token) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro de autenticação com Firebase.']);
-    exit();
+function fsPatch($url, $fields, $fieldPaths) {
+    $mask    = implode('&', array_map(fn($f) => "updateMask.fieldPaths=$f", $fieldPaths));
+    $fullUrl = $url . '?' . $mask;
+    $ch = curl_init($fullUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_CUSTOMREQUEST  => 'PATCH',
+        CURLOPT_POSTFIELDS     => json_encode(['fields' => $fields]),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+    ]);
+    $r    = curl_exec($ch);
+    $info = curl_getinfo($ch);
+    curl_close($ch);
+    return ['http_code' => $info['http_code'], 'body' => json_decode($r, true)];
 }
 
-// 1. Buscar o documento atual da obra para calcular nova média
-$obraUrl  = FIRESTORE_BASE . '/obras/' . $livro_id;
-$obraDoc  = firestoreRequest('GET', $obraUrl, $token);
+// ── Validações ────────────────────────────────────────────────────────────────
 
-if (isset($obraDoc['error'])) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Obra não encontrada.']);
-    exit();
-}
+try {
+    if ($acao !== 'avaliar') {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Ação inválida.']);
+        exit();
+    }
 
-// Lê avaliacao_media e total de avaliações atuais
-$fields         = $obraDoc['fields'] ?? [];
-$mediaAtual     = floatval($fields['avaliacao_media']['doubleValue'] ?? $fields['avaliacao_media']['integerValue'] ?? 0);
-$totalAvaliacoes = intval($fields['total_avaliacoes']['integerValue'] ?? 0);
+    if (empty($livro_id)) {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'ID do livro inválido.']);
+        exit();
+    }
 
-// 2. Verificar se o usuário já avaliou (subcoleção avaliacoes/{matricula})
-$avaliacaoUrl = FIRESTORE_BASE . '/obras/' . $livro_id . '/avaliacoes/' . $matricula;
-$avaliacaoDoc = firestoreRequest('GET', $avaliacaoUrl, $token);
+    if ($nota < 0.5 || $nota > 5.0) {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Nota deve ser entre 0.5 e 5.0.']);
+        exit();
+    }
 
-$jaAvaliou    = !isset($avaliacaoDoc['error']);
-$notaAnterior = 0;
-if ($jaAvaliou) {
-    $notaAnterior = floatval(
-        $avaliacaoDoc['fields']['nota']['doubleValue'] ??
-        $avaliacaoDoc['fields']['nota']['integerValue'] ?? 0
+    $base = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents";
+
+    // 1. Buscar dados atuais da obra
+    $obraUrl = "$base/obras/$livro_id";
+    $obraDoc = fsGet($obraUrl);
+
+    if (!$obraDoc || isset($obraDoc['error'])) {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Obra não encontrada.']);
+        exit();
+    }
+
+    $f               = $obraDoc['fields'] ?? [];
+    $mediaAtual      = floatval($f['avaliacao_media']['doubleValue'] ?? $f['avaliacao_media']['integerValue'] ?? 0);
+    $totalAvaliacoes = intval($f['total_avaliacoes']['integerValue'] ?? 0);
+
+    // 2. Verificar se o usuário já avaliou
+    $avalUrl = "$base/obras/$livro_id/avaliacoes/$matricula";
+    $avalDoc = fsGet($avalUrl);
+
+    $jaAvaliou    = !isset($avalDoc['error']) && isset($avalDoc['fields']);
+    $notaAnterior = 0;
+    if ($jaAvaliou) {
+        $notaAnterior = floatval(
+            $avalDoc['fields']['nota']['doubleValue'] ??
+            $avalDoc['fields']['nota']['integerValue'] ?? 0
+        );
+    }
+
+    // 3. Calcular nova média
+    if ($jaAvaliou && $totalAvaliacoes > 0) {
+        $novaMedia = (($mediaAtual * $totalAvaliacoes) - $notaAnterior + $nota) / $totalAvaliacoes;
+    } else {
+        $totalAvaliacoes++;
+        $novaMedia = (($mediaAtual * ($totalAvaliacoes - 1)) + $nota) / $totalAvaliacoes;
+    }
+    $novaMedia = round($novaMedia, 2);
+
+    // 4. Salvar avaliação individual em obras/{id}/avaliacoes/{matricula}
+    $resAval = fsPatch($avalUrl,
+        [
+            'nota'      => ['doubleValue'  => $nota],
+            'matricula' => ['stringValue'  => $matricula],
+            'data'      => ['stringValue'  => date('Y-m-d H:i:s')],
+        ],
+        ['nota', 'matricula', 'data']
     );
+
+    if ($resAval['http_code'] !== 200) {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao salvar avaliação individual.']);
+        exit();
+    }
+
+    // 5. Atualizar avaliacao_media e total_avaliacoes na obra
+    $resObra = fsPatch($obraUrl,
+        [
+            'avaliacao_media'  => ['doubleValue'  => $novaMedia],
+            'total_avaliacoes' => ['integerValue' => (string) $totalAvaliacoes],
+        ],
+        ['avaliacao_media', 'total_avaliacoes']
+    );
+
+    if ($resObra['http_code'] !== 200) {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Avaliação salva, mas erro ao atualizar média.']);
+        exit();
+    }
+
+    echo json_encode([
+        'sucesso'          => true,
+        'mensagem'         => 'Avaliação registrada com sucesso!',
+        'nova_media'       => $novaMedia,
+        'total_avaliacoes' => $totalAvaliacoes,
+    ]);
+
+} catch (Exception $e) {
+    echo json_encode(['sucesso' => false, 'mensagem' => $e->getMessage()]);
 }
-
-// 3. Recalcular média
-if ($jaAvaliou && $totalAvaliacoes > 0) {
-    // Substitui a nota antiga pela nova
-    $novaMedia = (($mediaAtual * $totalAvaliacoes) - $notaAnterior + $nota) / $totalAvaliacoes;
-} else {
-    // Nova avaliação
-    $totalAvaliacoes++;
-    $novaMedia = (($mediaAtual * ($totalAvaliacoes - 1)) + $nota) / $totalAvaliacoes;
-}
-$novaMedia = round($novaMedia, 2);
-
-// 4. Salvar avaliação individual em obras/{livro_id}/avaliacoes/{matricula}
-$avaliacaoBody = [
-    'fields' => [
-        'nota'       => ['doubleValue' => $nota],
-        'matricula'  => ['stringValue' => $matricula],
-        'data'       => ['stringValue' => date('Y-m-d H:i:s')],
-    ]
-];
-firestoreRequest('PATCH', $avaliacaoUrl, $token, $avaliacaoBody);
-
-// 5. Atualizar avaliacao_media e total_avaliacoes na obra
-$updateUrl  = $obraUrl . '?updateMask.fieldPaths=avaliacao_media&updateMask.fieldPaths=total_avaliacoes';
-$updateBody = [
-    'fields' => [
-        'avaliacao_media'  => ['doubleValue'  => $novaMedia],
-        'total_avaliacoes' => ['integerValue' => (string) $totalAvaliacoes],
-    ]
-];
-$updateResult = firestoreRequest('PATCH', $updateUrl, $token, $updateBody);
-
-if (isset($updateResult['error'])) {
-    echo json_encode(['sucesso' => false, 'mensagem' => 'Erro ao salvar avaliação.']);
-    exit();
-}
-
-echo json_encode([
-    'sucesso'    => true,
-    'mensagem'   => 'Avaliação registrada com sucesso!',
-    'nova_media' => $novaMedia,
-]);
+?>

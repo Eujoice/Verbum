@@ -1,10 +1,52 @@
 <!--Tela de Detalhes de Livro-->
 <?php
+ini_set('display_errors', 0);
+error_reporting(0);
 session_start();
 
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) { 
     header("Location: index.php");
     exit();
+}
+
+// ── Busca avaliação do usuário server-side (mesmo padrão do resto do projeto) ─
+$_avaliacao_usuario = null;
+$_avaliacao_media   = 0.0;
+$_total_avaliacoes  = 0;
+
+function _fsGetSimples($url) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+    ]);
+    $r = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($r, true);
+}
+
+$_livro_id_url = isset($_GET['id']) ? trim($_GET['id']) : '';
+if (!empty($_livro_id_url)) {
+    $projeto_id = 'verbum-bd';
+    $base = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents";
+    $matricula = $_SESSION['usuario_matricula'];
+
+    // Nota do usuário neste livro
+    $avalDoc = _fsGetSimples("$base/obras/$_livro_id_url/avaliacoes/$matricula");
+    if (!isset($avalDoc['error']) && isset($avalDoc['fields']['nota'])) {
+        $_avaliacao_usuario = floatval(
+            $avalDoc['fields']['nota']['doubleValue'] ??
+            $avalDoc['fields']['nota']['integerValue'] ?? 0
+        );
+    }
+
+    // Média geral e total de avaliações da obra
+    $obraDoc = _fsGetSimples("$base/obras/$_livro_id_url");
+    if (!isset($obraDoc['error']) && isset($obraDoc['fields'])) {
+        $f = $obraDoc['fields'];
+        $_avaliacao_media  = floatval($f['avaliacao_media']['doubleValue'] ?? $f['avaliacao_media']['integerValue'] ?? 0);
+        $_total_avaliacoes = intval($f['total_avaliacoes']['integerValue'] ?? 0);
+    }
 }
 ?>
 
@@ -531,6 +573,17 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             btnConfirmar.style.opacity = '1';
         });
     });
+
+    // Expõe pintar para uso externo
+    window._pintarEstrelas = function(valor) {
+        notaSelecionada = valor;
+        allSpans.forEach(s => s.classList.remove('on', 'hover'));
+        pintar(valor, 'on');
+        hiddenInput.value = valor;
+        btnConfirmar.disabled = false;
+        btnConfirmar.style.opacity = '1';
+        btnConfirmar.innerText = 'Atualizar Avaliação';
+    };
 })();
 
 function habilitarBotao(valor) {
@@ -570,8 +623,19 @@ async function enviarAvaliacao() {
 
         if (resultado.sucesso) {
             showToast('★ Avaliação enviada com sucesso!');
-            btn.innerText = "Avaliação enviada ✓";
+            btn.innerText = "Atualizar Avaliação";
             btn.style.backgroundColor = "#27ae60";
+            btn.disabled = false;
+            // Atualiza a média dos leitores na tela sem recarregar
+            if (resultado.nova_media !== undefined) {
+                const detAval = document.getElementById('det-avaliacao');
+                if (detAval) {
+                    const m = resultado.nova_media;
+                    const total = resultado.total_avaliacoes;
+                    const estrelas = '★'.repeat(Math.floor(m)) + (m % 1 >= 0.5 ? '½' : '');
+                    detAval.textContent = m.toFixed(1) + ' ' + estrelas + ' (' + total + (total > 1 ? ' avaliações' : ' avaliação') + ')';
+                }
+            }
         } else {
             showToast('✕ ' + resultado.mensagem);
             btn.disabled = false;
@@ -579,11 +643,41 @@ async function enviarAvaliacao() {
         }
     } catch (e) {
         console.error("Erro ao enviar avaliação:", e);
-        showToast("Erro ao conectar com o servidor.");
+        showToast("Erro: " + e.message);
         btn.disabled = false;
         btn.innerText = "Confirmar Avaliação";
     }
 }
+
+// ─── Avaliação existente injetada pelo PHP ────────────────────────────────────
+function carregarAvaliacaoUsuario() {
+    const notaUsuario     = <?php echo json_encode($_avaliacao_usuario ?? null); ?>;
+    const media           = <?php echo json_encode((float)($_avaliacao_media ?? 0)); ?>;
+    const totalAvaliacoes = <?php echo json_encode((int)($_total_avaliacoes ?? 0)); ?>;
+
+    // Pré-preenche estrelas se já avaliou
+    if (notaUsuario !== null && notaUsuario > 0) {
+        const aguardar = setInterval(() => {
+            if (typeof window._pintarEstrelas === 'function') {
+                clearInterval(aguardar);
+                window._pintarEstrelas(notaUsuario);
+            }
+        }, 100);
+    }
+
+    // Atualiza "Avaliação dos leitores"
+    const detAval = document.getElementById('det-avaliacao');
+    if (detAval) {
+        if (totalAvaliacoes > 0 && media > 0) {
+            const estrelas = '★'.repeat(Math.floor(media)) + (media % 1 >= 0.5 ? '½' : '');
+            detAval.textContent = media.toFixed(1) + ' ' + estrelas + ' (' + totalAvaliacoes + (totalAvaliacoes > 1 ? ' avaliações' : ' avaliação') + ')';
+        } else {
+            detAval.textContent = 'Sem avaliações ainda';
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', carregarAvaliacaoUsuario);
     </script>
 </body>
 </html>
