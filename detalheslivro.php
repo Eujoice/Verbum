@@ -1,52 +1,10 @@
 <!--Tela de Detalhes de Livro-->
 <?php
-ini_set('display_errors', 0);
-error_reporting(0);
 session_start();
 
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) { 
     header("Location: index.php");
     exit();
-}
-
-// ── Busca avaliação do usuário server-side (mesmo padrão do resto do projeto) ─
-$_avaliacao_usuario = null;
-$_avaliacao_media   = 0.0;
-$_total_avaliacoes  = 0;
-
-function _fsGetSimples($url) {
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_SSL_VERIFYPEER => false,
-    ]);
-    $r = curl_exec($ch);
-    curl_close($ch);
-    return json_decode($r, true);
-}
-
-$_livro_id_url = isset($_GET['id']) ? trim($_GET['id']) : '';
-if (!empty($_livro_id_url)) {
-    $projeto_id = 'verbum-bd';
-    $base = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents";
-    $matricula = $_SESSION['usuario_matricula'];
-
-    // Nota do usuário neste livro
-    $avalDoc = _fsGetSimples("$base/obras/$_livro_id_url/avaliacoes/$matricula");
-    if (!isset($avalDoc['error']) && isset($avalDoc['fields']['nota'])) {
-        $_avaliacao_usuario = floatval(
-            $avalDoc['fields']['nota']['doubleValue'] ??
-            $avalDoc['fields']['nota']['integerValue'] ?? 0
-        );
-    }
-
-    // Média geral e total de avaliações da obra
-    $obraDoc = _fsGetSimples("$base/obras/$_livro_id_url");
-    if (!isset($obraDoc['error']) && isset($obraDoc['fields'])) {
-        $f = $obraDoc['fields'];
-        $_avaliacao_media  = floatval($f['avaliacao_media']['doubleValue'] ?? $f['avaliacao_media']['integerValue'] ?? 0);
-        $_total_avaliacoes = intval($f['total_avaliacoes']['integerValue'] ?? 0);
-    }
 }
 ?>
 
@@ -98,7 +56,7 @@ if (!empty($_livro_id_url)) {
                 </a>
                 <a class="nav-item" href="favoritos.php">
                     <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
-                    Favoritos e Avaliações
+                    Favoritos
                 </a>
                 <a class="nav-item nav-sair" href="logout.php">
                     <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg></div>
@@ -160,42 +118,6 @@ if (!empty($_livro_id_url)) {
                         <button onclick="leiaMais()" id="btnLerMais">Leia mais</button>
                     </p>
 
-                    <!-- Bloco de Avaliação do Usuário -->
-<div class="card-avaliacao-usuario" style="margin: 20px 0; padding: 20px; background: #fff; border: 1px solid var(--borda); border-radius: 14px;">
-    <p class="card-info-titulo" style="margin-bottom: 15px;">Sua avaliação</p>
-    
-<div class="rating-input" id="rating-stars">
-    <span class="star-group" data-full="1.0" data-half="0.5">
-        <span class="star-full" data-value="1.0">&#9733;</span>
-        <span class="star-half" data-value="0.5">&#9733;</span>
-    </span>
-    <span class="star-group" data-full="2.0" data-half="1.5">
-        <span class="star-full" data-value="2.0">&#9733;</span>
-        <span class="star-half" data-value="1.5">&#9733;</span>
-    </span>
-    <span class="star-group" data-full="3.0" data-half="2.5">
-        <span class="star-full" data-value="3.0">&#9733;</span>
-        <span class="star-half" data-value="2.5">&#9733;</span>
-    </span>
-    <span class="star-group" data-full="4.0" data-half="3.5">
-        <span class="star-full" data-value="4.0">&#9733;</span>
-        <span class="star-half" data-value="3.5">&#9733;</span>
-    </span>
-    <span class="star-group" data-full="5.0" data-half="4.5">
-        <span class="star-full" data-value="5.0">&#9733;</span>
-        <span class="star-half" data-value="4.5">&#9733;</span>
-    </span>
-</div>
-
-    <input type="hidden" id="nota-final-usuario" value="0">
-    
-    <button id="btn-confirmar-avaliacao" class="btn-reservar" onclick="enviarAvaliacao()" 
-            style="margin-top: 15px; background-color: var(--verde-claro); width: auto;" disabled>
-        Confirmar Avaliação
-    </button>
-</div>
-                    
-
                     <div id="div-detalhes">
     
                         <div class="item">
@@ -230,9 +152,10 @@ if (!empty($_livro_id_url)) {
 
                     </div>
 
-<button id="btn-reserva-principal" class="btn-reservar" onclick="reservarLivro()">
-    Reservar exemplar
-</button>
+                    <div class="div-reserva">
+                        <button class="btn-reservar" onclick="reservarLivro()">
+                            Reservar exemplar
+                        </button>
                         <button class="btn-favorito" id="btnFavorito" onclick="toggleFavorito()" title="Salvar nos favoritos">♡</button>
                     </div>
                 </div>
@@ -300,11 +223,11 @@ if (!empty($_livro_id_url)) {
     <div class="toast-dl" id="toastDl"></div>
 
     <script src="script.js"></script>
-    <script typw="module" src="busca_detalhes.js"></script>
+    <script type="module" src="busca_detalhes.js"></script>
     <script type="module" src="acervo_logic.js"></script>
     <script src="script-acervo.js"></script>
 
-    <script>
+    <script type="module">
         // ─── Breadcrumb ───────────────────────────────────────────────
 
         function formatarGenero(texto) {
@@ -336,14 +259,11 @@ if (!empty($_livro_id_url)) {
 
             // Monitorar o status do livro para mudar o texto do botão
         // Monitorar o status do livro e a existência de reserva do usuário
-    const observarStatusEReserva = setInterval(async () => {
-        const statusEl = document.getElementById('status');
-    
-    // MUDANÇA AQUI: Use o ID único que criamos no passo 1
-        const btnReservar = document.getElementById('btn-reserva-principal');
-    
-        const urlParams = new URLSearchParams(window.location.search);
-        const livroId = urlParams.get('id');
+        const observarStatusEReserva = setInterval(async () => {
+            const statusEl = document.getElementById('status');
+            const btnReservar = document.querySelector('.btn-reservar');
+            const urlParams = new URLSearchParams(window.location.search);
+            const livroId = urlParams.get('id');
 
             if (statusEl && statusEl.innerText.trim() !== '' && livroId) {
                 const status = statusEl.innerText.toLowerCase().trim();
@@ -450,14 +370,67 @@ if (!empty($_livro_id_url)) {
         }
 
         // ─── Favorito ────────────────────────────────────────────────
-        let favoritoAtivo = false;
-        function toggleFavorito() {
-            favoritoAtivo = !favoritoAtivo;
-            const btn = document.getElementById('btnFavorito');
-            btn.textContent = favoritoAtivo ? '♥' : '♡';
-            btn.classList.toggle('ativo', favoritoAtivo);
-            showToast(favoritoAtivo ? '♥ Adicionado aos favoritos!' : 'Removido dos favoritos.');
-        }
+        import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js').then(({ collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp }) => {
+            import('./firebase-config.js').then(({ db }) => {
+
+                const MATRICULA = "<?php echo htmlspecialchars($_SESSION['usuario_matricula']); ?>";
+                const urlP = new URLSearchParams(window.location.search);
+                const LIVRO_ID = urlP.get('id');
+                const btn = document.getElementById('btnFavorito');
+
+                let favDocId = null;
+
+                // Verifica ao carregar se já é favorito
+                async function verificarFavorito() {
+                    if (!LIVRO_ID) return;
+                    const q = query(
+                        collection(db, 'favoritos'),
+                        where('usuario_id', '==', MATRICULA),
+                        where('obra_id', '==', LIVRO_ID)
+                    );
+                    const snap = await getDocs(q);
+                    if (!snap.empty) {
+                        favDocId = snap.docs[0].id;
+                        btn.textContent = '♥';
+                        btn.classList.add('ativo');
+                    }
+                }
+
+                window.toggleFavorito = async function () {
+                    if (!LIVRO_ID) return;
+                    btn.disabled = true;
+
+                    try {
+                        if (favDocId) {
+                            // Já é favorito → remove
+                            await deleteDoc(doc(db, 'favoritos', favDocId));
+                            favDocId = null;
+                            btn.textContent = '♡';
+                            btn.classList.remove('ativo');
+                            showToast('Removido dos favoritos.');
+                        } else {
+                            // Não é favorito → adiciona
+                            const novoDoc = await addDoc(collection(db, 'favoritos'), {
+                                usuario_id: MATRICULA,
+                                obra_id: LIVRO_ID,
+                                salvo_em: serverTimestamp()
+                            });
+                            favDocId = novoDoc.id;
+                            btn.textContent = '♥';
+                            btn.classList.add('ativo');
+                            showToast('♥ Adicionado aos favoritos!');
+                        }
+                    } catch (e) {
+                        console.error('Erro ao atualizar favorito:', e);
+                        showToast('Erro ao salvar favorito.');
+                    } finally {
+                        btn.disabled = false;
+                    }
+                };
+
+                verificarFavorito();
+            });
+        });
 
         // ─── Você também pode gostar ─────────────────────────────────
         // Aguarda o acervo_logic.js terminar de expor os dados e chama
@@ -507,177 +480,6 @@ if (!empty($_livro_id_url)) {
                 `;
             }).join('');
         };
-// ─── Sistema de Estrelas com Meia Estrela ────────────────────────────────────
-(function() {
-    const container = document.getElementById('rating-stars');
-    if (!container) return;
-
-    const hiddenInput = document.getElementById('nota-final-usuario');
-    const btnConfirmar = document.getElementById('btn-confirmar-avaliacao');
-    let notaSelecionada = 0;
-
-    // Todos os spans clicáveis (half e full dentro de cada grupo)
-    const allSpans = container.querySelectorAll('.star-half, .star-full');
-    // Todos os grupos
-    const allGroups = container.querySelectorAll('.star-group');
-
-    function valorDoSpan(span) {
-        return parseFloat(span.dataset.value);
-    }
-
-    // Pinta as estrelas até o valor informado
-    function pintar(valor, modo) { // modo: 'on' ou 'hover'
-        allGroups.forEach(group => {
-            const halfVal = parseFloat(group.dataset.half);
-            const fullVal = parseFloat(group.dataset.full);
-            const halfSpan = group.querySelector('.star-half');
-            const fullSpan = group.querySelector('.star-full');
-
-            // Remove os dois estados
-            halfSpan.classList.remove('on', 'hover');
-            fullSpan.classList.remove('on', 'hover');
-
-            if (valor >= fullVal) {
-                // Estrela cheia acesa
-                fullSpan.classList.add(modo);
-                halfSpan.classList.add(modo);
-            } else if (valor >= halfVal) {
-                // Só a meia acesa
-                halfSpan.classList.add(modo);
-            }
-        });
-    }
-
-    // Hover
-    allSpans.forEach(span => {
-        span.addEventListener('mouseenter', () => {
-            // Apaga 'on' temporariamente para ver o hover
-            allSpans.forEach(s => s.classList.remove('hover'));
-            pintar(valorDoSpan(span), 'hover');
-        });
-    });
-
-    container.addEventListener('mouseleave', () => {
-        allSpans.forEach(s => s.classList.remove('hover'));
-        if (notaSelecionada > 0) pintar(notaSelecionada, 'on');
-    });
-
-    // Clique
-    allSpans.forEach(span => {
-        span.addEventListener('click', () => {
-            notaSelecionada = valorDoSpan(span);
-            allSpans.forEach(s => s.classList.remove('on', 'hover'));
-            pintar(notaSelecionada, 'on');
-            hiddenInput.value = notaSelecionada;
-            btnConfirmar.disabled = false;
-            btnConfirmar.style.opacity = '1';
-        });
-    });
-
-    // Expõe pintar para uso externo
-    window._pintarEstrelas = function(valor) {
-        notaSelecionada = valor;
-        allSpans.forEach(s => s.classList.remove('on', 'hover'));
-        pintar(valor, 'on');
-        hiddenInput.value = valor;
-        btnConfirmar.disabled = false;
-        btnConfirmar.style.opacity = '1';
-        btnConfirmar.innerText = 'Atualizar Avaliação';
-    };
-})();
-
-function habilitarBotao(valor) {
-    // mantido por compatibilidade, mas não é mais chamado
-    document.getElementById('nota-final-usuario').value = valor;
-    const btn = document.getElementById('btn-confirmar-avaliacao');
-    btn.disabled = false;
-    btn.style.opacity = "1";
-}
-
-async function enviarAvaliacao() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const livroId = urlParams.get('id');
-    const nota = document.getElementById('nota-final-usuario').value;
-    const btn = document.getElementById('btn-confirmar-avaliacao');
-
-    if (!livroId || !nota || parseFloat(nota) <= 0) {
-        showToast("Selecione uma nota antes de confirmar.");
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerText = "Enviando...";
-
-    const formData = new FormData();
-    formData.append('acao', 'avaliar');
-    formData.append('livro_id', livroId);
-    formData.append('nota', nota);
-
-    try {
-        const response = await fetch('processar_avaliacao.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        const resultado = await response.json();
-
-        if (resultado.sucesso) {
-            showToast('★ Avaliação enviada com sucesso!');
-            btn.innerText = "Atualizar Avaliação";
-            btn.style.backgroundColor = "#27ae60";
-            btn.disabled = false;
-            // Atualiza a média dos leitores na tela sem recarregar
-            if (resultado.nova_media !== undefined) {
-                const detAval = document.getElementById('det-avaliacao');
-                if (detAval) {
-                    const m = resultado.nova_media;
-                    const total = resultado.total_avaliacoes;
-                    const estrelas = '★'.repeat(Math.floor(m)) + (m % 1 >= 0.5 ? '½' : '');
-                    detAval.textContent = m.toFixed(1) + ' ' + estrelas + ' (' + total + (total > 1 ? ' avaliações' : ' avaliação') + ')';
-                }
-            }
-        } else {
-            showToast('✕ ' + resultado.mensagem);
-            btn.disabled = false;
-            btn.innerText = "Confirmar Avaliação";
-        }
-    } catch (e) {
-        console.error("Erro ao enviar avaliação:", e);
-        showToast("Erro: " + e.message);
-        btn.disabled = false;
-        btn.innerText = "Confirmar Avaliação";
-    }
-}
-
-// ─── Avaliação existente injetada pelo PHP ────────────────────────────────────
-function carregarAvaliacaoUsuario() {
-    const notaUsuario     = <?php echo json_encode($_avaliacao_usuario ?? null); ?>;
-    const media           = <?php echo json_encode((float)($_avaliacao_media ?? 0)); ?>;
-    const totalAvaliacoes = <?php echo json_encode((int)($_total_avaliacoes ?? 0)); ?>;
-
-    // Pré-preenche estrelas se já avaliou
-    if (notaUsuario !== null && notaUsuario > 0) {
-        const aguardar = setInterval(() => {
-            if (typeof window._pintarEstrelas === 'function') {
-                clearInterval(aguardar);
-                window._pintarEstrelas(notaUsuario);
-            }
-        }, 100);
-    }
-
-    // Atualiza "Avaliação dos leitores"
-    const detAval = document.getElementById('det-avaliacao');
-    if (detAval) {
-        if (totalAvaliacoes > 0 && media > 0) {
-            const estrelas = '★'.repeat(Math.floor(media)) + (media % 1 >= 0.5 ? '½' : '');
-            detAval.textContent = media.toFixed(1) + ' ' + estrelas + ' (' + totalAvaliacoes + (totalAvaliacoes > 1 ? ' avaliações' : ' avaliação') + ')';
-        } else {
-            detAval.textContent = 'Sem avaliações ainda';
-        }
-    }
-}
-
-document.addEventListener('DOMContentLoaded', carregarAvaliacaoUsuario);
     </script>
 </body>
 </html>
