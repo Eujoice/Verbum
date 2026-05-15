@@ -1,0 +1,346 @@
+/* =========================================
+   FAVORITOS — style-favoritos.css
+   Segue o design system do Verbum
+========================================= */
+
+.fav-body {
+    padding: 36px 48px 48px;
+}
+
+/* ── Topo ── */
+.fav-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.fav-titulo h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-bottom: 5px;
+}
+
+.fav-titulo p {
+    font-size: 13px;
+    color: #9aaa98;
+}
+
+.fav-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: #f0f5ef;
+    border: 1.5px solid #dce8db;
+    border-radius: 12px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 70px;
+    flex: 1;
+    max-width: 140px;
+}
+
+.stat-num {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1;
+    color: #6C9467;
+}
+
+.stat-label {
+    font-size: 9px;
+    color: #9aaa98;
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* ── Filtros / Ordenação ── */
+.filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+}
+
+.filtros-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9aaa98;
+}
+
+.filtro-pill {
+    padding: 7px 18px;
+    border-radius: 50px;
+    border: 1.5px solid #dde8dc;
+    background: #f7f9f7;
+    font-size: 12px;
+    font-weight: 600;
+    color: #517463;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filtro-pill:hover,
+.filtro-pill.ativo {
+    background: #6C9467;
+    border-color: #6C9467;
+    color: #fff;
+}
+
+/* ── Grid de favoritos ── */
+.fav-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 22px;
+}
+
+/* ── Card de favorito ── */
+.fav-card {
+    background: #fff;
+    border: 1.5px solid #eaede9;
+    border-radius: 18px;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.fav-card:hover {
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.09);
+    transform: translateY(-3px);
+}
+
+/* Capa do livro */
+.fav-capa-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    background: #f0f5ef;
+}
+
+.fav-capa {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.fav-card:hover .fav-capa {
+    transform: scale(1.04);
+}
+
+.fav-capa-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    line-height: 1.4;
+}
+
+/* Botão de remover favorito */
+.fav-remover {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.92);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+    transition: background 0.18s, transform 0.15s;
+    z-index: 2;
+}
+
+.fav-remover:hover {
+    background: #fee2e2;
+    transform: scale(1.1);
+}
+
+.fav-remover svg {
+    width: 16px;
+    height: 16px;
+    fill: #e05252;
+    transition: fill 0.18s;
+}
+
+.fav-remover:hover svg {
+    fill: #b91c1c;
+}
+
+/* Informações do livro */
+.fav-info {
+    padding: 14px 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.fav-livro-titulo {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e2b1d;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.fav-livro-autor {
+    font-size: 11px;
+    color: #9aaa98;
+    font-weight: 400;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.fav-livro-genero {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    background: #eef4ed;
+    color: #3d6139;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    align-self: flex-start;
+}
+
+/* ── Skeleton loading ── */
+.fav-skeleton {
+    border-radius: 18px;
+    background: #f0f4ef;
+    aspect-ratio: 2 / 4;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+}
+
+/* ── Estado vazio ── */
+.fav-vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 72px 20px;
+}
+
+.fav-vazio svg {
+    width: 58px;
+    height: 58px;
+    fill: #cddacc;
+    display: block;
+    margin: 0 auto 18px;
+}
+
+.fav-vazio h3 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #3d4f3c;
+    margin-bottom: 8px;
+}
+
+.fav-vazio p {
+    font-size: 13px;
+    color: #9aaa98;
+}
+
+.fav-vazio .btn-explorar {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 11px 28px;
+    background: #6C9467;
+    color: #fff;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.fav-vazio .btn-explorar:hover {
+    background: #547a50;
+    transform: translateY(-1px);
+}
+
+/* ── Toast de confirmação de remoção ── */
+.fav-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: #1e2b1d;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    z-index: 9999;
+    opacity: 0;
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    pointer-events: none;
+    white-space: nowrap;
+}
+
+.fav-toast.visivel {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+/* ── Responsivo ── */
+@media (max-width: 768px) {
+    .fav-body {
+        padding: 24px 20px 40px;
+    }
+
+    .fav-grid {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 14px;
+    }
+
+    .fav-top {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .fav-stats {
+        width: 100%;
+    }
+
+    .stat-card {
+        max-width: none;
+    }
+}
