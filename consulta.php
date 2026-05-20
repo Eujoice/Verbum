@@ -125,6 +125,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
             </div>
 
             <div id="panel-emprestimos" class="panel">
+                <div id="emp-stats-container"></div>
                 <div class="lista-resultados" id="lista-emprestimos"></div>
                 <div class="paginacao" id="paginacao-emprestimos"></div>
             </div>

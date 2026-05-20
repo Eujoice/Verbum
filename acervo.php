@@ -13,9 +13,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styleacervo.css"
-    
-    >
+    <link rel="stylesheet" href="styleacervo.css">
 </head>
 <body class="body-acervo">
 
@@ -48,7 +46,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 Histórico de Empréstimos
             </a>
 
-            <!-- ↓ Agora abre o overlay em vez de navegar para outra página -->
             <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 Dados Pessoais
@@ -66,22 +63,71 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     </nav>
 
     <div class="container-acervo">
-        <header class="header">
-            <div class="header-left">
-                    <div class="logo"><a href="acervo.php">Verbum</a></div>
-                    <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
+
+        <header class="header" style="box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; overflow: visible;">
+    
+    <div class="header-left" style="display: flex; align-items: center; flex: 1; justify-content: flex-start; flex-shrink: 0;">
+        <div class="logo"><a href="acervo.php">Verbum</a></div>
+        <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
+    </div>
+
+    <div class="busca" style="flex: 2; max-width: 500px; display: flex; align-items: center; justify-content: center; margin: 0 15px;">
+        <svg class="icone-lupa" viewBox="0 0 24 24" style="flex-shrink: 0;">
+            <path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="pesquisa" placeholder="O que você quer ler?" style="width: 100%;">
+    </div>
+
+    <div class="icones" style="display: flex; align-items: center; gap: 20px; flex: 1; justify-content: flex-end; flex-shrink: 0;">
+        
+        <div class="notificacao-container" id="notificacaoContainer" style="position: relative; display: flex; align-items: center; color: #ffffff;">
+            <button class="notificacao-btn" id="notificacaoBtn" onclick="toggleDropdownNotificacoes(event)" style="background: none; border: none; cursor: pointer; color: #ffffff; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                <span class="notificacao-badge" id="notificacaoBadge" style="display: none; position: absolute; top: -2px; right: -2px; background-color: #e05252; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 700; display: none; align-items: center; justify-content: center; line-height: 1;">0</span>
+            </button>
+
+            <div class="notificacao-dropdown" id="notificacaoDropdown" style="display: none;">
+                <div class="notif-topo">
+                    <span class="notif-topo-titulo">Notificações</span>
                 </div>
-            <div class="busca">
-                <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                <input type="text" id="pesquisa" placeholder="O que você quer ler?">            </div>
-            <div class="icones">
-                <button class="hambtn" id="hambtn" onclick="toggleMenu()">
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                    <div class="bar"></div>
-                </button>
+                <div class="notif-corpo">
+                    <div class="notificacao-lista" id="notificacaoLista">
+                        <div class="notif-vazia">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            <p>Nenhuma notificação</p>
+                        </div>
+                    </div>
+                    <div class="notif-painel-detalhe" id="notifPainelDetalhe"></div>
+                </div>
             </div>
-        </header>
+        </div>
+
+        <div class="user-profile" style="display: flex; align-items: center; gap: 10px; color: #ffffff;">
+            <span class="user-name" style="font-size: 15px; font-weight: 500; white-space: nowrap; color: #ffffff; display: inline-block; margin-right: 2px;">
+                <?php 
+                    $nome_completo = trim($_SESSION['usuario_nome']);
+                    $partes_nome = explode(' ', $nome_completo);
+                    $primeiro_nome = $partes_nome[0];
+                    echo "Olá, " . htmlspecialchars($primeiro_nome) . "!";
+                ?>
+            </span>
+            <div class="user-avatar" style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); flex-shrink: 0;">
+                <svg viewBox="0 0 24 24" width="20" height="20" fill="#ffffff">
+                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                </svg>
+            </div>
+        </div>
+
+        <button class="hambtn" id="hambtn" style="flex-shrink: 0;">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </button>
+    </div>
+</header>
 
         <nav class="menu-tabs">
             <a class="tab ativo" href="acervo.php">Acervo</a>
@@ -90,51 +136,40 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
-<section class="banner-section">
-    <div class="carousel" id="carousel">
-        <div class="slides" id="slides">
-            <!-- Percy Jackson (Supondo que seja L12 baseando-se na lista) -->
-            <a href="detalheslivro.php?id=L07" class="slide slide-1">
-                <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
-            </a>
-            
-            <!-- Crime e Castigo (Confirmado na imagem como L01) -->
-            <a href="detalheslivro.php?id=L01" class="slide slide-2">
-                <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
-            </a>
-            
-            <!-- A Metamorfose (Ajuste o ID conforme seu Firestore) -->
-            <a href="detalheslivro.php?id=L04" class="slide slide-3">
-                <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
-            </a>
-            
-            <!-- Biblioteca da meia noite (Ajuste o ID conforme seu Firestore) -->
-            <a href="detalheslivro.php?id=L06" class="slide slide-4">
-                <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
-            </a>
-            
-            <!-- Vidas Secas (Ajuste o ID conforme seu Firestore) -->
-            <a href="detalheslivro.php?id=L22" class="slide slide-5">
-                <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
-            </a>
-        </div>
-        
-        <button class="carr-prev" onclick="mudarSlide(-1)">
-            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="carr-next" onclick="mudarSlide(1)">
-            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-    </div>
-    
-    <div class="dots" id="dots">
-        <button class="dot active" onclick="irParaSlide(0)"></button>
-        <button class="dot" onclick="irParaSlide(1)"></button>
-        <button class="dot" onclick="irParaSlide(2)"></button>
-        <button class="dot" onclick="irParaSlide(3)"></button>
-        <button class="dot" onclick="irParaSlide(4)"></button>
-    </div>
-</section>
+        <section class="banner-section">
+            <div class="carousel" id="carousel">
+                <div class="slides" id="slides">
+                    <div class="slide slide-1">
+                        <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
+                    </div>
+                    <div class="slide slide-2">
+                        <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
+                    </div>
+                    <div class="slide slide-3">
+                        <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
+                    </div>
+                    <div class="slide slide-4">
+                        <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
+                    </div>
+                    <div class="slide slide-5">
+                        <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
+                    </div>
+                </div>
+                <button class="carr-prev" onclick="mudarSlide(-1)">
+                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="carr-next" onclick="mudarSlide(1)">
+                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+            <div class="dots" id="dots">
+                <button class="dot active" onclick="irParaSlide(0)"></button>
+                <button class="dot" onclick="irParaSlide(1)"></button>
+                <button class="dot" onclick="irParaSlide(2)"></button>
+                <button class="dot" onclick="irParaSlide(3)"></button>
+                <button class="dot" onclick="irParaSlide(4)"></button>
+            </div>
+        </section>
 
         <section class="populares">
             <div class="sec-header">
@@ -153,7 +188,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         </section>
     </div>
 
-    <!-- ↓ Overlay de Dados Pessoais incluído aqui -->
     <?php include 'dp_modal.php'; ?>
     <script src="busca_detalhes.js"></script>
     <script src="script-acervo.js"></script>

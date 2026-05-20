@@ -35,6 +35,27 @@ if ($acao == 'devolver' && !empty($idObra)) {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['fields' => ['status' => ['stringValue' => 'inativo']]]));
             curl_exec($ch);
+
+            // Notificação de devolução confirmada ao aluno
+            $matriculaAluno = $dadosEmp['fields']['usuario_id']['stringValue'] ?? '';
+            $tituloObra     = $dadosEmp['fields']['titulo_obra']['stringValue'] ?? 'Livro';
+            $dataHoje       = date('d/m/Y');
+
+            if (!empty($matriculaAluno)) {
+                $mensagemNotif = "Devolução confirmada! O livro \"$tituloObra\" foi devolvido com sucesso em $dataHoje. Obrigado!";
+
+                $dadosNotif = json_encode(['fields' => [
+                    'matricula' => ['stringValue' => $matriculaAluno],
+                    'mensagem'  => ['stringValue' => $mensagemNotif],
+                    'data'      => ['stringValue' => date('Y-m-d H:i:s')],
+                    'lida'      => ['booleanValue' => false]
+                ]]);
+
+                curl_setopt($ch, CURLOPT_URL, "https://firestore.googleapis.com/v1/projects/{$projetoID}/databases/(default)/documents/notificacoes");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $dadosNotif);
+                curl_exec($ch);
+            }
         }
     }
 

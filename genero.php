@@ -88,21 +88,65 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
 </nav>
 
     <div class="container-acervo">
-        <header class="header">
-                        <div class="header-left">
-                    <div class="logo"><a href="acervo.php">Verbum</a></div>
-                    <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
-                </div>
-            <div class="busca">
-                <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-<input type="text" id="pesquisa" placeholder="O que você quer ler?">             </div>
-            <div class="icones">
+         <header class="header" style="box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; overflow: visible;">
+    
+            <div class="header-left" style="display: flex; align-items: center; flex: 1; justify-content: flex-start; flex-shrink: 0;">
+                <div class="logo"><a href="acervo.php">Verbum</a></div>
+                <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
+            </div>
 
-                <button class="hambtn" id="hambtn" onclick="toggleMenu()">
-                    <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+            <div class="busca" style="flex: 2; max-width: 500px; display: flex; align-items: center; justify-content: center; margin: 0 15px;">
+                <svg class="icone-lupa" viewBox="0 0 24 24" style="flex-shrink: 0;">
+                    <path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/>
+                </svg>
+                <input type="text" id="pesquisa" placeholder="O que você quer ler?" style="width: 100%;">
+            </div>
+
+            <div class="icones" style="display: flex; align-items: center; gap: 20px; flex: 1; justify-content: flex-end; flex-shrink: 0;">
+                
+                <div class="notificacao-container" id="notificacaoContainer" style="position: relative; display: flex; align-items: center; color: #ffffff;">
+                    <button class="notificacao-btn" id="notificacaoBtn" onclick="toggleDropdownNotificacoes(event)" style="background: none; border: none; cursor: pointer; color: #ffffff; padding: 4px; display: flex; align-items: center; justify-content: center;">
+                        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                        </svg>
+                        <span class="notificacao-badge" id="notificacaoBadge" style="display: none; position: absolute; top: -2px; right: -2px; background-color: #ff4d4d; color: white; border-radius: 50%; padding: 2px 6px; font-size: 10px; font-weight: bold; line-height: 1;">0</span>
+                    </button>
+                    
+                    <div class="notificacao-dropdown" id="notificacaoDropdown" style="display: none; position: absolute; right: 0; top: 45px; background: white; border: 1px solid #ccc; box-shadow: 0px 4px 8px rgba(0,0,0,0.1); border-radius: 8px; width: 300px; z-index: 1000; color: #333;">
+                        <div class="notificacao-header" style="padding: 10px; border-bottom: 1px solid #eee; font-weight: bold;">
+                            <h3 style="margin: 0; font-size: 16px;">Notificações</h3>
+                        </div>
+                        <div class="notificacao-lista" id="notificacaoLista" style="max-height: 250px; overflow-y: auto; padding: 10px;">
+                            <div class="notificacao-vazia" style="text-align: center; color: #888; padding: 15px 0;">Nenhuma notificação encontrada.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-profile" style="display: flex; align-items: center; gap: 10px; color: #ffffff;">
+                    <span class="user-name" style="font-size: 15px; font-weight: 500; white-space: nowrap; color: #ffffff; display: inline-block; margin-right: 2px;">
+                        <?php 
+                            $nome_completo = trim($_SESSION['usuario_nome']);
+                            $partes_nome = explode(' ', $nome_completo);
+                            $primeiro_nome = $partes_nome[0];
+                            echo "Olá, " . htmlspecialchars($primeiro_nome) . "!";
+                        ?>
+                    </span>
+                    <div class="user-avatar" style="width: 34px; height: 34px; min-width: 34px; min-height: 34px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.2); flex-shrink: 0;">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="#ffffff">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <button class="hambtn" id="hambtn" style="flex-shrink: 0;">
+                    <div class="bar"></div>
+                    <div class="bar"></div>
+                    <div class="bar"></div>
                 </button>
             </div>
         </header>
+
 
         <nav class="menu-tabs">
             <a class="tab" href="acervo.php">Acervo</a>

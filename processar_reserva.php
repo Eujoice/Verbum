@@ -224,6 +224,21 @@ try {
             // 4. Remove a reserva (já foi convertida em empréstimo)
             firestoreDelete($urlReserva);
 
+            // 5. Dispara notificação automática para o aluno
+            $dataFormatada    = date('d/m/Y', strtotime($dataDevolucao));
+            $mensagemNotif    = "Empréstimo realizado com sucesso! O livro \"$titulo_obra\" deve ser devolvido até o dia $dataFormatada.";
+
+            $dadosNotificacao = [
+                'matricula' => ['stringValue' => $matricula_aluno],
+                'mensagem'  => ['stringValue' => $mensagemNotif],
+                'data'      => ['stringValue' => date('Y-m-d H:i:s')],
+                'lida'      => ['booleanValue' => false]
+            ];
+
+            $urlNotificacoes = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes";
+            firestorePost($urlNotificacoes, $dadosNotificacao);
+            // Notificação é enviada em "best-effort" — falha silenciosa não bloqueia o empréstimo
+
             echo json_encode([
                 'sucesso'   => true,
                 'mensagem'  => "Retirada confirmada! Empréstimo criado para $nome_aluno. Devolução prevista: " . date('d/m/Y', strtotime($dataDevolucao)) . "."
@@ -357,6 +372,37 @@ try {
             }
 
             echo json_encode(['sucesso' => true, 'mensagem' => 'Observação salva com sucesso.']);
+            break;
+
+
+        /* ──────────────────────────────────────
+           AÇÃO: ENVIAR NOTIFICAÇÃO MANUAL
+        ────────────────────────────────────── */
+        case 'enviar_notificacao_manual':
+            $matricula    = $_POST['matricula']    ?? '';
+            $titulo_livro = $_POST['titulo_livro'] ?? 'Livro';
+
+            if (empty($matricula)) {
+                echo json_encode(['sucesso' => false, 'mensagem' => 'Matrícula do aluno não informada.']);
+                exit();
+            }
+
+            $urlNotificacoes = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes";
+            
+            $dadosNotificacao = [
+                'matricula' => ['stringValue' => $matricula],
+                'mensagem'  => ['stringValue' => "Lembrete: O livro \"$titulo_livro\" está aguardando a sua retirada no balcão da biblioteca!"],
+                'data'      => ['stringValue' => date('Y-m-d H:i:s')],
+                'lida'      => ['booleanValue' => false]
+            ];
+
+            $resultado = firestorePost($urlNotificacoes, $dadosNotificacao);
+
+            if ($resultado['http_code'] !== 200) {
+                throw new Exception("Erro ao registrar a notificação no banco de dados.");
+            }
+
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Notificação enviada com sucesso!']);
             break;
 
 
