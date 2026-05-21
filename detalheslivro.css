@@ -590,10 +590,12 @@
 .nav-sair .nav-ic svg { fill: #dc2626; }
 
 /* Formulario de avaliacao (mantido para compatibilidade) */
-.avaliar { font-weight: 600; color: #6F7880; padding-left: 12%; }
-.form-avaliar { padding-left: 12%; padding-bottom: 8%; }
+.avaliar { font-weight: 600; color: #6F7880; padding-left: 12%; margin-top: 8px; margin-bottom: 12px; font-size: 15px; }
+.form-avaliar { padding-left: 12%; padding-bottom: 6%; }
 #input-avaliar { outline: none; border: 2px solid var(--borda); border-radius: 15px; padding: 10px 25px 10px 10px; font-family: "Poppins", sans-serif; width: 250px; box-shadow: 0 3px 6px rgba(0,0,0,0.08); }
-.inp-submit-avaliacao { border: none; color: white; background-color: var(--verde-claro); border-radius: 15px; padding: 10px 20px; font-weight: 600; font-size: 15px; font-family: "Poppins", sans-serif; cursor: pointer; }
+.inp-submit-avaliacao { border: none; color: white; background-color: var(--verde-claro); border-radius: 15px; padding: 10px 20px; font-weight: 600; font-size: 15px; font-family: "Poppins", sans-serif; cursor: pointer; transition: background 0.2s, opacity 0.2s; }
+.inp-submit-avaliacao:hover:not(:disabled) { background-color: var(--verde); }
+.inp-submit-avaliacao:disabled { cursor: not-allowed; }
 
 /* =========================================
    SECAO SIMILARES
