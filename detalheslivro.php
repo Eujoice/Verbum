@@ -1,10 +1,52 @@
 <!--Tela de Detalhes de Livro-->
 <?php
+ini_set('display_errors', 0);
+error_reporting(0);
 session_start();
 
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) { 
     header("Location: index.php");
     exit();
+}
+
+// ── Busca avaliação do usuário server-side ────────────────────────────────────
+$_avaliacao_usuario = null;
+$_avaliacao_media   = 0.0;
+$_total_avaliacoes  = 0;
+
+function _fsGetSimples($url) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+    ]);
+    $r = curl_exec($ch);
+    curl_close($ch);
+    return json_decode($r, true);
+}
+
+$_livro_id_url = isset($_GET['id']) ? trim($_GET['id']) : '';
+if (!empty($_livro_id_url)) {
+    $projeto_id = 'verbum-bd';
+    $base = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents";
+    $matricula = $_SESSION['usuario_matricula'];
+
+    // Nota do usuário neste livro
+    $avalDoc = _fsGetSimples("$base/obras/$_livro_id_url/avaliacoes/$matricula");
+    if (!isset($avalDoc['error']) && isset($avalDoc['fields']['nota'])) {
+        $_avaliacao_usuario = floatval(
+            $avalDoc['fields']['nota']['doubleValue'] ??
+            $avalDoc['fields']['nota']['integerValue'] ?? 0
+        );
+    }
+
+    // Média geral e total de avaliações da obra
+    $obraDoc = _fsGetSimples("$base/obras/$_livro_id_url");
+    if (!isset($obraDoc['error']) && isset($obraDoc['fields'])) {
+        $f = $obraDoc['fields'];
+        $_avaliacao_media  = floatval($f['avaliacao_media']['doubleValue'] ?? $f['avaliacao_media']['integerValue'] ?? 0);
+        $_total_avaliacoes = intval($f['total_avaliacoes']['integerValue'] ?? 0);
+    }
 }
 ?>
 
@@ -161,6 +203,37 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 </div>
             </div>
 
+            <!-- Widget de avaliação por estrelas -->
+            <div class="avaliar">Avalie esta obra</div>
+            <div class="form-avaliar">
+                <div class="rating-input" id="rating-input">
+                    <span class="star-group">
+                        <span class="star-half" data-val="0.5">★</span>
+                        <span class="star-full" data-val="1">★</span>
+                    </span>
+                    <span class="star-group">
+                        <span class="star-half" data-val="1.5">★</span>
+                        <span class="star-full" data-val="2">★</span>
+                    </span>
+                    <span class="star-group">
+                        <span class="star-half" data-val="2.5">★</span>
+                        <span class="star-full" data-val="3">★</span>
+                    </span>
+                    <span class="star-group">
+                        <span class="star-half" data-val="3.5">★</span>
+                        <span class="star-full" data-val="4">★</span>
+                    </span>
+                    <span class="star-group">
+                        <span class="star-half" data-val="4.5">★</span>
+                        <span class="star-full" data-val="5">★</span>
+                    </span>
+                </div>
+                <input type="hidden" id="hidden-nota" value="">
+                <button id="btnConfirmar" onclick="enviarAvaliacao()" disabled style="opacity:0.5; margin-top:10px;">
+                    Confirmar Avaliação
+                </button>
+            </div>
+
             <!-- Cards inferiores: sinopse completa + detalhes do acervo -->
             <div class="secao-inferior">
                 <div class="card-info">
@@ -226,6 +299,136 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <script type="module" src="busca_detalhes.js"></script>
     <script type="module" src="acervo_logic.js"></script>
     <script src="script-acervo.js"></script>
+
+    <!-- ─── Avaliação por estrelas ─────────────────────────────────────── -->
+    <script>
+        // IIFE: interação com as estrelas (hover + click + meia estrela)
+        (function () {
+            const container = document.getElementById('rating-input');
+            if (!container) return;
+
+            const allSpans    = container.querySelectorAll('[data-val]');
+            const hiddenInput = document.getElementById('hidden-nota');
+            const btnConfirmar = document.getElementById('btnConfirmar');
+            let notaSelecionada = 0;
+
+            function pintar(valor, modo) {
+                allSpans.forEach(s => {
+                    const v = parseFloat(s.dataset.val);
+                    if (v <= valor) s.classList.add(modo);
+                    else            s.classList.remove(modo);
+                });
+            }
+
+            allSpans.forEach(span => {
+                span.addEventListener('mouseenter', () => {
+                    allSpans.forEach(s => s.classList.remove('hover'));
+                    pintar(parseFloat(span.dataset.val), 'hover');
+                });
+                span.addEventListener('mouseleave', () => {
+                    allSpans.forEach(s => s.classList.remove('hover'));
+                    if (notaSelecionada > 0) pintar(notaSelecionada, 'on');
+                });
+                span.addEventListener('click', () => {
+                    notaSelecionada = parseFloat(span.dataset.val);
+                    allSpans.forEach(s => s.classList.remove('on', 'hover'));
+                    pintar(notaSelecionada, 'on');
+                    hiddenInput.value = notaSelecionada;
+                    btnConfirmar.disabled = false;
+                    btnConfirmar.style.opacity = '1';
+                });
+            });
+
+            // Expõe pintar para uso externo (pré-preenche nota já salva)
+            window._pintarEstrelas = function(valor) {
+                notaSelecionada = valor;
+                allSpans.forEach(s => s.classList.remove('on', 'hover'));
+                pintar(valor, 'on');
+                hiddenInput.value = valor;
+                btnConfirmar.disabled = false;
+                btnConfirmar.style.opacity = '1';
+                btnConfirmar.innerText = 'Atualizar Avaliação';
+            };
+        })();
+
+        // Envia a avaliação ao servidor
+        async function enviarAvaliacao() {
+            const nota = parseFloat(document.getElementById('hidden-nota').value);
+            const btn  = document.getElementById('btnConfirmar');
+            const urlParams = new URLSearchParams(window.location.search);
+            const livroId   = urlParams.get('id');
+
+            if (!nota || nota <= 0 || nota > 5) return showToast('Selecione uma nota antes de confirmar.');
+            if (!livroId) return showToast('Erro: ID do livro não encontrado.');
+
+            btn.disabled  = true;
+            btn.innerText = 'Enviando...';
+
+            const formData = new FormData();
+            formData.append('livro_id', livroId);
+            formData.append('nota', nota);
+
+            try {
+                const response = await fetch('processar_avaliacao.php', { method: 'POST', body: formData });
+                const resultado = await response.json();
+
+                if (resultado.sucesso) {
+                    showToast('★ Avaliação enviada com sucesso!');
+                    btn.innerText = 'Atualizar Avaliação';
+                    btn.style.backgroundColor = '#27ae60';
+                    btn.disabled = false;
+                    if (resultado.nova_media !== undefined) {
+                        const detAval = document.getElementById('det-avaliacao');
+                        if (detAval) {
+                            const m     = resultado.nova_media;
+                            const total = resultado.total_avaliacoes;
+                            const estrelas = '★'.repeat(Math.floor(m)) + (m % 1 >= 0.5 ? '½' : '');
+                            detAval.textContent = m.toFixed(1) + ' ' + estrelas + ' (' + total + (total > 1 ? ' avaliações' : ' avaliação') + ')';
+                        }
+                    }
+                } else {
+                    showToast('✕ ' + resultado.mensagem);
+                    btn.disabled  = false;
+                    btn.innerText = 'Confirmar Avaliação';
+                }
+            } catch (e) {
+                console.error('Erro ao enviar avaliação:', e);
+                showToast('Erro: ' + e.message);
+                btn.disabled  = false;
+                btn.innerText = 'Confirmar Avaliação';
+            }
+        }
+
+        // Carrega avaliação já existente ao abrir a página (via PHP server-side)
+        function carregarAvaliacaoUsuario() {
+            const notaUsuario     = <?php echo json_encode($_avaliacao_usuario ?? null); ?>;
+            const media           = <?php echo json_encode((float)($_avaliacao_media ?? 0)); ?>;
+            const totalAvaliacoes = <?php echo json_encode((int)($_total_avaliacoes ?? 0)); ?>;
+
+            // Pré-preenche estrelas se o usuário já avaliou
+            if (notaUsuario !== null && notaUsuario > 0) {
+                const aguardar = setInterval(() => {
+                    if (typeof window._pintarEstrelas === 'function') {
+                        clearInterval(aguardar);
+                        window._pintarEstrelas(notaUsuario);
+                    }
+                }, 100);
+            }
+
+            // Atualiza "Avaliação dos leitores" no card de detalhes
+            const detAval = document.getElementById('det-avaliacao');
+            if (detAval) {
+                if (totalAvaliacoes > 0 && media > 0) {
+                    const estrelas = '★'.repeat(Math.floor(media)) + (media % 1 >= 0.5 ? '½' : '');
+                    detAval.textContent = media.toFixed(1) + ' ' + estrelas + ' (' + totalAvaliacoes + (totalAvaliacoes > 1 ? ' avaliações' : ' avaliação') + ')';
+                } else {
+                    detAval.textContent = 'Sem avaliações ainda';
+                }
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', carregarAvaliacaoUsuario);
+    </script>
 
     <script type="module">
         // ─── Breadcrumb ───────────────────────────────────────────────
