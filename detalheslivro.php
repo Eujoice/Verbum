@@ -205,7 +205,7 @@ if (!empty($_livro_id_url)) {
 
             <!-- Widget de avaliação por estrelas -->
             <div class="avaliar">Avalie esta obra</div>
-            <div class="form-avaliar">
+            <div class="form-avaliar" style="display:flex; flex-direction:column; align-items:flex-start; gap:14px;">
                 <div class="rating-input" id="rating-input">
                     <span class="star-group">
                         <span class="star-half" data-val="0.5">★</span>
@@ -229,7 +229,7 @@ if (!empty($_livro_id_url)) {
                     </span>
                 </div>
                 <input type="hidden" id="hidden-nota" value="">
-                <button id="btnConfirmar" onclick="enviarAvaliacao()" disabled style="opacity:0.5; margin-top:10px;">
+                <button id="btnConfirmar" class="inp-submit-avaliacao" onclick="enviarAvaliacao()" disabled style="opacity:0.5;">
                     Confirmar Avaliação
                 </button>
             </div>
