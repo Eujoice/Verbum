@@ -5,45 +5,70 @@ import {
     doc, 
     getDoc, 
     query, 
-    limit 
+    limit,
+    where
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 // --- CONFIGURAÇÃO INICIAL ---
 const urlParams = new URLSearchParams(window.location.search);
 const idLivro = urlParams.get('id');
 
+// --- HELPER: busca livros por lista de IDs ---
+async function buscarPorIds(ids) {
+    const livros = [];
+    await Promise.all(ids.map(async (id) => {
+        try {
+            const snap = await getDoc(doc(db, "obras", id));
+            if (snap.exists()) livros.push({ id: snap.id, ...snap.data() });
+        } catch (e) {}
+    }));
+    // Mantém a ordem da lista de IDs
+    return ids.map(id => livros.find(l => l.id === id)).filter(Boolean);
+}
+
+// --- HELPER: gera HTML do card ---
+const gerarCardHTML = (livro) => `
+    <div class="livro">
+        <a href="detalheslivro.php?id=${livro.id}" style="text-decoration: none; color: inherit; display: block;">
+            <img src="${livro.capa}" alt="${livro.titulo}">
+            <p class="titulo">${livro.titulo}</p>
+            <p class="autor">${livro.autor}</p>
+        </a>
+    </div>
+`;
+
 // --- TELA DE ACERVO (Geral) ---
 async function carregarAcervo() {
-    const listaPopulares = document.getElementById('lista-populares');
-    const listaClassicos = document.getElementById('lista-classicos');
+    const listaPopulares      = document.getElementById('lista-populares');
+    const listaClassicos      = document.getElementById('lista-classicos');
+    const listaInternacionais = document.getElementById('lista-internacionais');
+    const listaFiccao         = document.getElementById('lista-ficcao');
 
-    if (!listaPopulares && !listaClassicos) return;
+    if (!listaPopulares && !listaClassicos && !listaInternacionais && !listaFiccao) return;
 
     try {
-        const q = query(collection(db, "obras"), limit(12));
-        const querySnapshot = await getDocs(q);
-        
-        const livros = [];
-        querySnapshot.forEach((doc) => {
-            livros.push({ id: doc.id, ...doc.data() });
-        });
-
-        const gerarCardHTML = (livro) => `
-            <div class="livro">
-                <a href="detalheslivro.php?id=${livro.id}" style="text-decoration: none; color: inherit; display: block;">
-                    <img src="${livro.capa}" alt="${livro.titulo}">
-                    <p class="titulo">${livro.titulo}</p>
-                    <p class="autor">${livro.autor}</p>
-                </a>
-            </div>
-        `;
-
+        // Populares: L01–L06
         if (listaPopulares) {
-            listaPopulares.innerHTML = livros.slice(0, 6).map(gerarCardHTML).join('');
+            const livros = await buscarPorIds(['L01','L02','L03','L04','L05','L06']);
+            listaPopulares.innerHTML = livros.map(gerarCardHTML).join('');
         }
 
+        // Clássicos: L07–L12
         if (listaClassicos) {
-            listaClassicos.innerHTML = livros.slice(6, 12).map(gerarCardHTML).join('');
+            const livros = await buscarPorIds(['L07','L08','L09','L10','L11','L12']);
+            listaClassicos.innerHTML = livros.map(gerarCardHTML).join('');
+        }
+
+        // Internacionais: L13–L18
+        if (listaInternacionais) {
+            const livros = await buscarPorIds(['L13','L14','L15','L16','L17','L18']);
+            listaInternacionais.innerHTML = livros.map(gerarCardHTML).join('');
+        }
+
+        // Ficção: L19–L24
+        if (listaFiccao) {
+            const livros = await buscarPorIds(['L19','L20','L21','L22','L23','L24']);
+            listaFiccao.innerHTML = livros.map(gerarCardHTML).join('');
         }
 
     } catch (error) {
@@ -76,11 +101,9 @@ async function carregarDadosLivro() {
             document.getElementById('paginas').innerText = dados.paginas || "---";
             document.getElementById('status').innerText = dados.status || "---";
 
-            // 3. LOGICA ALTERADA: Resumo ao lado da capa
+            // 3. Resumo ao lado da capa
             const resumo = dados.resumo || "Resumo não disponível.";
             const resenhaEl = document.getElementById('resenha');
-            
-            // Exibe o resumo com a função de "Leia mais" caso ele seja grande
             const limite = 200;
             if (resumo.length > limite) {
                 resenhaEl.innerHTML = `
@@ -91,46 +114,42 @@ async function carregarDadosLivro() {
                 resenhaEl.innerText = resumo;
             }
 
-            // 4. LOGICA ALTERADA: Sinopse Completa (Card Inferior)
-            // Aqui pegamos o campo 'sinopse' do Firebase
+            // 4. Sinopse Completa (Card Inferior)
             const sinopseCompleta = dados.sinopse || "Sinopse completa não disponível.";
             document.getElementById('sinopse-completa').innerText = sinopseCompleta;
 
             // 5. Card de Informações do Acervo
-            if(document.getElementById('det-colecao')) 
+            if (document.getElementById('det-colecao'))
                 document.getElementById('det-colecao').innerText = dados.colecao || "Nenhuma";
-            if(document.getElementById('det-localizacao')) 
+            if (document.getElementById('det-localizacao'))
                 document.getElementById('det-localizacao').innerText = dados.localizacao || "---";
-            if(document.getElementById('det-exemplares-total')) 
+            if (document.getElementById('det-exemplares-total'))
                 document.getElementById('det-exemplares-total').innerText = dados.exemplares_totais || "0";
             if (document.getElementById('det-avaliacao')) {
-            const el = document.getElementById('det-avaliacao');
-
-            // Usa avaliacao_media (calculada a partir das avaliações dos usuários)
-            // e total_avaliacoes como fonte de verdade
-            const media = parseFloat(dados.avaliacao_media) || 0;
-            const total = parseInt(dados.total_avaliacoes) || 0;
-
-            if (media > 0 && total > 0) {
-                const inteiras = Math.floor(media);
-                const decimal  = media - inteiras;
-                let estrelas = '★'.repeat(inteiras);
-                if (decimal >= 0.25 && decimal < 0.75) estrelas += '½';
-                else if (decimal >= 0.75) estrelas += '★';
-                const vazias = 5 - Math.round(media);
-                estrelas += '☆'.repeat(Math.max(0, vazias));
-                el.innerHTML = `<span class="estrelas">${estrelas}</span> — ${media.toFixed(1)} (${total} ${total > 1 ? 'avaliações' : 'avaliação'})`;
-            } else {
-                el.innerText = "Sem avaliações";
+                const el = document.getElementById('det-avaliacao');
+                const media = parseFloat(dados.avaliacao_media) || 0;
+                const total = parseInt(dados.total_avaliacoes) || 0;
+                if (media > 0 && total > 0) {
+                    const inteiras = Math.floor(media);
+                    const decimal  = media - inteiras;
+                    let estrelas = '★'.repeat(inteiras);
+                    if (decimal >= 0.25 && decimal < 0.75) estrelas += '½';
+                    else if (decimal >= 0.75) estrelas += '★';
+                    const vazias = 5 - Math.round(media);
+                    estrelas += '☆'.repeat(Math.max(0, vazias));
+                    el.innerHTML = `<span class="estrelas">${estrelas}</span> — ${media.toFixed(1)} (${total} ${total > 1 ? 'avaliações' : 'avaliação'})`;
+                } else {
+                    el.innerText = "Sem avaliações";
+                }
             }
-        }
-            if(document.getElementById('det-adicionado')) 
+            if (document.getElementById('det-adicionado'))
                 document.getElementById('det-adicionado').innerText = dados.data_adicao || "---";
-            if(document.getElementById('det-idioma')) 
+            if (document.getElementById('det-idioma'))
                 document.getElementById('det-idioma').innerText = dados.idioma_original || "Português";
-            if(document.getElementById('det-traducao')) 
+            if (document.getElementById('det-traducao'))
                 document.getElementById('det-traducao').innerText = dados.traducao || "---";
-            // 6. Chamada para Recomendações
+
+            // 6. Recomendações
             buscarRecomendacoes(dados.genero, dados.colecao, idLivro);
 
         } else {
@@ -141,19 +160,17 @@ async function carregarDadosLivro() {
     }
 }
 
-// --- LÓGICA DE RECOMENDAÇÕES (Gênero ou Coleção) ---
+// --- LÓGICA DE RECOMENDAÇÕES ---
 async function buscarRecomendacoes(genero, colecao, idAtual) {
     try {
         const obrasRef = collection(db, "obras");
         let similares = [];
 
-        // Busca uma amostra do acervo
-        const q = query(obrasRef, limit(20)); 
+        const q = query(obrasRef, limit(20));
         const querySnapshot = await getDocs(q);
-        
+
         querySnapshot.forEach((doc) => {
             const d = doc.data();
-            // Filtra: não pode ser o livro atual E deve ser do mesmo gênero OU mesma coleção
             if (doc.id !== idAtual) {
                 if (d.genero === genero || d.colecao === colecao) {
                     similares.push({ id: doc.id, ...d });
@@ -161,7 +178,6 @@ async function buscarRecomendacoes(genero, colecao, idAtual) {
             }
         });
 
-        // Fallback: Se não houver similares suficientes, preenche com outros livros aleatórios
         if (similares.length < 4) {
             querySnapshot.forEach((doc) => {
                 if (doc.id !== idAtual && !similares.find(s => s.id === doc.id)) {
@@ -170,7 +186,6 @@ async function buscarRecomendacoes(genero, colecao, idAtual) {
             });
         }
 
-        // Envia para a função de renderização no detalheslivro.php
         if (typeof window.renderizarSimilares === 'function') {
             window.renderizarSimilares(similares, idAtual);
         }

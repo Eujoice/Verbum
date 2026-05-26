@@ -920,3 +920,64 @@
 .star-group .star-half.on   { color: #f5b301; }
 .star-group .star-full.hover { color: #f5c842; }
 .star-group .star-half.hover { color: #f5c842; }
+
+/* =========================================
+   AVALIAÇÃO INLINE — abaixo do resumo
+   ========================================= */
+   .avaliar-inline {
+    margin-bottom: 20px;
+    max-width: 560px;
+}
+
+.avaliar-inline-titulo {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #8a9e89;
+    margin-bottom: 10px;
+}
+
+.avaliar-inline-corpo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+/* Botão confirmar avaliação — novo estilo */
+.btn-confirmar-avaliacao {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--verde);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 9px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s, opacity 0.2s;
+    opacity: 0.45;
+    line-height: 1;
+}
+
+.btn-confirmar-avaliacao:not(:disabled) {
+    opacity: 1;
+}
+
+.btn-confirmar-avaliacao:not(:disabled):hover {
+    background: #375e31;
+    transform: translateY(-1px);
+}
+
+.btn-confirmar-avaliacao:disabled {
+    cursor: not-allowed;
+}
+
+.btn-confirmar-avaliacao svg {
+    flex-shrink: 0;
+}

@@ -13,9 +13,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styleacervo.css"
-    
-    >
+    <link rel="stylesheet" href="styleacervo.css">
 </head>
 <body class="body-acervo">
 
@@ -47,13 +45,10 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
                 Histórico de Empréstimos
             </a>
-
-            <!-- ↓ Agora abre o overlay em vez de navegar para outra página -->
             <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 Dados Pessoais
             </a>
-
             <a class="nav-item" href="favoritos.php">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
                 Favoritos e Avaliações
@@ -68,12 +63,13 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <div class="container-acervo">
         <header class="header">
             <div class="header-left">
-                    <div class="logo"><a href="acervo.php">Verbum</a></div>
-                    <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
-                </div>
+                <div class="logo"><a href="acervo.php">Verbum</a></div>
+                <img class="logo-vb" src="imgs/ig_aviao.png" alt="Logo">
+            </div>
             <div class="busca">
                 <svg class="icone-lupa" viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
-                <input type="text" id="pesquisa" placeholder="O que você quer ler?">            </div>
+                <input type="text" id="pesquisa" placeholder="O que você quer ler?">
+            </div>
             <div class="icones">
                 <button class="hambtn" id="hambtn" onclick="toggleMenu()">
                     <div class="bar"></div>
@@ -90,56 +86,44 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
-<section class="banner-section">
-    <div class="carousel" id="carousel">
-        <div class="slides" id="slides">
-            <!-- Percy Jackson (Supondo que seja L12 baseando-se na lista) -->
-            <a href="detalheslivro.php?id=L07" class="slide slide-1">
-                <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
-            </a>
-            
-            <!-- Crime e Castigo (Confirmado na imagem como L01) -->
-            <a href="detalheslivro.php?id=L01" class="slide slide-2">
-                <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
-            </a>
-            
-            <!-- A Metamorfose (Ajuste o ID conforme seu Firestore) -->
-            <a href="detalheslivro.php?id=L04" class="slide slide-3">
-                <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
-            </a>
-            
-            <!-- Biblioteca da meia noite (Ajuste o ID conforme seu Firestore) -->
-            <a href="detalheslivro.php?id=L06" class="slide slide-4">
-                <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
-            </a>
-            
-            <!-- Vidas Secas (Ajuste o ID conforme seu Firestore) -->
-            <a href="detalheslivro.php?id=L22" class="slide slide-5">
-                <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
-            </a>
-        </div>
-        
-        <button class="carr-prev" onclick="mudarSlide(-1)">
-            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-        <button class="carr-next" onclick="mudarSlide(1)">
-            <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-    </div>
-    
-    <div class="dots" id="dots">
-        <button class="dot active" onclick="irParaSlide(0)"></button>
-        <button class="dot" onclick="irParaSlide(1)"></button>
-        <button class="dot" onclick="irParaSlide(2)"></button>
-        <button class="dot" onclick="irParaSlide(3)"></button>
-        <button class="dot" onclick="irParaSlide(4)"></button>
-    </div>
-</section>
+        <section class="banner-section">
+            <div class="carousel" id="carousel">
+                <div class="slides" id="slides">
+                    <a href="detalheslivro.php?id=L07" class="slide slide-1">
+                        <img class="slide-img" src="imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
+                    </a>
+                    <a href="detalheslivro.php?id=L01" class="slide slide-2">
+                        <img class="slide-img" src="imgs/crime.jpg" alt="Crime e Castigo">
+                    </a>
+                    <a href="detalheslivro.php?id=L04" class="slide slide-3">
+                        <img class="slide-img" src="imgs/met.png" alt="A Metamorfose">
+                    </a>
+                    <a href="detalheslivro.php?id=L06" class="slide slide-4">
+                        <img class="slide-img" src="imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
+                    </a>
+                    <a href="detalheslivro.php?id=L22" class="slide slide-5">
+                        <img class="slide-img" src="imgs/vds.png" alt="Vidas Secas">
+                    </a>
+                </div>
+                <button class="carr-prev" onclick="mudarSlide(-1)">
+                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="carr-next" onclick="mudarSlide(1)">
+                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+            </div>
+            <div class="dots" id="dots">
+                <button class="dot active" onclick="irParaSlide(0)"></button>
+                <button class="dot" onclick="irParaSlide(1)"></button>
+                <button class="dot" onclick="irParaSlide(2)"></button>
+                <button class="dot" onclick="irParaSlide(3)"></button>
+                <button class="dot" onclick="irParaSlide(4)"></button>
+            </div>
+        </section>
 
         <section class="populares">
             <div class="sec-header">
                 <h2>Populares</h2>
-                <a href="populares_lista.php" class="ver-todos">Ver todos →</a>
             </div>
             <div class="lista-livros" id="lista-populares"></div>
         </section>
@@ -147,13 +131,26 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         <section class="classicos">
             <div class="sec-header">
                 <h2>Clássicos</h2>
-                <a href="classicos_lista.php" class="ver-todos">Ver todos →</a>
             </div>
             <div class="lista-livros" id="lista-classicos"></div>
         </section>
+
+        <section class="internacionais">
+            <div class="sec-header">
+                <h2>Internacionais</h2>
+            </div>
+            <div class="lista-livros" id="lista-internacionais"></div>
+        </section>
+
+        <section class="ficcao">
+            <div class="sec-header">
+                <h2>Ficção</h2>
+            </div>
+            <div class="lista-livros" id="lista-ficcao"></div>
+        </section>
+
     </div>
 
-    <!-- ↓ Overlay de Dados Pessoais incluído aqui -->
     <?php include 'dp_modal.php'; ?>
     <script src="busca_detalhes.js"></script>
     <script src="script-acervo.js"></script>

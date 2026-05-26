@@ -160,6 +160,40 @@ if (!empty($_livro_id_url)) {
                         <button onclick="leiaMais()" id="btnLerMais">Leia mais</button>
                     </p>
 
+                    <!-- Widget de avaliação por estrelas — abaixo do resumo -->
+                    <div class="avaliar-inline">
+                        <span class="avaliar-inline-titulo">Avalie esta obra</span>
+                        <div class="avaliar-inline-corpo">
+                            <div class="rating-input" id="rating-input">
+                                <span class="star-group">
+                                    <span class="star-half" data-val="0.5">★</span>
+                                    <span class="star-full" data-val="1">★</span>
+                                </span>
+                                <span class="star-group">
+                                    <span class="star-half" data-val="1.5">★</span>
+                                    <span class="star-full" data-val="2">★</span>
+                                </span>
+                                <span class="star-group">
+                                    <span class="star-half" data-val="2.5">★</span>
+                                    <span class="star-full" data-val="3">★</span>
+                                </span>
+                                <span class="star-group">
+                                    <span class="star-half" data-val="3.5">★</span>
+                                    <span class="star-full" data-val="4">★</span>
+                                </span>
+                                <span class="star-group">
+                                    <span class="star-half" data-val="4.5">★</span>
+                                    <span class="star-full" data-val="5">★</span>
+                                </span>
+                            </div>
+                            <input type="hidden" id="hidden-nota" value="">
+                            <button id="btnConfirmar" class="btn-confirmar-avaliacao" onclick="enviarAvaliacao()" disabled>
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                Confirmar
+                            </button>
+                        </div>
+                    </div>
+
                     <div id="div-detalhes">
     
                         <div class="item">
@@ -203,43 +237,13 @@ if (!empty($_livro_id_url)) {
                 </div>
             </div>
 
-            <!-- Widget de avaliação por estrelas -->
-            <div class="avaliar">Avalie esta obra</div>
-            <div class="form-avaliar" style="display:flex; flex-direction:column; align-items:flex-start; gap:14px;">
-                <div class="rating-input" id="rating-input">
-                    <span class="star-group">
-                        <span class="star-half" data-val="0.5">★</span>
-                        <span class="star-full" data-val="1">★</span>
-                    </span>
-                    <span class="star-group">
-                        <span class="star-half" data-val="1.5">★</span>
-                        <span class="star-full" data-val="2">★</span>
-                    </span>
-                    <span class="star-group">
-                        <span class="star-half" data-val="2.5">★</span>
-                        <span class="star-full" data-val="3">★</span>
-                    </span>
-                    <span class="star-group">
-                        <span class="star-half" data-val="3.5">★</span>
-                        <span class="star-full" data-val="4">★</span>
-                    </span>
-                    <span class="star-group">
-                        <span class="star-half" data-val="4.5">★</span>
-                        <span class="star-full" data-val="5">★</span>
-                    </span>
-                </div>
-                <input type="hidden" id="hidden-nota" value="">
-                <button id="btnConfirmar" class="inp-submit-avaliacao" onclick="enviarAvaliacao()" disabled style="opacity:0.5;">
-                    Confirmar Avaliação
-                </button>
-            </div>
-
             <!-- Cards inferiores: sinopse completa + detalhes do acervo -->
             <div class="secao-inferior">
                 <div class="card-info">
                     <p class="card-info-titulo">Sinopse completa</p>
                     <p class="card-sinopse-texto" id="sinopse-completa">Carregando sinopse...</p>
                 </div>
+
                 <div class="card-info">
                     <p class="card-info-titulo">Informações do acervo</p>
                     <div class="detalhe-row">
@@ -299,6 +303,16 @@ if (!empty($_livro_id_url)) {
     <script type="module" src="busca_detalhes.js"></script>
     <script type="module" src="acervo_logic.js"></script>
     <script src="script-acervo.js"></script>
+
+    <!-- ─── Toast global (acessível por todos os scripts) ─────────────────── -->
+    <script>
+        function showToast(msg) {
+            const t = document.getElementById('toastDl');
+            t.textContent = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+    </script>
 
     <!-- ─── Avaliação por estrelas ─────────────────────────────────────── -->
     <script>
@@ -365,6 +379,7 @@ if (!empty($_livro_id_url)) {
             btn.innerText = 'Enviando...';
 
             const formData = new FormData();
+            formData.append('acao', 'avaliar');   // ← campo obrigatório pelo PHP
             formData.append('livro_id', livroId);
             formData.append('nota', nota);
 
@@ -460,7 +475,6 @@ if (!empty($_livro_id_url)) {
             }
         }, 300);
 
-            // Monitorar o status do livro para mudar o texto do botão
         // Monitorar o status do livro e a existência de reserva do usuário
         const observarStatusEReserva = setInterval(async () => {
             const statusEl = document.getElementById('status');
@@ -473,8 +487,6 @@ if (!empty($_livro_id_url)) {
                 const matricula = "<?php echo $_SESSION['usuario_matricula']; ?>";
 
                 try {
-                    // 1. Verificar se o usuário já tem uma reserva ativa para este livro
-                    // Fazemos uma busca rápida no Firestore via JS ou criamos um pequeno PHP de consulta
                     const resp = await fetch(`consultar_minha_reserva.php?livro_id=${livroId}`);
                     const dados = await resp.json();
 
@@ -491,7 +503,6 @@ if (!empty($_livro_id_url)) {
                         return;
                     }
 
-                    // 2. Se não estiver reservado, aplica a lógica normal de status do acervo
                     if (status === 'emprestado') {
                         btnReservar.innerHTML = 'Entrar na fila de espera';
                         btnReservar.style.backgroundColor = '#f39c12';
@@ -499,7 +510,6 @@ if (!empty($_livro_id_url)) {
                         btnReservar.innerHTML = 'Reservar exemplar';
                         btnReservar.style.backgroundColor = '';
                     } else if (status === 'reservado') {
-                        // Se o status geral for reservado por OUTRA pessoa
                         btnReservar.innerHTML = 'Entrar na fila de espera';
                         btnReservar.style.backgroundColor = '#f39c12';
                     }
@@ -512,14 +522,6 @@ if (!empty($_livro_id_url)) {
             }
         }, 500);
 
-        // ─── Toast ───────────────────────────────────────────────────
-        function showToast(msg) {
-            const t = document.getElementById('toastDl');
-            t.textContent = msg;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 3000);
-        }
-
         // ─── Reservar ────────────────────────────────────────────────
         async function reservarLivro() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -528,7 +530,6 @@ if (!empty($_livro_id_url)) {
             
             if (!livroId) return showToast("Erro: ID do livro não encontrado.");
 
-            // Desabilita o botão para evitar cliques múltiplos
             btnReservar.disabled = true;
             btnReservar.innerText = "Processando...";
 
@@ -547,18 +548,14 @@ if (!empty($_livro_id_url)) {
                 if (resultado.sucesso) {
                     showToast('✓ ' + resultado.mensagem);
 
-                    // Se for reserva direta
                     if (resultado.tipo === 'Direta') {
                         btnReservar.innerText = 'Reservado';
-                        btnReservar.style.backgroundColor = '#27ae60'; // Verde
-                    } 
-                    // Se for fila de espera
-                    else {
+                        btnReservar.style.backgroundColor = '#27ae60';
+                    } else {
                         btnReservar.innerText = `Sua posição na fila: ${resultado.posicao}º`;
-                        btnReservar.style.backgroundColor = '#f39c12'; // Laranja
+                        btnReservar.style.backgroundColor = '#f39c12';
                     }
                     
-                    // Recarrega a página após 3 segundos para atualizar os dados gerais
                     setTimeout(() => location.reload(), 3000);
                 } else {
                     showToast('✕ ' + resultado.mensagem);
@@ -583,7 +580,6 @@ if (!empty($_livro_id_url)) {
 
                 let favDocId = null;
 
-                // Verifica ao carregar se já é favorito
                 async function verificarFavorito() {
                     if (!LIVRO_ID) return;
                     const q = query(
@@ -605,14 +601,12 @@ if (!empty($_livro_id_url)) {
 
                     try {
                         if (favDocId) {
-                            // Já é favorito → remove
                             await deleteDoc(doc(db, 'favoritos', favDocId));
                             favDocId = null;
                             btn.textContent = '♡';
                             btn.classList.remove('ativo');
                             showToast('Removido dos favoritos.');
                         } else {
-                            // Não é favorito → adiciona
                             const novoDoc = await addDoc(collection(db, 'favoritos'), {
                                 usuario_id: MATRICULA,
                                 obra_id: LIVRO_ID,
@@ -636,22 +630,13 @@ if (!empty($_livro_id_url)) {
         });
 
         // ─── Você também pode gostar ─────────────────────────────────
-        // Aguarda o acervo_logic.js terminar de expor os dados e chama
-        // a função de similares. 
-        //
-        // Estratégia: busca até 8 livros do acervo e exibe 5 aleatórios,
-        // excluindo o livro atual.
-
         window.renderizarSimilares = function(outrosLivros, idAtual) {
             const grid = document.getElementById('similares-grid');
             if (!grid) return;
 
-            // Sorteia 5 entre os similares encontrados
             const selecionados = outrosLivros
                 .sort(() => Math.random() - 0.5)
                 .slice(0, 5);
-
-    
 
             if (selecionados.length === 0) {
                 grid.innerHTML = '<p style="color:var(--texto-muted);font-size:14px;">Nenhuma sugestão disponível no momento.</p>';
