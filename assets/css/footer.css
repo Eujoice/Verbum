@@ -1,0 +1,190 @@
+/* =========================================
+   FOOTER VERBUM
+   ========================================= */
+
+.footer-verbum {
+    background: linear-gradient(135deg, #3d6b37 0%, #4f8a47 100%);
+    color: #ffffff;
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    margin-top: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Efeitos decorativos */
+
+.footer-verbum::before {
+    content: "";
+    position: absolute;
+    top: -80px;
+    right: -80px;
+    width: 220px;
+    height: 220px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 50%;
+}
+
+.footer-verbum::after {
+    content: "";
+    position: absolute;
+    bottom: -100px;
+    left: -100px;
+    width: 260px;
+    height: 260px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+}
+
+/* =========================================
+   CONTAINER
+   ========================================= */
+
+.footer-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px 45px 14px;
+}
+
+/* =========================================
+   TOPO
+   ========================================= */
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    align-items: start;
+}
+
+/* =========================================
+   LOGO
+   ========================================= */
+
+.footer-brand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
+}
+
+.footer-logo {
+    font-family: 'Milonga', serif;
+    font-size: 64px;
+    color: #ffffff;
+    position: relative;
+    left: 0;
+}
+
+/* =========================================
+   COLUNAS
+   ========================================= */
+
+.footer-nav-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #ffffff;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.footer-links a {
+    color: rgba(255,255,255,0.85);
+    text-decoration: none;
+    font-size: 13px;
+    transition: all 0.25s ease;
+    width: fit-content;
+    position: relative;
+}
+
+.footer-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    width: 0%;
+    height: 2px;
+    background: #ffffff;
+    transition: width 0.25s ease;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.footer-links a:hover::after {
+    width: 100%;
+}
+
+/* =========================================
+   RODAPÉ INFERIOR
+   ========================================= */
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-top: 14px;
+}
+
+.footer-inst {
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.5;
+}
+
+.footer-copy {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+}
+
+/* =========================================
+   RESPONSIVO
+   ========================================= */
+
+@media (max-width: 768px) {
+
+    .footer-container {
+        padding: 25px 20px 15px;
+    }
+
+    .footer-top {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .footer-brand {
+        min-width: auto;
+        justify-content: flex-start;
+        padding-top: 0;
+    }
+
+    .footer-logo {
+        font-size: 42px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
