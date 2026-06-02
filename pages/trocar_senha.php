@@ -52,6 +52,5 @@
     <script src="../assets/js/trocar_senha_logic.js"></script>
     <script src="../assets/js/script.js"></script>
 
-    <?php include '../includes/footer.php'; ?>
 </body>
 </html>
