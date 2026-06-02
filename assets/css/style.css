@@ -1,0 +1,1305 @@
+@import url('https://fonts.googleapis.com/css2?family=Milonga&display=swap'); /*Fonte do título*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap'); 
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee&display=swap');
+
+/* TELA -- LOGIN */
+.body-login {
+    background-color: #477740;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Milonga', serif;
+    position: relative;
+    z-index: 2;
+}
+
+#titulo {
+    font-family: "Milonga", serif;
+    color: #6C9467;
+}
+
+.titulo-login {
+    font-size: 96px;
+    font-weight: lighter;
+}
+
+.div-central {
+    display: flex;
+    flex-direction: row;
+}
+
+.div-titulo {
+    background-color: white;
+    text-align: center;
+    padding-top: 95px;
+    padding-bottom: 95px;
+    padding-left: 32px;
+    padding-right: 32px;
+    border-radius: 15px 15px 15px 15px;
+    position: relative;
+    left: 11px;
+    box-shadow: -10px 2px 30px -5px rgb(0, 0, 0, 0.4);
+}
+
+.div-entradas {
+    background-color: #354A2B;
+    padding: 45px 70px;
+    border-radius: 0px 15px 15px 0px;
+    box-shadow: 10px 2px 30px -5px rgb(0, 0, 0, 0.4);
+    position: relative;
+}
+
+.div-log-inf {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#label-login {
+    color: white;
+    font-size: 15px;
+    font-family: "poppins", serif;
+}
+
+.senha-login {
+    display: inline-block;
+    margin-top: 25px;
+}
+
+.input-login {
+    background-color: transparent;
+    border: none;
+    border-bottom: 2px solid white;
+    width: 100%;
+    height: 25px;
+    outline: none;
+    color: white;
+}
+
+.btn-login {
+    margin-top: 60px;
+    background-color: white;
+    color: #354A2B;
+    font-family: "Poppins", serif;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-login:hover {
+    background: #e3eae2;
+    transform: translateY(-1px);
+    cursor: pointer;
+}
+
+.btn-login:active { transform: scale(0.98); }
+
+
+.btn-recup {
+    background-color: white;
+    color: #354A2B;
+    font-family: "Poppins", serif;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 28px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.btn-recup:hover {
+    background: #e3eae2;
+    transform: translateY(-1px);
+    cursor: pointer;
+}
+
+.btn-recup:active { transform: scale(0.98); }
+
+#a-login {
+    color: white;
+    font-size: 14px;
+    font-family: "poppins", serif;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+a:hover {
+    color: #ffffff;
+}
+
+.mensagem-erro {
+    background-color: rgba(255, 0, 0, 0.871);
+    color: #fdfdfd;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ff4d4d;
+    margin-bottom: 15px;
+    font-size: 16px;
+    text-align: center;
+    animation: shake 0.4s; 
+
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* TELA -- PERFIL */
+
+.body-perfil {
+    background-color: #6C9467;
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Poppins", serif;
+}
+
+.container-perfil {
+    background-color: white;
+    border-radius: 20px;
+    border: 2px solid #6C9467;
+    padding: 40px;
+    width: 400px;
+    position: relative;
+    z-index: 2;
+}
+
+.foto{
+    display: flex;
+    justify-content: center;
+}
+
+.dados-entrada-perfil{
+    font-family: "ABeeZee", serif;
+    color: #687661;
+    text-align: center;
+    align-items: center;
+}
+
+.dados-entrada-perfil p{
+    margin: 0;
+}
+
+.dados-entrada-perfil p:first-child {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.dados-entrada-perfil p:last-child {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.botoes {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 20px;
+    font-weight: bold;
+}
+
+
+.botoes button {
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #6C9467;
+    background-color: white;
+    color: #6C9467;
+    cursor: pointer;
+    font-size: medium;
+    font-family: "Poppins", serif;
+    font-weight: bold;
+}
+
+.botoes button:hover {
+
+    background-color: #687661;
+    color: white;
+    border-color: #687661;
+}
+
+.botoes a {
+    display: block;
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid #6C9467;
+    background-color: white;
+    color: #6C9467;
+    cursor: pointer;
+    font-size: medium;
+    font-family: "Poppins", sans-serif;
+    text-align: center;
+    text-decoration: none; 
+}
+
+.botoes a:hover {
+    background-color: #687661;
+    color: white;
+    border-color: #687661;
+}
+
+.btn-admin-atalho:hover {
+    background-color: #34495e;
+    filter: brightness(1.1);
+}
+
+.star {
+    position: absolute;
+    width: 10vw;       
+    max-width: 140px;   
+    min-width: 60px;    
+    animation: girar linear infinite;
+    opacity: 1;
+
+    z-index: 0;         
+    pointer-events: none; 
+}
+
+@keyframes girar {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* posições espalhadas */
+
+.star1 {
+    top: 5%;
+    left: 8%;
+    animation-duration: 40s;
+}
+
+.star2 {
+    top: 8%;
+    right: 8%;
+    animation-duration: 50s;
+}
+
+.star3 {
+    bottom: 5%;
+    left: 10%;
+    animation-duration: 45s;
+}
+
+.star4 {
+    top: 75%;
+    right: 5%;
+    animation-duration: 55s;
+}
+
+.star5 {
+    top: 45%;
+    left: 2%;
+    animation-duration: 48s;
+}
+
+.star6 {
+    bottom: 39%;
+    right: 14%;
+    animation-duration: 60s;
+}
+
+/* NOVAS ESTRELAS NO CENTRO */
+
+.star7 {
+    top: 2%;
+    left: 48%;
+    transform: translateX(-50%);
+    animation-duration: 52s;
+}
+
+.star8 {
+    bottom: 3%;
+    left: 52%;
+    transform: translateX(-50%);
+    animation-duration: 47s;
+}
+
+
+/* TELA -- ACERVO */
+.body-acervo {
+    background-color: #6C9467;
+    font-family: "Poppins", sans-serif;
+    overflow-x: hidden; /* Evita que a tela crie barra de rolagem horizontal ao abrir o menu */
+}
+
+/* =========================================
+   CONTAINER PRINCIPAL CENTRALIZADO
+   ========================================= */
+   .container-acervo {
+    width: 100%;
+    max-width: 1200px;
+    background-color: white;
+    border-radius: 25px;
+    margin: 18px auto;
+    min-height: calc(100vh - 36px); /* ocupa a tela toda menos as margens */
+    padding-bottom: 40px;
+    position: relative; /* mantém mas sem z-index */
+}
+
+/* =========================================
+   CABEÇALHO (HEADER)
+   ========================================= */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+}
+
+.logo {
+    font-family: "Milonga", serif;
+    font-size: 28px;
+    color: #6C9467;
+}
+
+.busca {
+    position: relative;
+}
+
+.busca input {
+    width: 520px;
+    padding: 10px 15px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    outline: none;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+
+.icone-lupa {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    opacity: 0.6;
+}
+
+.icones {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    color: #6C9467;
+    cursor: pointer;
+}
+
+.icone-usuario {
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+}
+
+.favoritos {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+}
+
+.icone-coracao {
+    width: 20px;
+    height: 20px;
+}
+
+/* =========================================
+   MENU SUPERIOR HORIZONTAL
+   ========================================= */
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 35px;
+    padding: 15px 0;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #8a8a8a;
+    font-weight: 600;
+    font-size: 14px;
+    position: relative;
+}
+
+.menu a.ativo {
+    color: #6C9467;
+}
+
+.menu a.ativo::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: -10px;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    background-color: #6C9467;
+    border-radius: 50%;
+}
+
+/* =========================================
+   BANNER PERCY JACKSON
+   ========================================= */
+.banner {
+    padding: 20px 0;
+    display: flex;
+    justify-content: center;
+}
+
+.banner img {
+    width: 55%;
+    max-height: 160px;
+    object-fit: cover;
+    border-radius: 15px;
+}
+
+/* =========================================
+   SEÇÃO DE LIVROS POPULARES
+   ========================================= */
+.populares {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.populares-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+.populares h2 {
+    color: #6C9467;
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.lista-livros {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+}
+
+.livro {
+    width: 120px;
+    text-align: center;
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.livro:hover {
+    transform: scale(1.08);
+}
+
+.livro img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+.livro .titulo {
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 6px;
+    color: #517463;
+}
+
+.livro .autor {
+    font-size: 11px;
+    color: #888;
+}
+
+.livro .avaliacao {
+    font-size: 11px;
+    color: #f4b400;
+}
+
+/* =========================================
+   BOTÃO DE EXPANDIR (Três Barrinhas)
+   ========================================= */
+.btn-expandir {
+    position: fixed;
+    top: 28px;
+    right: 28px;
+    z-index: 10000;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    /* ESSENCIAL: garante que fique acima do container branco */
+    isolation: isolate;
+}
+
+.btn-expandir i {
+    color: #6C9467;
+    font-size: 30px;
+    display: block;
+    transition: transform 0.2s;
+    line-height: 1;
+}
+
+.btn-expandir i:hover {
+    transform: scale(1.1);
+}
+
+.btn-expandir i:hover {
+    transform: scale(1.1);
+}
+
+/* =========================================
+   OVERLAY (fundo escurecido ao abrir)
+   ========================================= */
+.overlay-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s ease;
+}
+
+.overlay-menu.ativo {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* =========================================
+   MENU LATERAL (Gaveta da Direita)
+   ========================================= */
+nav.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -27vw;           /* começa escondido */
+    width: 25vw;            /* ocupa 1/4 da tela */
+    min-width: 260px;
+    height: 100vh;
+    background-color: #6C9467;
+    box-shadow: -4px 0 20px rgba(0,0,0,0.25);
+    transition: right 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 60px;
+    overflow-y: auto;
+}
+
+nav.menu-lateral.expandir {
+    right: 0;
+}
+
+/* =========================================
+   PERFIL NO MENU
+   ========================================= */
+.conteudo-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0 20px;
+}
+
+.foto img {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    background-color: #fff;
+}
+
+.dados-entrada-perfil {
+    color: #ffffff;
+    text-align: center;
+    margin-top: 14px;
+    margin-bottom: 28px;
+}
+
+.dados-entrada-perfil #nomeUsuario {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+}
+
+.dados-entrada-perfil #matriculaUsuario {
+    font-size: 12px;
+    color: #dceadb;
+    margin: 0;
+}
+
+/* Linha divisória */
+.dados-entrada-perfil::after {
+    content: '';
+    display: block;
+    width: 50px;
+    height: 2px;
+    background: rgba(255,255,255,0.4);
+    margin: 12px auto 0;
+    border-radius: 2px;
+}
+
+/* =========================================
+   BOTÕES DO MENU LATERAL
+   ========================================= */
+.botoes {
+    display: flex;
+    flex-direction: column;
+    width: 85%;
+    gap: 10px;
+    padding-bottom: 30px;
+}
+
+.botoes a {
+    background-color: #ffffff;
+    color: #517463;
+    text-decoration: none;
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    display: block;
+}
+
+.botoes a:hover {
+    background-color: #f0f5f0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.15);
+}
+
+.botoes .btn-sair {
+    background-color: #c0392b;
+    color: #fff;
+    margin-top: 10px;
+}
+
+.botoes .btn-sair:hover {
+    background-color: #a93226;
+    color: #fff;
+}
+/* TELA -- DADOS PESSOAIS */
+.body-dp {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #6C9467; 
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+}
+
+
+.container-dp {
+    background-color: white;
+    border-radius: 20px;
+    padding: 40px;
+    width: 400px;
+    box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
+}
+
+.header-perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.foto3 {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.foto3 img {
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dados-entrada-dp {
+    color: #687661;
+}
+
+#nomeUsuario {
+    display: block;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 2px;
+    color: #354A2B;
+    text-decoration: none;
+}
+
+#emailUsuario {
+    margin: 0;
+    font-size: 14px;
+    font-family: "ABeeZee", sans-serif;
+    opacity: 0.8;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+}
+
+.label-dp {
+    font-size: 16px;
+    font-weight: 600;
+    color: #6C9467;
+    margin-bottom: 6px;
+    margin-left: 5px;
+}
+
+.formu {
+    border-radius: 15px;
+    padding: 12px 15px;
+    width: 100%;
+    border: 1.5px solid #6C9467;
+    box-sizing: border-box;
+    outline: none;
+    font-family: "Poppins", sans-serif;
+    color: #354A2B;
+    transition: all 0.3s ease;
+}
+
+.formu:focus {
+    border-color: #354A2B;
+    box-shadow: 0 0 5px rgba(108, 148, 103, 0.3);
+}
+
+.formu::placeholder {
+    color: rgba(104, 118, 97, 0.4);
+}
+
+.btn {
+    margin: 10px auto 0 auto;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    background-color: #354A2B;
+    cursor: pointer;
+    font-weight: 600;
+    color: #ffffff;
+    width: 180px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn:hover {
+    background-color: #26361f;
+    transform: translateY(-2px);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* RESPONSIVIDADE SIMPLES */
+@media (max-width: 450px) {
+    .container-dp {
+        width: 90%;
+        padding: 25px;
+    }
+}
+/* TELA -- DETALHES -- LIVROS */
+
+.body-det-livro {
+    margin: 0;
+    padding: 0;
+    background-color: #6C9467;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+}
+
+.container-dl-cheio {
+    width: 100vw;
+    height: fit-content;
+    background-color: white;
+    border-radius: 25px;
+    margin-top: 18px;
+    margin-bottom: 18px;
+}
+
+.div-livro {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 2% 12%;
+}
+
+.capa-livro-det {
+    width: 300px;
+    margin-right: 35px;
+    box-shadow: -20px 18px 10px rgb(0, 0, 0, 0.2);
+}
+
+.ttl-livro {
+    color: #517463;
+}
+
+.autor-livro, .resenha {
+    color: #939393;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+#mais {
+    display: none;
+}
+
+#btnLerMais {
+    background-color: transparent;
+    border: none;
+    color: #96C1DD;
+    font-size: 16px;
+}
+
+#div-detalhes {
+    display: grid;
+    grid-template-areas: 
+    "ttl-detalhes info-detalhes";
+    font-size: 14px;
+    justify-content: left;
+    gap: 15px;
+    color: #939393;
+}
+
+.ttl-detalhes {
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.div-reserva {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 30px;
+}
+
+.disponibilidade {
+    border: 3px solid #CBD2CB;
+    border-radius: 15px;
+    padding: 10px 50px 10px 20px;
+    color: #6F7880;
+    font-size: 15px;
+    font-weight: 600;
+    background-color: #F0F4F0;
+}
+
+.btn-reservar {
+    background-color: #6C9467;
+    color: white;
+    font-family: "Poppins", sans-serif;
+    border: none;
+    border-radius: 15px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.avaliar {
+    font-weight: 600;
+    color: #6F7880;
+}
+
+.avaliar {
+    padding-left: 12%;
+}
+
+.form-avaliar {
+    padding-left: 12%;
+    padding-bottom: 8%;
+}
+
+#input-avaliar {
+    outline: none;
+    border: 2px solid #CBD2CB;
+    border-radius: 15px;
+    padding: 10px 25px 10px 10px;
+    font-family: "Poppins", sans-serif;
+    width: 250px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.12);
+}
+
+.inp-submit-avaliacao {
+    border: none;
+    color: white;
+    background-color: #6C9467;
+    border-radius: 15px;
+    padding: 10px 20px;
+    font-weight: 600;
+    font-size: 15px;
+    font-family: "Poppins", sans-serif;
+}
+
+/* Telas de ADM */
+
+.form-container {
+    padding: 40px 100px;
+    color: #6C9467; 
+}
+
+.linha {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+}
+
+/* estilização dos inputs */
+.form-container input[type="text"], 
+.form-container input[type="password"], 
+.form-container input[type="date"], 
+.form-container input[type="email"] {
+    border: 1px solid #CBD2CB;
+    border-radius: 12px;
+    padding: 8px 15px;
+    outline: none;
+    color: #666;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* inputs que são apenas para leitura (multa e dias) */
+.input-readonly {
+    background-color: #E9E9E9;
+    border: none !important;
+    width: 80px;
+    text-align: center;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.divisor {
+    border: 0;
+    border-top: 1px solid #E5E5E5;
+    margin: 30px 0;
+}
+
+.area-botoes {
+    display: flex;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.btn-acao {
+    padding: 10px 25px;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 0px rgba(0,0,0,0.1); 
+    transition: transform 0.1s;
+}
+
+.btn-acao:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0px rgba(0,0,0,0.1);
+}
+
+
+.verde-claro { background-color: #6C9467; }
+.verde-escuro { background-color: #4A6347; }
+
+.form-grid-verbum {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    padding: 20px 80px; 
+}
+
+.campo-box {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.campo-box select {
+    height: 40px;
+    border-radius: 15px;
+    padding-right: 35px;
+    cursor: pointer;
+}
+
+.span-2 {
+    grid-column: span 2;
+}
+
+.area-botoes-central {
+    grid-column: span 3;
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-acao.verde-claro {
+    background-color: #769871; 
+    color: white;
+    padding: 12px 60px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+
+.secao-busca {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 40px 0;
+}
+
+.secao-busca label {
+    color: #8a8a8a;
+    font-weight: 600;
+}
+
+.input-busca-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #CBD2CB;
+    border-radius: 12px;
+    width: 500px;
+    padding: 5px 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.input-busca-container input {
+    border: none;
+    outline: none;
+    width: 100%;
+    padding: 8px;
+    font-family: "Poppins", sans-serif;
+}
+
+.btn-lupa {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-lupa img {
+    width: 20px;
+}
+
+.lista-resultados {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    padding-bottom: 50px;
+}
+
+.card-exemplar {
+    display: flex;
+    justify-content: space-between;
+    background: white;
+    border-radius: 20px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    width: 80%;
+    max-width: 800px;
+    padding: 25px;
+}
+
+.info-exemplar h3 {
+    color: #4A6347;
+    margin: 0 0 5px 0;
+    font-size: 1.2rem;
+}
+
+.info-exemplar .autor {
+    color: #6C9467;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.avaliacao-stars {
+    margin-bottom: 15px;
+}
+
+.estrelas {
+    color: #FFD700;
+    font-size: 1.1rem;
+}
+
+.detalhes-lista {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.detalhes-lista li {
+    font-size: 0.85rem;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.localizacao {
+    font-size: 0.9rem;
+    color: #8a8a8a;
+}
+
+.localizacao a {
+    color: #6C9467;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.capa-exemplar img {
+    width: 160px;
+    height: 220px;
+    border-radius: 8px;
+    
+}
+
+.badge-admin {
+    background-color: #4A6347; 
+    color: white;
+    font-size: 15px;
+    padding: 6px 10px;
+    border-radius: 4px;
+    margin-left: 10px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.bodym{
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+}
+
+.fundo {
+  width: 70%;
+  height: 100vh;
+  margin: auto;
+  margin-top: 0px;
+  background-color: #6f8f68;
+  border-radius: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.voltar {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  width: 50px;
+  height: 50px;
+  border-radius: 15px;
+  border: 2px solid #6f8f68;
+  background-color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.card {
+  text-align: center;
+  width: 60%;
+}
+
+h1 {
+  color: white;
+  font-size: 30px;
+  margin-bottom: 20px;
+  font-family: "Poppins", sans-serif;
+
+  
+}
+
+.sub {
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 40px;
+  font-family: "Poppins", sans-serif;
+
+
+}
+
+.sub a {
+  color: white;
+  text-decoration: underline;
+  font-family: "Poppins", sans-serif;
+  font-weight: bold;
+
+
+}
+
+.caixa {
+  background-color: #ffffff;
+  padding: 50px;
+  border-radius: 20px;
+  margin: 25px auto;
+  width: 70%;
+  font-size: 18px;
+  color: #354A2B;
+  font-weight: bold;
+}
+.lista-container {
+    margin-top: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.tabela-listagem {
+    width: 100%;
+    border-collapse: collapse; /* Isso faz as bordas ficarem bonitas */
+    margin-top: 10px;
+}
+
+.tabela-listagem th {
+    text-align: left;
+    padding: 12px 8px; /* Dá espaço entre as colunas */
+    border-bottom: 2px solid #eee;
+    font-weight: bold;
+}
+
+.tabela-listagem td {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f9f9f9;
+}
+
+.titulo-sessao {
+    margin-bottom: 15px;
+    font-weight: bold;
+    font-size: 1.5rem;
+}

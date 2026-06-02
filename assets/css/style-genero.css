@@ -1,0 +1,594 @@
+/* =========================================
+   PÁGINA DE GÊNEROS — REDESIGN EDITORIAL
+   ========================================= */
+
+   .pg-generos {
+    padding: 36px 48px 48px;
+}
+.h11{
+    color:#3a8036;
+}
+h2{
+    color:#3a8036;
+}
+
+.pg-header {
+    margin-bottom: 32px;
+}
+
+.pg-header h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-bottom: 6px;
+}
+
+.pg-sub {
+    font-size: 13px;
+    color: #9aaa98;
+}
+.generos-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    width: 100%;
+}
+
+/* ---- CARD ---- */
+.genero-card {
+    border-radius: 16px;
+    cursor: pointer;
+    transition: transform 0.22s ease, box-shadow 0.22s ease;
+    position: relative;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 24px 20px;
+    min-height: 130px;
+}
+
+.genero-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 40px rgba(31, 80, 90, 0.3);
+    opacity: 1;
+}
+
+.genero-card:hover .genero-icon-wrap {
+    transform: translateY(calc(-50% - 4px)) rotate(-6deg);
+}
+
+/* Linha de acento lateral */
+.genero-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: rgba(255,255,255,0.22);
+    border-radius: 0 2px 2px 0;
+}
+
+/* Overlay de profundidade no rodapé do card */
+.genero-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60%;
+    background: linear-gradient(to top, rgba(0,0,0,0.28), transparent);
+    border-radius: 0 0 16px 16px;
+    pointer-events: none;
+}
+
+/* Padrão geométrico no canto superior direito */
+.genero-card-pattern {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 110px;
+    height: 110px;
+    opacity: 0.13;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Ícone — grande, à direita, saindo levemente do card */
+.genero-icon-wrap {
+    position: absolute;
+    right: -10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(8deg);
+    transition: transform 0.22s ease;
+    z-index: 3;
+    width: 90px;
+    height: 90px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,0.28));
+}
+
+.genero-icon-wrap svg,
+.genero-icon-wrap img {
+    width: 84px;
+    height: 84px;
+    object-fit: contain;
+}
+
+/* Nome do gênero — estilizado com Milonga + sombra suave */
+.genero-nome {
+    font-family: 'Milonga', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+    position: relative;
+    z-index: 2;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    max-width: calc(100% - 70px); /* evita sobrepor o ícone */
+}
+
+/* Skeleton */
+.genero-skeleton {
+    border-radius: 16px;
+    min-height: 130px;
+    background: linear-gradient(135deg, #dce8db, #eef2ed);
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+}
+
+/* =========================================
+   SUBTELA DE LIVROS — MODELO ACERVO
+   ========================================= */
+.pg-livros {
+    padding: 28px 48px 48px;
+}
+
+.btn-voltar {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: #6C9467;
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+    padding: 8px 0;
+    margin-bottom: 24px;
+    transition: opacity 0.2s;
+}
+
+.btn-voltar:hover { opacity: 0.7; }
+
+.btn-voltar svg {
+    width: 18px;
+    height: 18px;
+}
+
+.livros-header {
+    margin-bottom: 24px;
+    border-bottom: 1px solid #e8ede7;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.genero-badge-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.genero-badge-icon svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}
+
+.livros-header-text h2 {
+    font-size: 17px;
+    font-weight: 700;
+    color: #3a8036;
+    margin-bottom: 2px;
+    display: none;
+}
+
+.genero-desc {
+    font-size: 12px;
+    color: #9aaa98;
+    margin: 0;
+}
+
+.genero-badge { display: none; }
+
+/* Barra de filtros */
+.filtros-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filtros-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9aaa98;
+}
+
+.filtro-pill {
+    padding: 7px 18px;
+    border-radius: 50px;
+    border: 1.5px solid #dde8dc;
+    background: #f7f9f7;
+    font-size: 12px;
+    font-weight: 600;
+    color: #517463;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filtro-pill:hover,
+.filtro-pill.ativo {
+    background: #6C9467;
+    border-color: #6C9467;
+    color: #fff;
+}
+
+.livros-count {
+    font-size: 12px;
+    color: #9aaa98;
+    margin-bottom: 20px;
+}
+
+/* Grid de livros */
+.livros-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 20px;
+    justify-content: flex-start;
+}
+
+/* Card de Livro — Estilo Tela Inicial */
+.livro-card {
+    flex: 0 0 148px; 
+    text-align: center;
+    transition: transform 0.3s ease; 
+    cursor: pointer;
+    position: relative;
+    text-decoration: none;
+}
+
+/* Efeito de aumento (Zoom) idêntico à home */
+.livro-card:hover {
+    transform: scale(1.1); 
+    z-index: 10; 
+}
+
+/* Capa do Livro */
+.livro-capa {
+    width: 148px;
+    height: 210px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+    display: block;
+}
+
+/* Tipografia — Ajustada para os tamanhos da home */
+.livro-titulo {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-top: 10px;
+    line-height: 1.35;
+    /* Mantém o texto alinhado ao centro como na home */
+    text-align: center; 
+}
+
+.livro-autor {
+    font-size: 13px;
+    color: #9aaa98;
+    margin-top: 3px;
+    text-align: center;
+}
+
+/* Estrelas de avaliação (se houver no seu JS) */
+.livro-stars {
+    font-size: 11px;
+    color: #e8a020;
+    margin-top: 4px;
+    text-align: center;
+}
+
+/* Estado vazio */
+.estado-vazio {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #9aaa98;
+}
+
+.estado-vazio svg {
+    width: 48px;
+    height: 48px;
+    fill: #cddacc;
+    display: block;
+    margin: 0 auto 16px;
+}
+
+.estado-vazio p { font-size: 14px; }
+
+/* Misc */
+.sb-avatar svg,
+.nav-ic svg {
+    display: block;
+    flex-shrink: 0;
+}
+
+svg { max-width: 100%; }
+
+/* =========================================
+   NOTIFICAÇÕES — NOVO DESIGN v2
+   ========================================= */
+
+/* Dropdown container */
+.notificacao-dropdown {
+    position: absolute;
+    right: 0;
+    top: 48px;
+    width: 360px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e0ebe0;
+    box-shadow: 0 8px 32px rgba(30, 58, 31, 0.13), 0 2px 8px rgba(0,0,0,0.06);
+    z-index: 1100;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    color: #1e2b1d;
+}
+
+.notificacao-dropdown.aberto {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Topo fixo */
+.notif-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #edf3ed;
+}
+
+.notif-topo-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e3a1f;
+}
+
+/* Área de conteúdo (lista + painel de detalhe lado a lado com overflow) */
+.notif-corpo {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Lista de notificações */
+.notificacao-lista {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 8px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #c8dfc9 transparent;
+}
+
+.notificacao-lista::-webkit-scrollbar { width: 4px; }
+.notificacao-lista::-webkit-scrollbar-thumb { background: #c8dfc9; border-radius: 4px; }
+
+/* Labels de grupo */
+.notif-grupo-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aaa98;
+    padding: 8px 18px 4px;
+}
+
+/* Card de notificação na lista */
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 18px;
+    cursor: pointer;
+    transition: background 0.12s;
+    position: relative;
+    border-bottom: 1px solid #f0f5f0;
+}
+
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #f5faf5; }
+.notif-item.nao-lida { background: #f0f7f0; }
+.notif-item.nao-lida:hover { background: #e8f3e8; }
+
+/* Ícone colorido por tipo */
+.notif-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.notif-icon-svg { width: 17px; height: 17px; }
+
+.notif-tipo--info    { background: #e6f0ff; color: #2563eb; }
+.notif-tipo--alerta  { background: #fdf0f0; color: #b91c1c; }
+.notif-tipo--reserva { background: #fef9ec; color: #92400e; }
+.notif-tipo--geral   { background: #eef5ee; color: #346736; }
+
+/* Texto do card */
+.notif-item-corpo { flex: 1; min-width: 0; }
+
+.notif-item-msg {
+    font-size: 13px;
+    color: #1e2b1d;
+    line-height: 1.45;
+    margin: 0 0 3px;
+    word-break: break-word;
+}
+
+.notif-item.lida .notif-item-msg { color: #6b7a6b; }
+
+.notif-item-tempo {
+    font-size: 11px;
+    color: #9aaa98;
+}
+
+/* Ponto "não lida" */
+.notif-ponto-novo {
+    width: 8px;
+    height: 8px;
+    background: #477740;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+/* Estado vazio */
+.notif-vazia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px;
+    color: #9aaa98;
+    gap: 10px;
+}
+
+.notif-vazia svg { width: 36px; height: 36px; stroke: #c8dfc9; }
+.notif-vazia p { font-size: 13px; margin: 0; }
+
+/* ── Painel de detalhe (desliza por cima da lista) ── */
+.notif-painel-detalhe {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.notif-painel-detalhe.aberto {
+    transform: translateX(0);
+}
+
+.notif-det-header {
+    padding: 12px 14px 8px;
+    border-bottom: 1px solid #edf3ed;
+}
+
+.notif-det-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #477740;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.12s;
+}
+
+.notif-det-voltar:hover { background: #eef5ee; }
+.notif-det-voltar svg { width: 16px; height: 16px; }
+
+.notif-det-corpo {
+    padding: 20px 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.notif-det-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+}
+
+.notif-det-icon .notif-icon-svg { width: 24px; height: 24px; }
+
+.notif-det-tipo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aaa98;
+}
+
+.notif-det-mensagem {
+    font-size: 14px;
+    color: #1e2b1d;
+    line-height: 1.6;
+    background: #f5faf5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #e0ebe0;
+}
+
+.notif-det-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 4px;
+}
+
+.notif-det-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #6b7a6b;
+}
+
+.notif-det-meta-item svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #9aaa98;
+}

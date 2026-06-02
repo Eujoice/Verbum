@@ -1,0 +1,522 @@
+.hist-body {
+    padding: 36px 48px 48px;
+}
+
+.hist-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.hist-titulo h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-bottom: 5px;
+}
+
+.hist-titulo p {
+    font-size: 13px;
+    color: #9aaa98;
+}
+
+.hist-stats {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    background: #f0f5ef;
+    border: 1.5px solid #dce8db;
+    border-radius: 12px; /* Bordas um pouco menores para combinar */
+    padding: 12px 20px;   /* Reduzido (era 20px 32px) */
+    text-align: center;
+    min-width: 70px;      /* Reduzido (era 110px) */
+    flex: 1;              /* Faz eles crescerem igualitariamente */
+    max-width: 140px;     /* Impede que fiquem gigantes em telas largas */
+}
+
+.stat-num {
+    font-size: 20px;      /* Reduzido (era 42px) */
+    font-weight: 700;
+    line-height: 1;
+}
+
+.stat-label {
+    font-size: 9px;      /* Reduzido (era 13px) */
+    color: #9aaa98;
+    margin-top: 4px;
+    font-weight: 600;
+    text-transform: uppercase; /* Dá um ar mais elegante sendo menor */
+    letter-spacing: 0.5px;
+}
+
+.stat-num.verde    { color: #3d6139; }
+.stat-num.amarelo  { color: #8a5f00; }
+.stat-num.vermelho { color: #a32d2d; }
+
+
+
+/* ── Filtros ── */
+.filtros {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filtros-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9aaa98;
+}
+
+.filtro-pill {
+    padding: 7px 18px;
+    border-radius: 50px;
+    border: 1.5px solid #dde8dc;
+    background: #f7f9f7;
+    font-size: 12px;
+    font-weight: 600;
+    color: #517463;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+}
+
+.filtro-pill:hover,
+.filtro-pill.ativo {
+    background: #6C9467;
+    border-color: #6C9467;
+    color: #fff;
+}
+
+/* ── Lista de empréstimos ── */
+.hist-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.emp-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fff;
+    border: 1.5px solid #eaede9;
+    border-radius: 18px;
+    padding: 18px 22px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.emp-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    transform: translateY(-2px);
+}
+
+.emp-capa {
+    width: 64px;
+    height: 90px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: block;
+}
+
+.emp-capa-placeholder {
+    width: 64px;
+    height: 90px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    padding: 6px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    line-height: 1.3;
+}
+
+.emp-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.emp-titulo {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-bottom: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.emp-autor {
+    font-size: 12px;
+    color: #9aaa98;
+    margin-bottom: 12px;
+}
+
+.emp-datas {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.emp-data-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.emp-data-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #9aaa98;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+}
+
+.emp-data-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: #3d6139;
+}
+
+.emp-data-val.atrasado {
+    color: #a32d2d;
+}
+
+.emp-status {
+    flex-shrink: 0;
+    align-self: flex-start;
+}
+
+.badge {
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.badge-devolvido { background: #eef4ed; color: #3d6139; }
+.badge-ativo     { background: #fff8e6; color: #8a5f00; }
+.badge-atrasado  { background: #fef0f0; color: #a32d2d; }
+
+/* ── Skeleton ── */
+.emp-skeleton {
+    height: 126px;
+    border-radius: 18px;
+    background: #f0f4ef;
+    animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.5; }
+}
+
+/* ── Estado vazio ── */
+.hist-vazio {
+    text-align: center;
+    padding: 64px 20px;
+}
+
+.hist-vazio svg {
+    width: 56px;
+    height: 56px;
+    fill: #cddacc;
+    display: block;
+    margin: 0 auto 16px;
+}
+
+.hist-vazio p {
+    font-size: 14px;
+    color: #9aaa98;
+}
+/* Garante que o conteúdo do histórico não cubra o menu */
+/* Garante que o Header e o Botão fiquem sempre no topo */
+.header {
+    z-index: 1000 !important;
+}
+
+.hambtn {
+    position: relative;
+    z-index: 1001 !important;
+    cursor: pointer !important;
+}
+
+/* Garante que o Menu Lateral não abra por baixo dos cards do histórico */
+.menu-lateral {
+    z-index: 9999 !important;
+}
+
+.overlay-menu {
+    z-index: 9998 !important;
+}
+
+/* Força as barras do hambúrguer a serem visíveis no cabeçalho verde */
+.bar {
+    background: #fff !important;
+    display: block;
+}
+
+
+/* =========================================
+   NOTIFICAÇÕES — NOVO DESIGN v2
+   ========================================= */
+
+/* Dropdown container */
+.notificacao-dropdown {
+    position: absolute;
+    right: 0;
+    top: 48px;
+    width: 360px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e0ebe0;
+    box-shadow: 0 8px 32px rgba(30, 58, 31, 0.13), 0 2px 8px rgba(0,0,0,0.06);
+    z-index: 1100;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    color: #1e2b1d;
+}
+
+.notificacao-dropdown.aberto {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Topo fixo */
+.notif-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #edf3ed;
+}
+
+.notif-topo-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e3a1f;
+}
+
+/* Área de conteúdo (lista + painel de detalhe lado a lado com overflow) */
+.notif-corpo {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Lista de notificações */
+.notificacao-lista {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 8px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #c8dfc9 transparent;
+}
+
+.notificacao-lista::-webkit-scrollbar { width: 4px; }
+.notificacao-lista::-webkit-scrollbar-thumb { background: #c8dfc9; border-radius: 4px; }
+
+/* Labels de grupo */
+.notif-grupo-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aaa98;
+    padding: 8px 18px 4px;
+}
+
+/* Card de notificação na lista */
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 18px;
+    cursor: pointer;
+    transition: background 0.12s;
+    position: relative;
+    border-bottom: 1px solid #f0f5f0;
+}
+
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #f5faf5; }
+.notif-item.nao-lida { background: #f0f7f0; }
+.notif-item.nao-lida:hover { background: #e8f3e8; }
+
+/* Ícone colorido por tipo */
+.notif-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.notif-icon-svg { width: 17px; height: 17px; }
+
+.notif-tipo--info    { background: #e6f0ff; color: #2563eb; }
+.notif-tipo--alerta  { background: #fdf0f0; color: #b91c1c; }
+.notif-tipo--reserva { background: #fef9ec; color: #92400e; }
+.notif-tipo--geral   { background: #eef5ee; color: #346736; }
+
+/* Texto do card */
+.notif-item-corpo { flex: 1; min-width: 0; }
+
+.notif-item-msg {
+    font-size: 13px;
+    color: #1e2b1d;
+    line-height: 1.45;
+    margin: 0 0 3px;
+    word-break: break-word;
+}
+
+.notif-item.lida .notif-item-msg { color: #6b7a6b; }
+
+.notif-item-tempo {
+    font-size: 11px;
+    color: #9aaa98;
+}
+
+/* Ponto "não lida" */
+.notif-ponto-novo {
+    width: 8px;
+    height: 8px;
+    background: #477740;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+/* Estado vazio */
+.notif-vazia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px;
+    color: #9aaa98;
+    gap: 10px;
+}
+
+.notif-vazia svg { width: 36px; height: 36px; stroke: #c8dfc9; }
+.notif-vazia p { font-size: 13px; margin: 0; }
+
+/* ── Painel de detalhe (desliza por cima da lista) ── */
+.notif-painel-detalhe {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.notif-painel-detalhe.aberto {
+    transform: translateX(0);
+}
+
+.notif-det-header {
+    padding: 12px 14px 8px;
+    border-bottom: 1px solid #edf3ed;
+}
+
+.notif-det-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #477740;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.12s;
+}
+
+.notif-det-voltar:hover { background: #eef5ee; }
+.notif-det-voltar svg { width: 16px; height: 16px; }
+
+.notif-det-corpo {
+    padding: 20px 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.notif-det-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+}
+
+.notif-det-icon .notif-icon-svg { width: 24px; height: 24px; }
+
+.notif-det-tipo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aaa98;
+}
+
+.notif-det-mensagem {
+    font-size: 14px;
+    color: #1e2b1d;
+    line-height: 1.6;
+    background: #f5faf5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #e0ebe0;
+}
+
+.notif-det-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 4px;
+}
+
+.notif-det-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #6b7a6b;
+}
+
+.notif-det-meta-item svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #9aaa98;
+}

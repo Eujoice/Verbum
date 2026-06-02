@@ -1,0 +1,1050 @@
+@import url('https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* =========================================
+   BODY E CONTAINER PRINCIPAL
+   ========================================= */
+.body-acervo {
+    background-color: #f7faf7;
+    font-family: 'Poppins', 'DM Sans', sans-serif;
+    min-height: 100vh;
+    font-size: 16px;
+}
+
+.container-acervo {
+    width: 100%;
+    background-color: #f7faf7;
+    margin: 0;
+}
+
+/* =========================================
+   HEADER
+   ========================================*/
+   
+.header {
+    background: #477740;
+    padding: 0 40px;
+    height: 80px;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-start; /* logo fica à esquerda */
+}
+
+.logo {
+    font-family: "Milonga", serif;
+    font-size: 26px;
+    margin: 0;
+}
+
+.logo a {
+    color: #e8f2e8 !important;
+    text-decoration: none;
+}
+
+.logo-vb {
+    width: 50px;
+    height: 50px;
+    margin-left: -16px;
+}
+
+.busca {
+    position: relative;
+    width: 100%;
+    max-width: 520px;
+    justify-self: center; /* centraliza no grid */
+    margin: 0; /* remove o margin: 0 40px anterior */
+}
+
+.busca input {
+    width: 100%;
+    padding: 11px 52px 11px 18px;
+    border-radius: 50px;
+    border: 1.5px solid #dde8dc;
+    background: #f7f9f7;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #1e2b1d;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.busca input:focus {
+    border-color: #6C9467;
+}
+
+.icone-lupa {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+}
+
+.icones {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    justify-content: flex-end; /* hambúrguer fica à direita */
+}
+
+/* =========================================
+   BOTÃO HAMBURGUER
+   ========================================= */
+.hambtn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 7px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    transition: background 0.15s;
+}
+
+.hambtn:hover {
+    background: #f0f5ef;
+}
+
+.bar {
+    width: 24px;
+    height: 2.5px;
+    background: #fff;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.hambtn.aberto .bar:nth-child(1) {
+    transform: translateY(7.5px) rotate(45deg);
+}
+
+.hambtn.aberto .bar:nth-child(2) {
+    opacity: 0;
+    transform: scaleX(0);
+}
+
+.hambtn.aberto .bar:nth-child(3) {
+    transform: translateY(-7.5px) rotate(-45deg);
+}
+
+/* =========================================
+   TABS DE NAVEGAÇÃO
+   ========================================= */
+.menu-tabs {
+    display: flex;
+    padding: 0 48px;
+    border-bottom: 1px solid #eaede9;
+    gap: 0;
+    justify-content: center;
+}
+
+.tab {
+    padding: 16px 28px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #9aaa98;
+    text-decoration: none;
+    border-bottom: 2.5px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    color: #517463;
+}
+
+.tab.ativo {
+    color: #6C9467;
+    border-bottom-color: #6C9467;
+}
+
+/* =========================================
+   CARROSSEL DE BANNERS
+   ========================================= */
+/* =========================================
+   CARROSSEL DE BANNERS - COMPLETO
+   ========================================= */
+.banner-section {
+    padding: 28px 120px 8px;
+}
+
+.carousel {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden; /* Importante para o zoom da imagem não vazar */
+    height: 230px;
+    max-width: 750px;
+    margin: 0 auto;
+    background: #111;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    transition: box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+/* Efeito de profundidade no carrossel ao passar o mouse */
+.carousel:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+}
+
+.slides {
+    display: flex;
+    height: 100%;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* O slide agora é uma tag <a> */
+.slide {
+    min-width: 100%;
+    height: 100%;
+    display: block;
+    text-decoration: none;
+    overflow: hidden; /* Garante que o zoom da imagem fique preso aqui dentro */
+    position: relative;
+}
+
+/* Estilo da Imagem e Animação */
+.slide-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.2, 0, 0.2, 1), filter 0.4s ease;
+}
+
+/* --- ANIMAÇÃO DE HOVER (Quando passa a mão) --- */
+.slide:hover .slide-img {
+    transform: scale(1.08); /* Zoom suave para dentro */
+    filter: brightness(0.85); /* Escurece levemente para destacar */
+}
+
+/* Feedback visual ao clicar */
+.slide:active .slide-img {
+    transform: scale(1.03);
+    transition: transform 0.1s ease;
+}
+
+/* Botões de Navegação (Prev/Next) */
+.carr-prev,
+.carr-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px); /* Efeito de vidro */
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.carr-prev { left: 15px; }
+.carr-next { right: 15px; }
+
+.carr-prev:hover,
+.carr-next:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.carr-prev svg,
+.carr-next svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Indicadores (Dots) */
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 0 4px;
+    margin: 0 auto;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #cddacc;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.dot.active {
+    width: 24px;
+    border-radius: 4px;
+    background: #6C9467;
+}
+
+/* =========================================
+   SEÇÃO POPULARES
+   ========================================= */
+/* Container das seções */
+.populares, .classicos {
+    width: 100%;
+    max-width: 1100px; 
+    margin: 40px auto; 
+    padding: 0 20px;
+}
+
+.sec-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: #3a8036;
+    /* Isso garante que o título comece alinhado com o primeiro livro */
+}
+
+/* Estilo do link Ver Todos */
+.ver-todos {
+    font-size: 13px;
+    color: #9aaa98;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.ver-todos:hover {
+    color: #6C9467;
+}
+
+.lista-livros {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    overflow: visible; 
+    padding: 20px 0; /* Espaço para o zoom não bater no título acima */
+}
+
+/* Mantemos o tamanho original do livro que você já tinha no código */
+.livro {
+    flex: 0 0 148px; 
+    text-align: center;
+    transition: transform 0.3s ease; /* Transição da animação */
+    cursor: pointer;
+    position: relative;
+}
+/* Efeito de aumento (Zoom) sem cortar */
+.livro:hover {
+    transform: scale(1.1); /* Aumenta 10% */
+    z-index: 10; /* Fica na frente dos outros ao aumentar */
+}
+.livro img {
+    width: 148px;
+    height: 210px;
+    border-radius: 12px;
+    object-fit: cover;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+    display: block;
+}
+
+.livro .titulo {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e2b1d;
+    margin-top: 10px;
+    line-height: 1.35;
+}
+
+.livro .autor {
+    font-size: 13px;
+    color: #9aaa98;
+    margin-top: 3px;
+}
+
+.livro .avaliacao {
+    font-size: 11px;
+    color: #e8a020;
+    margin-top: 4px;
+}
+
+/* =========================================
+   OVERLAY DO MENU
+   ========================================= */
+   .overlay-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0);
+    pointer-events: none;
+    transition: background 0.38s ease;
+    z-index: 9000;
+}
+
+.overlay-menu.ativo {
+    background: rgba(0,0,0,0.3);
+    pointer-events: all;
+}
+
+.menu-lateral {
+    position: fixed;
+    top: 0;
+    right: -28vw;
+    width: 25vw;
+    min-width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: -8px 0 32px rgba(0,0,0,0.12);
+    border-left: 1px solid #eaede9;
+}
+
+.menu-lateral.aberto {
+    right: 0;
+}
+
+.sb-profile {
+    padding: 36px 24px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: #f7f9f7;
+    border-bottom: 1px solid #eaede9;
+}
+
+.sb-profile::after {
+    display: none;
+}
+
+.sb-avatar {
+    width: 78px;
+    height: 78px;
+    border-radius: 50%;
+    background: #eef4ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    overflow: hidden;
+    border: 3px solid #6C9467;
+    box-shadow: 0 4px 14px rgba(108,148,103,0.25);
+}
+
+.sb-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.sb-avatar-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.sb-avatar-icon svg {
+    width: 38px;
+    height: 38px;
+    fill: #6C9467;
+}
+
+.sb-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e2b1d;
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.4;
+}
+
+.sb-mat {
+    font-size: 11px;
+    color: #9aaa98;
+    margin-top: 4px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.sb-divider {
+    display: none;
+}
+
+.sb-nav {
+    padding: 16px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+}
+
+.nav-sep {
+    height: 1px;
+    background: #eaede9;
+    margin: 6px 0;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 12px;
+    background: transparent;
+    color: #3d4f3c;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-decoration: none;
+    font-family: 'Poppins', sans-serif;
+    border: 1px solid transparent;
+}
+
+.nav-item:hover {
+    background: #f0f5ef;
+    color: #1e2b1d;
+    border-color: #dde8dc;
+}
+
+.nav-ic {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    background: #eef4ed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.18s;
+}
+
+.nav-item:hover .nav-ic {
+    background: #ddeedd;
+}
+
+.nav-ic svg {
+    width: 15px;
+    height: 15px;
+    fill: #6C9467;
+}
+
+.nav-admin {
+    background: #fffbeb;
+    color: #854d0e;
+    border-color: #fde68a;
+}
+
+.nav-admin:hover {
+    background: #fef3c7;
+    color: #713f12;
+    border-color: #fcd34d;
+}
+
+.nav-admin .nav-ic {
+    background: #fef3c7;
+}
+
+.nav-admin:hover .nav-ic {
+    background: #fde68a;
+}
+
+.nav-admin .nav-ic svg {
+    fill: #d97706;
+}
+
+.nav-sair {
+    background: #fff5f5;
+    color: #991b1b;
+    border-color: #fecaca;
+    margin-top: 8px;
+}
+
+.nav-sair:hover {
+    background: #fee2e2;
+    color: #7f1d1d;
+    border-color: #fca5a5;
+}
+
+.nav-sair .nav-ic {
+    background: #fee2e2;
+}
+
+.nav-sair:hover .nav-ic {
+    background: #fecaca;
+}
+
+.nav-sair .nav-ic svg {
+    fill: #dc2626;
+}
+
+/* ── Dropdown de busca ── */
+.busca {
+    position: relative; /* garante que o dropdown se ancora aqui */
+}
+
+.resultados-busca {
+    position: absolute;
+    top: 48px;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+    display: none;
+    z-index: 999;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease;
+    margin-top: -4px;
+}
+
+.resultado-item {
+    display: flex;
+    gap: 12px;
+    padding: 10px;
+    text-decoration: none;
+    color: #2d2d2d;
+    transition: background 0.2s ease;
+}
+
+.resultado-item:hover { background: #f7f9f7; }
+
+.res-capa {
+    width: 45px;
+    height: 65px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #eee;
+}
+
+.res-capa img { width: 100%; height: 100%; object-fit: cover; }
+
+.res-conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+}
+
+.res-titulo { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+
+.res-linha { display: flex; justify-content: space-between; font-size: 12px; }
+
+.res-id { color: #888; }
+
+.res-status { font-weight: 500; }
+.res-status.disp { color: #2e7d32; }
+.res-status.emp  { color: #c62828; }
+
+.resultado-vazio { padding: 12px; font-size: 14px; color: #888; }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Estilos para o Sistema de Notificações na Navbar */
+.notificacao-container {
+    position: relative;
+    display: inline-block;
+}
+
+.notificacao-btn {
+    background: none;
+    border: none;
+    color: #ffffff; 
+    cursor: pointer;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.notificacao-btn:hover {
+    color: #1a202c;
+}
+
+.notificacao-badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: #e53e3e; 
+    color: white;
+    font-size: 11px;
+    font-weight:100;
+    border-radius: 50%;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #fff;
+    font-family: 'Poppins', sans-serif;
+}
+
+.notificacao-dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    width: 320px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e2e8f0;
+    display: none;
+    z-index: 1000;
+    font-family: 'Poppins', sans-serif;
+}
+
+.notificacao-dropdown.aberto {
+    display: block;
+}
+
+.notificacao-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid #edf2f7;
+}
+
+.notificacao-header h3 {
+    margin: 0;
+    font-size: 15px;
+    color: #2d3748;
+    font-weight: 600;
+}
+
+.notificacao-lista {
+    max-height: 280px;
+    overflow-y: auto;
+    padding: 4px 0;
+}
+
+.notificacao-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;       
+    margin: 8px 12px;           
+    border-radius: 6px;        
+    border: 1px solid #edf2f7;  
+    background-color: #ffffff;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+/* Ajuste no hover para combinar com o novo design */
+.notificacao-item:hover {
+    background-color: #f8fafc;
+    transform: translateY(-1px); /* Efeito sutil de flutuação ao passar o mouse */
+}
+
+.notificacao-item.nao-lida {
+    background-color: #f0f4f8; /* Destaque azul sutil para itens novos */
+    font-weight: 500;
+}
+
+.notificacao-item .data {
+    display: block;
+    font-size: 11px;
+    color: #a0aec0;
+    margin-top: 4px;
+}
+
+.notificacao-vazia {
+    padding: 20px;
+    text-align: center;
+    color: #a0aec0;
+    font-size: 13px;
+}
+
+.notificacao-conteudo {
+    flex: 1; /* Faz o texto ocupar o máximo de espaço possível */
+}
+
+/* Estilo do botão de check (✓) */
+.btn-lida {
+    background-color: #edf2f7;
+    border: none;
+    color: #4a5568;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+    margin-right: 10px;
+}
+
+.btn-lida:hover {
+    background-color: #48bb78; /* Fica verde ao passar o mouse */
+    color: white;
+    transform: scale(1.1);
+}
+/* =========================================
+   NOTIFICAÇÕES — NOVO DESIGN v2
+   ========================================= */
+
+/* Dropdown container */
+.notificacao-dropdown {
+    position: absolute;
+    right: 0;
+    top: 48px;
+    width: 360px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #e0ebe0;
+    box-shadow: 0 8px 32px rgba(30, 58, 31, 0.13), 0 2px 8px rgba(0,0,0,0.06);
+    z-index: 1100;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px) scale(0.97);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+    color: #1e2b1d;
+}
+
+.notificacao-dropdown.aberto {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+/* Topo fixo */
+.notif-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px 12px;
+    border-bottom: 1px solid #edf3ed;
+}
+
+.notif-topo-titulo {
+    font-size: 15px;
+    font-weight: 600;
+    color: #1e3a1f;
+}
+
+/* Área de conteúdo (lista + painel de detalhe lado a lado com overflow) */
+.notif-corpo {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Lista de notificações */
+.notificacao-lista {
+    max-height: 360px;
+    overflow-y: auto;
+    padding: 8px 0;
+    scrollbar-width: thin;
+    scrollbar-color: #c8dfc9 transparent;
+}
+
+.notificacao-lista::-webkit-scrollbar { width: 4px; }
+.notificacao-lista::-webkit-scrollbar-thumb { background: #c8dfc9; border-radius: 4px; }
+
+/* Labels de grupo */
+.notif-grupo-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aaa98;
+    padding: 8px 18px 4px;
+}
+
+/* Card de notificação na lista */
+.notif-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 11px 18px;
+    cursor: pointer;
+    transition: background 0.12s;
+    position: relative;
+    border-bottom: 1px solid #f0f5f0;
+}
+
+.notif-item:last-child { border-bottom: none; }
+.notif-item:hover { background: #f5faf5; }
+.notif-item.nao-lida { background: #f0f7f0; }
+.notif-item.nao-lida:hover { background: #e8f3e8; }
+
+/* Ícone colorido por tipo */
+.notif-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.notif-icon-svg { width: 17px; height: 17px; }
+
+.notif-tipo--info    { background: #e6f0ff; color: #2563eb; }
+.notif-tipo--alerta  { background: #fdf0f0; color: #b91c1c; }
+.notif-tipo--reserva { background: #fef9ec; color: #92400e; }
+.notif-tipo--geral   { background: #eef5ee; color: #346736; }
+
+/* Texto do card */
+.notif-item-corpo { flex: 1; min-width: 0; }
+
+.notif-item-msg {
+    font-size: 13px;
+    color: #1e2b1d;
+    line-height: 1.45;
+    margin: 0 0 3px;
+    word-break: break-word;
+}
+
+.notif-item.lida .notif-item-msg { color: #6b7a6b; }
+
+.notif-item-tempo {
+    font-size: 11px;
+    color: #9aaa98;
+}
+
+/* Ponto "não lida" */
+.notif-ponto-novo {
+    width: 8px;
+    height: 8px;
+    background: #477740;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+}
+
+/* Estado vazio */
+.notif-vazia {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 20px;
+    color: #9aaa98;
+    gap: 10px;
+}
+
+.notif-vazia svg { width: 36px; height: 36px; stroke: #c8dfc9; }
+.notif-vazia p { font-size: 13px; margin: 0; }
+
+/* ── Painel de detalhe (desliza por cima da lista) ── */
+.notif-painel-detalhe {
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    transform: translateX(100%);
+    transition: transform 0.22s ease;
+    overflow-y: auto;
+    z-index: 10;
+}
+
+.notif-painel-detalhe.aberto {
+    transform: translateX(0);
+}
+
+.notif-det-header {
+    padding: 12px 14px 8px;
+    border-bottom: 1px solid #edf3ed;
+}
+
+.notif-det-voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    color: #477740;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: background 0.12s;
+}
+
+.notif-det-voltar:hover { background: #eef5ee; }
+.notif-det-voltar svg { width: 16px; height: 16px; }
+
+.notif-det-corpo {
+    padding: 20px 18px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.notif-det-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+}
+
+.notif-det-icon .notif-icon-svg { width: 24px; height: 24px; }
+
+.notif-det-tipo {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9aaa98;
+}
+
+.notif-det-mensagem {
+    font-size: 14px;
+    color: #1e2b1d;
+    line-height: 1.6;
+    background: #f5faf5;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border: 1px solid #e0ebe0;
+}
+
+.notif-det-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding-top: 4px;
+}
+
+.notif-det-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #6b7a6b;
+}
+
+.notif-det-meta-item svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    color: #9aaa98;
+}
