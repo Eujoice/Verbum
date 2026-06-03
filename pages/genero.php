@@ -212,6 +212,7 @@ $genero_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
 
     <script src="../assets/js/busca_detalhes.js"></script>
 
+    <script src="../assets/js/multa.js"></script>
     <script src="../assets/js/script-acervo.js"></script>
     <script type="module" src="../assets/js/genero_logic.js"></script>
 

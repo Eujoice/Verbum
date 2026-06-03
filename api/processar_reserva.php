@@ -99,6 +99,35 @@ try {
                 exit();
             }
 
+            /* ── Bloqueia reserva se o usuário tem multa pendente ── */
+            {
+                $urlEmp  = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/emprestimos";
+                $jsonEmp = @file_get_contents($urlEmp);
+                if ($jsonEmp) {
+                    $docsEmp   = json_decode($jsonEmp, true)['documents'] ?? [];
+                    $hojeMulta = new DateTime(); $hojeMulta->setTime(0,0,0);
+                    foreach ($docsEmp as $eDoc) {
+                        $ef = $eDoc['fields'] ?? [];
+                        if (($ef['status']['stringValue'] ?? '') !== 'ativo') continue;
+                        if (($ef['usuario_id']['stringValue'] ?? '') !== $usuario_matricula) continue;
+                        $dfStr = $ef['data_devolucao_prevista']['stringValue'] ?? '';
+                        if (empty($dfStr)) continue;
+                        $df   = new DateTime($dfStr); $df->setTime(0,0,0);
+                        $diff = (int)$hojeMulta->diff($df)->format('%r%a');
+                        if ($diff < 0) {
+                            $dias  = abs($diff);
+                            $valor = number_format($dias * 1.00, 2, ',', '.');
+                            echo json_encode([
+                                'sucesso'  => false,
+                                'temMulta' => true,
+                                'mensagem' => "Você possui uma multa pendente de R$ $valor. Quite o débito no PagTesouro antes de fazer novas reservas.",
+                            ]);
+                            exit();
+                        }
+                    }
+                }
+            }
+
             $urlObra   = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/obras/$livro_id";
             $obra_data = firestoreGet($urlObra);
 

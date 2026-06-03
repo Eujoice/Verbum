@@ -276,6 +276,19 @@ if (!empty($_livro_id_url)) {
 
                     </div>
 
+                    <!-- Aviso de multa neste livro (exibido pelo multa.js quando aplicável) -->
+                    <div id="aviso-multa-livro" style="display:none; margin-bottom:10px; background:#fef2f2; border:1.5px solid #fca5a5; border-radius:8px; padding:10px 14px; font-size:13px; color:#991b1b; line-height:1.5;">
+                        <img src="../assets/imgs/multa.png" alt="Atenção!" style="width:25px;"> <br>
+                        <strong>Este livro está com multa pendente.</strong><br>
+                        <span id="aviso-multa-livro-detalhe"></span><br>
+                        <a href="https://pagtesouro.tesouro.gov.br/portal-gru/#/pagamento-gru/formulario?servico=011327"
+                           target="_blank" rel="noopener"
+                           style="display:inline-block;margin-top:6px;background:#b91c1c;color:#fff;border-radius:6px;padding:5px 12px;font-weight:700;text-decoration:none;font-size:12px;">
+                           Pagar no PagTesouro
+                        </a>
+                        <p style="margin-top: 5px;" >Após efetuar o pagamento, envie o comprovante para o e-mail bibliotecaverbum@gmail.com</p>
+                    </div>
+
                     <div class="div-reserva">
                         <div class="div-reserva">
                             <button class="btn-reservar" id="btnReservar">
@@ -349,6 +362,7 @@ if (!empty($_livro_id_url)) {
     <div class="toast-dl" id="toastDl"></div>
 
     <script src="../assets/js/script.js"></script>
+    <script src="../assets/js/multa.js"></script>
     <script type="module" src="../assets/js/busca_detalhes.js"></script>
     <script type="module" src="../assets/js/acervo_logic.js"></script>
     <script src="../assets/js/script-acervo.js"></script>
@@ -527,6 +541,11 @@ if (!empty($_livro_id_url)) {
                     } else {
                         aplicarEstado(ESTADOS.filaMinha, resultado.posicao);
                     }
+                } else if (resultado.temMulta) {
+                    // Bloqueio por multa: mostra aviso e trava o botão
+                    showToast('' + resultado.mensagem);
+                    aplicarAvisoMultaLivro(window._verbumMulta);
+                    aplicarEstado({ texto: 'Multa pendente', cor: '#b91c1c', desabilitado: true });
                 } else {
                     showToast('✕ ' + resultado.mensagem);
                     inicializarBotao(); // re-verifica o estado real
@@ -567,6 +586,43 @@ if (!empty($_livro_id_url)) {
 
         // Inicia tudo
         inicializarBotao();
+
+        // ── Integração com sistema de multas ─────────────────────────
+        // Quando multa.js detectar multa, verifica se este livro é o devedor
+        // e exibe o aviso inline + bloqueia o botão de reserva.
+        function aplicarAvisoMultaLivro(dadosMulta) {
+            if (!dadosMulta || !dadosMulta.temMulta) return;
+
+            // Bloqueia SEMPRE o botão de reserva quando há qualquer multa
+            const btnRes = document.getElementById('btnReservar');
+            if (btnRes) {
+                btnRes.disabled = true;
+                btnRes.style.backgroundColor = '#9ca3af';
+                btnRes.style.cursor = 'not-allowed';
+                btnRes.title = 'Quite sua multa pendente para fazer novas reservas';
+            }
+
+            // Verifica se este livro específico é um dos que está em atraso
+            const detalheDoLivro = dadosMulta.detalhes.find(d => d.obra_id === LIVRO_ID);
+            const avisoEl        = document.getElementById('aviso-multa-livro');
+            const detalheEl      = document.getElementById('aviso-multa-livro-detalhe');
+
+            if (detalheDoLivro && avisoEl && detalheEl) {
+                const valor = detalheDoLivro.valor.toFixed(2).replace('.', ',');
+                detalheEl.textContent =
+                    `Atraso de ${detalheDoLivro.dias_atraso} dia${detalheDoLivro.dias_atraso > 1 ? 's' : ''} · Multa acumulada: R$ ${valor}`;
+                avisoEl.style.display = 'block';
+            }
+        }
+
+        // Se multa.js já rodou antes deste módulo (improvável mas possível)
+        if (window._verbumMulta) {
+            aplicarAvisoMultaLivro(window._verbumMulta);
+        }
+        // Escuta o evento disparado por multa.js
+        document.addEventListener('verbum:multa', function (e) {
+            aplicarAvisoMultaLivro(e.detail);
+        });
 
         // ─── Favorito ────────────────────────────────────────────────
         import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js').then(({ collection, query, where, getDocs, addDoc, deleteDoc, doc, serverTimestamp }) => {

@@ -1,3 +1,9 @@
+/* ── FLAG DE NOTIFICAÇÕES ──────────────────────────────────────────────────
+   Mudar para TRUE quando for demonstrar o projeto.
+   FALSE = polling desativado, zero leituras extras no Firestore.
+   ────────────────────────────────────────────────────────────────────── */
+const NOTIFICACOES_ATIVAS = false;
+
 const POR_PAGINA = 10;
 
 let todosExemplares = [];
@@ -1627,6 +1633,7 @@ function classePorTipo(tipo, mensagem) {
 }
 
 async function buscarNotificacoesAluno() {
+    if (!NOTIFICACOES_ATIVAS) return; // Stand-by: remover quando for demonstrar
     try {
         const badge  = document.getElementById('notificacaoBadge');
         const lista  = document.getElementById('notificacaoLista');

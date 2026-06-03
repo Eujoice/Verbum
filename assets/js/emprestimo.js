@@ -215,20 +215,27 @@ function mostrarToast(texto) {
 function calcularMulta(dataPrevista) {
     const hoje = new Date();
     const prevista = new Date(dataPrevista);
-    hoje.setHours(0,0,0,0); prevista.setHours(0,0,0,0);
+
+    // Zera horário para comparar apenas as datas
+    hoje.setHours(0, 0, 0, 0);
+    prevista.setHours(0, 0, 0, 0);
+
     if (hoje > prevista) {
-        const diffDias = Math.ceil(Math.abs(hoje - prevista) / (1000 * 60 * 60 * 24));
+        const diffMs = hoje.getTime() - prevista.getTime();
+        const diffDias = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
         document.getElementById('diasAtraso').value = diffDias;
-        document.getElementById('valorMulta').value = `R$ ${(diffDias * 2).toFixed(2)}`;
+        document.getElementById('valorMulta').value =
+            `R$ ${diffDias.toFixed(2).replace('.', ',')}`;
     } else {
         document.getElementById('diasAtraso').value = 0;
-        document.getElementById('valorMulta').value = "R$ 0,00";
+        document.getElementById('valorMulta').value = 'R$ 0,00';
     }
 }
 
 /**
  * Calcula a nova data de devolução adicionando N dias úteis a partir de hoje.
- * Dias úteis: segunda a sábado (ajuste se necessário).
+ * Dias úteis: segunda a sábado (ajustaar se necessário).
  * Retorna string no formato YYYY-MM-DD.
  */
 function calcularNovaDataRenovacao(diasUteis) {

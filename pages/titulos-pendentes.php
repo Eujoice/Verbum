@@ -181,6 +181,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
         <?php include '../includes/dp_modal.php'; ?>
 
     <script src="../assets/js/busca_detalhes.js"></script>
+    <script src="../assets/js/multa.js"></script>
     <script src="../assets/js/script-acervo.js"></script>
     <script type="module" src="../assets/js/pendentes_logic.js"></script>
 

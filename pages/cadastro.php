@@ -204,7 +204,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
 <?php if (isset($_GET['sucesso'])): ?>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        mostrarPopup("Usuário cadastrado com sucesso!", "+1 Leitor(a)!", "imgs/aluna.png");
+        mostrarPopup("Usuário cadastrado com sucesso!", "+1 Leitor(a)!", "../assets/imgs/aluna.png");
     });
 </script>
 <?php endif; ?>

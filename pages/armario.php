@@ -216,7 +216,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
 <div id="toast" class="toast">Armário locado com sucesso!</div>
 
 <script src="../assets/js/armario.js"></script>
-<script src="../assets/js/script-acervo.js"></script>
+    <script src="../assets/js/script-acervo.js"></script>
 
     <?php include '../includes/footer.php'; ?>
 </body>
