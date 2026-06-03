@@ -377,10 +377,10 @@ if (!empty($_livro_id_url)) {
             carregando:  { texto: 'Verificando...',         cor: '#888',     desabilitado: true  },
             disponivel:  { texto: 'Reservar exemplar',      cor: '',         desabilitado: false },
             fila:        { texto: 'Entrar na fila',         cor: '#e07b20',  desabilitado: false },
-            reservadoMeu:{ texto: '✓ Você reservou',        cor: '#27ae60',  desabilitado: true  },
+            reservadoMeu:{ texto: 'Você reservou',        cor: '#27ae60',  desabilitado: true  },
             filaMinha:   { texto: null /* definido abaixo */,cor: '#e07b20',  desabilitado: true  },
             processando: { texto: 'Processando...',         cor: '#888',     desabilitado: true  },
-            renovar:     { texto: '⟲ Renovar empréstimo',  cor: '#1a6ea8',  desabilitado: false },
+            renovar:     { texto: 'Renovar empréstimo',  cor: '#1a6ea8',  desabilitado: false },
         };
 
         // Armazena dados do empréstimo ativo do usuário neste livro (para renovação)
@@ -486,12 +486,21 @@ if (!empty($_livro_id_url)) {
 
             // Nova data: 7 dias úteis a partir de hoje
             function novaDataRenovacao(diasUteis) {
-                const d = new Date(); d.setHours(0,0,0,0);
+                const d = new Date();
+                d.setHours(0, 0, 0, 0);
+
                 let add = 0;
+
                 while (add < diasUteis) {
                     d.setDate(d.getDate() + 1);
-                    if (d.getDay() !== 0) add++; // pula domingo
+
+                    const diaSemana = d.getDay();
+
+                    if (diaSemana !== 0 && diaSemana !== 6) {
+                        add++;
+                    }
                 }
+
                 return d.toISOString().split('T')[0];
             }
 

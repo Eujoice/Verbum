@@ -189,7 +189,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['usuario_tipo'] !== 'administrador'
     </div>
 
     <script src="../assets/js/consulta.js"></script>
-
     <?php include '../includes/footer.php'; ?>
 </body>
 </html>

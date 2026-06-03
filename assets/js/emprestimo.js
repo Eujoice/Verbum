@@ -235,21 +235,26 @@ function calcularMulta(dataPrevista) {
 
 /**
  * Calcula a nova data de devolução adicionando N dias úteis a partir de hoje.
- * Dias úteis: segunda a sábado (ajustaar se necessário).
+ * Dias úteis: segunda a sexta
  * Retorna string no formato YYYY-MM-DD.
  */
-function calcularNovaDataRenovacao(diasUteis) {
+function calcularNovaDataRenovacao() {
     const data = new Date();
     data.setHours(0, 0, 0, 0);
+
     let adicionados = 0;
-    while (adicionados < diasUteis) {
+
+    while (adicionados < 7) {
         data.setDate(data.getDate() + 1);
-        const diaSemana = data.getDay(); // 0=Dom, 6=Sab
-        if (diaSemana !== 0) { // pula apenas domingo
+
+        const diaSemana = data.getDay();
+
+        if (diaSemana !== 0 && diaSemana !== 6) {
             adicionados++;
         }
     }
-    return data.toISOString().split('T')[0]; // YYYY-MM-DD
+
+    return data.toISOString().split('T')[0];
 }
 
 /**
