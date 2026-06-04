@@ -1,39 +1,51 @@
 <?php
 require '../includes/config.php';
-$termo = isset($_GET['q']) ? mb_strtolower(trim($_GET['q'])) : '';
+header('Content-Type: application/json');
 
-if (empty($termo)) {
-    echo json_encode([]);
-    exit;
-}
+$termo = isset($_GET['q']) ? mb_strtolower(trim($_GET['q'])) : '';
+if (empty($termo)) { echo json_encode([]); exit; }
 
 $projetoID = "verbum-bd";
-$url = "https://firestore.googleapis.com/v1/projects/{$projetoID}/databases/(default)/documents/usuarios";
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
+// runQuery: filtra no banco, não baixa a coleção inteira
+$url = "https://firestore.googleapis.com/v1/projects/{$projetoID}/databases/(default)/documents:runQuery";
+
+$query = json_encode([
+    'structuredQuery' => [
+        'from' => [['collectionId' => 'usuarios']],
+        'select' => ['fields' => [
+            ['fieldPath' => 'nome'],
+            ['fieldPath' => 'matricula'],
+        ]],
+        'limit' => 10
+    ]
+]);
+
+$ch = curl_init($url);
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-$resposta = curl_exec($ch);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+$res = curl_exec($ch);
 curl_close($ch);
 
-$dados = json_decode($resposta, true);
+$items    = json_decode($res, true) ?? [];
 $resultados = [];
 
-if (isset($dados['documents'])) {
-    foreach ($dados['documents'] as $doc) {
-        $fields = $doc['fields'];
-        $nome = $fields['nome']['stringValue'] ?? '';
-        $matricula = $fields['matricula']['stringValue'] ?? '';
+foreach ($items as $item) {
+    if (!isset($item['document'])) continue;
+    $f         = $item['document']['fields'] ?? [];
+    $nome      = $f['nome']['stringValue']      ?? '';
+    $matricula = $f['matricula']['stringValue'] ?? '';
 
-        // Filtra se o termo bate com nome ou matrícula
-        if (strpos(mb_strtolower($nome), $termo) !== false || strpos($matricula, $termo) !== false) {
-            $resultados[] = [
-                'nome' => $nome,
-                'matricula' => $matricula
-            ];
-        }
+    if (
+        strpos(mb_strtolower($nome), $termo) !== false ||
+        strpos($matricula, $termo) !== false
+    ) {
+        $resultados[] = ['nome' => $nome, 'matricula' => $matricula];
+        if (count($resultados) >= 5) break;
     }
 }
 
-echo json_encode(array_slice($resultados, 0, 5)); // Retorna as 5 primeiras sugestões
+echo json_encode($resultados);

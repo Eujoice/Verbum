@@ -245,6 +245,16 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
     <div id="toast" class="toast">Operação realizada com sucesso!</div>
 
+    <!-- ═══ POPUP DE PERFIL DO USUÁRIO ═══ -->
+    <div id="popupPerfilOverlay" class="popup-perfil-overlay" onclick="if(event.target===this)fecharPerfilUsuario()">
+        <div class="popup-perfil-box">
+            <button class="popup-perfil-close" onclick="fecharPerfilUsuario()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+            <div id="popupPerfilCorpo" class="popup-perfil-corpo"></div>
+        </div>
+    </div>
+
     <script src="../assets/js/emprestimo.js"></script>
     <script src="../assets/js/script-acervo.js"></script>
 

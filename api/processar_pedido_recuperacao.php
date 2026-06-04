@@ -54,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $mail->Host       = 'smtp.gmail.com'; 
                 $mail->SMTPAuth   = true;
                 $mail->Username   = 'bibliotecaverbum@gmail.com'; 
-                $mail->Password   = 'xwcm fzqj fadq bvjj';    
+                $mail->Password   = 'SUA_APP_PASSWORD_AQUI';    
                 $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                 $mail->Port       = 587;
                 $mail->CharSet    = 'UTF-8';

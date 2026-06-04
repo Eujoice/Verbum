@@ -1,10 +1,9 @@
 <?php
 session_start();
-require '../includes/config.php'; 
-
+require '../includes/config.php';
 header('Content-Type: application/json');
 
-$livro_id = $_GET['livro_id'] ?? '';
+$livro_id  = $_GET['livro_id'] ?? '';
 $matricula = $_SESSION['usuario_matricula'] ?? '';
 $projeto_id = "verbum-bd";
 
@@ -13,54 +12,63 @@ if (!$livro_id || !$matricula) {
     exit();
 }
 
-// 1. Buscar todas as reservas para este livro específico
-$url = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas";
-$json = @file_get_contents($url);
-$dados = json_decode($json, true);
-$documentos = $dados['documents'] ?? [];
+$base = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents";
 
-$filaDoLivro = [];
-$minhaReserva = null;
+// runQuery: filtra reservas SOMENTE deste livro — não baixa toda a coleção
+$query = json_encode([
+    'structuredQuery' => [
+        'from' => [['collectionId' => 'reservas']],
+        'where' => [
+            'fieldFilter' => [
+                'field' => ['fieldPath' => 'obra_id'],
+                'op'    => 'EQUAL',
+                'value' => ['stringValue' => $livro_id],
+            ]
+        ],
+        'select' => ['fields' => [
+            ['fieldPath' => 'matricula'],
+            ['fieldPath' => 'tipo'],
+            ['fieldPath' => 'data_reserva'],
+        ]],
+        'orderBy' => [['field' => ['fieldPath' => 'data_reserva'], 'direction' => 'ASCENDING']],
+    ]
+]);
 
-// 2. Filtrar apenas as reservas deste livro que estão na Fila
-foreach ($documentos as $doc) {
-    $f = $doc['fields'];
-    $idDoLivroNoDoc = $f['obra_id']['stringValue'] ?? '';
-    $tipoDoc = $f['tipo']['stringValue'] ?? '';
+$ch = curl_init("$base:runQuery");
+curl_setopt($ch, CURLOPT_POST, true);
+curl_setopt($ch, CURLOPT_POSTFIELDS, $query);
+curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+$res = json_decode(curl_exec($ch), true) ?? [];
+curl_close($ch);
 
-    if ($idDoLivroNoDoc === $livro_id && $tipoDoc === 'Fila') {
-        $filaDoLivro[] = [
-            'matricula' => $f['matricula']['stringValue'] ?? '',
-            'data' => $f['data_reserva']['stringValue'] ?? '9999-12-31' // Fallback para o fim da fila
-        ];
-    }
-    
-    // Verifica se o usuário tem uma reserva "Direta" (que não entra na conta da fila)
-    if ($idDoLivroNoDoc === $livro_id && $f['matricula']['stringValue'] === $matricula && $tipoDoc === 'Direta') {
+$filaOrdenada = [];
+
+foreach ($res as $item) {
+    if (!isset($item['document'])) continue;
+    $f     = $item['document']['fields'] ?? [];
+    $mat   = $f['matricula']['stringValue']   ?? '';
+    $tipo  = $f['tipo']['stringValue']        ?? '';
+    $data  = $f['data_reserva']['stringValue'] ?? '';
+
+    // Reserva direta deste usuário: responde imediatamente
+    if ($mat === $matricula && $tipo === 'Direta') {
         echo json_encode(['jaReservado' => true, 'tipo' => 'Direta', 'posicao' => 0]);
+        exit();
+    }
+
+    if ($tipo === 'Fila') {
+        $filaOrdenada[] = ['matricula' => $mat, 'data' => $data];
+    }
+}
+
+// Encontra posição na fila (já ordenada pelo Firestore via orderBy)
+foreach ($filaOrdenada as $index => $reserva) {
+    if ($reserva['matricula'] === $matricula) {
+        echo json_encode(['jaReservado' => true, 'tipo' => 'Fila', 'posicao' => $index + 1]);
         exit();
     }
 }
 
-// 3. Ordenar a fila por data (quem reservou primeiro fica no topo)
-usort($filaDoLivro, function($a, $b) {
-    return strcmp($a['data'], $b['data']);
-});
-
-// 4. Encontrar a posição da matrícula do usuário na fila ordenada
-$posicaoReal = 0;
-$encontradoNaFila = false;
-
-foreach ($filaDoLivro as $index => $reserva) {
-    if ($reserva['matricula'] === $matricula) {
-        $posicaoReal = $index + 1; // +1 porque array começa em 0
-        $encontradoNaFila = true;
-        break;
-    }
-}
-
-echo json_encode([
-    'jaReservado' => $encontradoNaFila,
-    'tipo' => 'Fila',
-    'posicao' => $posicaoReal
-]);
+echo json_encode(['jaReservado' => false, 'tipo' => 'Fila', 'posicao' => 0]);

@@ -1,145 +1,164 @@
 <?php
 session_start();
 require '../includes/config.php';
-
 header('Content-Type: application/json');
 
-if (!isset($_SESSION['logado']))  {
+if (!isset($_SESSION['logado'])) {
     echo json_encode(['sucesso' => false, 'mensagem' => 'Acesso negado.']);
     exit();
 }
 
 $projeto_id = "verbum-bd";
+$base       = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents";
 $acao       = $_POST['acao']       ?? '';
 $reserva_id = $_POST['reserva_id'] ?? '';
 
-/* ══════════════════════════════════════════════
-   FUNÇÕES AUXILIARES DE FIRESTORE
-══════════════════════════════════════════════ */
+/* ── Helpers ─────────────────────────────────────────────────────────────── */
 
-// Busca um documento pelo caminho completo
-function firestoreGet($url) {
-    $json = @file_get_contents($url);
-    if (!$json) return null;
-    return json_decode($json, true);
-}
-
-// Atualiza campos específicos de um documento (PATCH)
-function firestorePatch($url, $fields, $fieldPaths) {
-    $maskParams = implode('&', array_map(fn($f) => "updateMask.fieldPaths=$f", $fieldPaths));
-    $fullUrl    = $url . '?' . $maskParams;
-
-    $body = json_encode(['fields' => $fields]);
-
-    $ch = curl_init($fullUrl);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'PATCH');
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    $result = curl_exec($ch);
-    $info   = curl_getinfo($ch);
-    curl_close($ch);
-
-    return ['http_code' => $info['http_code'], 'body' => json_decode($result, true)];
-}
-
-// Cria um novo documento em uma coleção (POST)
-function firestorePost($url, $fields) {
-    $body = json_encode(['fields' => $fields]);
-
+function fsGet($url) {
     $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-    $result = curl_exec($ch);
-    $info   = curl_getinfo($ch);
-    curl_close($ch);
-
-    return ['http_code' => $info['http_code'], 'body' => json_decode($result, true)];
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    $r = curl_exec($ch); curl_close($ch);
+    return json_decode($r, true);
 }
 
-// Deleta um documento pelo caminho completo
-function firestoreDelete($url) {
-    $ch = curl_init($url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    $result = curl_exec($ch);
-    $info   = curl_getinfo($ch);
-    curl_close($ch);
+function fsPatch($url, $fields, $fieldPaths) {
+    $mask    = implode('&', array_map(fn($f) => "updateMask.fieldPaths=$f", $fieldPaths));
+    $ch = curl_init("$url?$mask");
+    curl_setopt_array($ch, [
+        CURLOPT_CUSTOMREQUEST  => 'PATCH',
+        CURLOPT_POSTFIELDS     => json_encode(['fields' => $fields]),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+    ]);
+    $r = curl_exec($ch); $info = curl_getinfo($ch); curl_close($ch);
+    return ['http_code' => $info['http_code'], 'body' => json_decode($r, true)];
+}
 
+function fsPost($url, $fields) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => json_encode(['fields' => $fields]),
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+    ]);
+    $r = curl_exec($ch); $info = curl_getinfo($ch); curl_close($ch);
+    return ['http_code' => $info['http_code'], 'body' => json_decode($r, true)];
+}
+
+function fsDelete($url) {
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [CURLOPT_CUSTOMREQUEST => 'DELETE', CURLOPT_RETURNTRANSFER => true]);
+    curl_exec($ch); $info = curl_getinfo($ch); curl_close($ch);
     return $info['http_code'];
 }
 
-// Busca todos os documentos de uma coleção
-function firestoreListar($url) {
-    $json = @file_get_contents($url);
-    if (!$json) return [];
-    $data = json_decode($json, true);
-    return $data['documents'] ?? [];
+/**
+ * Busca reservas de FILA para um livro específico via runQuery.
+ * Retorna array já ordenado por data_reserva ASC.
+ */
+function buscarFilaDoLivro($base, $obra_id) {
+    $query = json_encode([
+        'structuredQuery' => [
+            'from' => [['collectionId' => 'reservas']],
+            'where' => [
+                'compositeFilter' => [
+                    'op' => 'AND',
+                    'filters' => [
+                        ['fieldFilter' => ['field' => ['fieldPath' => 'obra_id'], 'op' => 'EQUAL', 'value' => ['stringValue' => $obra_id]]],
+                        ['fieldFilter' => ['field' => ['fieldPath' => 'tipo'],    'op' => 'EQUAL', 'value' => ['stringValue' => 'Fila']]],
+                    ]
+                ]
+            ],
+            'orderBy' => [['field' => ['fieldPath' => 'data_reserva'], 'direction' => 'ASCENDING']],
+            'limit' => 50,
+        ]
+    ]);
+
+    $ch = curl_init("$base:runQuery");
+    curl_setopt_array($ch, [
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => $query,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+    ]);
+    $res = json_decode(curl_exec($ch), true) ?? [];
+    curl_close($ch);
+
+    $fila = [];
+    foreach ($res as $item) {
+        if (!isset($item['document'])) continue;
+        $fila[] = $item['document'];
+    }
+    return $fila;
 }
 
-/* ══════════════════════════════════════════════
-   ROTEADOR DE AÇÕES
-══════════════════════════════════════════════ */
+/* ── Roteador ────────────────────────────────────────────────────────────── */
 try {
     switch ($acao) {
 
-        /* ──────────────────────────────────────
-           AÇÃO 1: FAZER RESERVA (fluxo existente)
-           Chamado pelo botão "Reservar" na página do livro
-        ────────────────────────────────────── */
+        /* ── RESERVAR ──────────────────────────────────────────────────── */
         case 'reservar':
             $livro_id          = $_POST['livro_id'] ?? '';
             $usuario_matricula = $_SESSION['usuario_matricula'];
             $usuario_nome      = $_SESSION['usuario_nome'];
 
             if (empty($livro_id)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'ID do livro inválido.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'ID do livro inválido.']); exit();
             }
 
-            /* ── Bloqueia reserva se o usuário tem multa pendente ── */
-            {
-                $urlEmp  = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/emprestimos";
-                $jsonEmp = @file_get_contents($urlEmp);
-                if ($jsonEmp) {
-                    $docsEmp   = json_decode($jsonEmp, true)['documents'] ?? [];
-                    $hojeMulta = new DateTime(); $hojeMulta->setTime(0,0,0);
-                    foreach ($docsEmp as $eDoc) {
-                        $ef = $eDoc['fields'] ?? [];
-                        if (($ef['status']['stringValue'] ?? '') !== 'ativo') continue;
-                        if (($ef['usuario_id']['stringValue'] ?? '') !== $usuario_matricula) continue;
-                        $dfStr = $ef['data_devolucao_prevista']['stringValue'] ?? '';
-                        if (empty($dfStr)) continue;
-                        $df   = new DateTime($dfStr); $df->setTime(0,0,0);
-                        $diff = (int)$hojeMulta->diff($df)->format('%r%a');
-                        if ($diff < 0) {
-                            $dias  = abs($diff);
-                            $valor = number_format($dias * 1.00, 2, ',', '.');
-                            echo json_encode([
-                                'sucesso'  => false,
-                                'temMulta' => true,
-                                'mensagem' => "Você possui uma multa pendente de R$ $valor. Quite o débito no PagTesouro antes de fazer novas reservas.",
-                            ]);
-                            exit();
-                        }
-                    }
+            // Verifica multa: busca somente empréstimos ativos deste usuário
+            $queryMulta = json_encode([
+                'structuredQuery' => [
+                    'from' => [['collectionId' => 'emprestimos']],
+                    'where' => [
+                        'compositeFilter' => [
+                            'op' => 'AND',
+                            'filters' => [
+                                ['fieldFilter' => ['field' => ['fieldPath' => 'usuario_id'], 'op' => 'EQUAL', 'value' => ['stringValue' => $usuario_matricula]]],
+                                ['fieldFilter' => ['field' => ['fieldPath' => 'status'],     'op' => 'EQUAL', 'value' => ['stringValue' => 'ativo']]],
+                            ]
+                        ]
+                    ],
+                    'select' => ['fields' => [['fieldPath' => 'data_devolucao_prevista']]],
+                ]
+            ]);
+            $ch = curl_init("$base:runQuery");
+            curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_POSTFIELDS => $queryMulta,
+                CURLOPT_RETURNTRANSFER => true, CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_HTTPHEADER => ['Content-Type: application/json']]);
+            $docsEmp = json_decode(curl_exec($ch), true) ?? [];
+            curl_close($ch);
+
+            $hojeMulta = new DateTime(); $hojeMulta->setTime(0,0,0);
+            foreach ($docsEmp as $eItem) {
+                if (!isset($eItem['document'])) continue;
+                $ef    = $eItem['document']['fields'] ?? [];
+                $dfStr = $ef['data_devolucao_prevista']['stringValue'] ?? '';
+                if (empty($dfStr)) continue;
+                $df   = new DateTime($dfStr); $df->setTime(0,0,0);
+                $diff = (int)$hojeMulta->diff($df)->format('%r%a');
+                if ($diff < 0) {
+                    $valor = number_format(abs($diff) * 1.00, 2, ',', '.');
+                    echo json_encode(['sucesso' => false, 'temMulta' => true,
+                        'mensagem' => "Você possui multa pendente de R$ $valor. Quite antes de reservar."]);
+                    exit();
                 }
             }
 
-            $urlObra   = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/obras/$livro_id";
-            $obra_data = firestoreGet($urlObra);
-
-            if (!$obra_data) {
-                throw new Exception("Erro ao localizar livro no acervo.");
-            }
+            // Busca a obra pelo ID direto
+            $urlObra   = "$base/obras/$livro_id";
+            $obra_data = fsGet($urlObra);
+            if (!$obra_data || isset($obra_data['error'])) throw new Exception("Erro ao localizar livro.");
 
             $fields       = $obra_data['fields'] ?? [];
             $status_atual = $fields['status']['stringValue'] ?? 'Disponivel';
             $titulo_obra  = $fields['titulo']['stringValue'] ?? 'Livro';
-
-            // Define se vai direto ou para a fila
             $tipo_reserva = ($status_atual === 'Emprestado') ? 'Fila' : 'Direta';
 
             $dadosReserva = [
@@ -148,85 +167,45 @@ try {
                 'titulo_obra'  => ['stringValue' => $titulo_obra],
                 'obra_id'      => ['stringValue' => $livro_id],
                 'data_reserva' => ['stringValue' => date('Y-m-d H:i:s')],
-                'tipo'         => ['stringValue' => $tipo_reserva]
+                'tipo'         => ['stringValue' => $tipo_reserva],
             ];
 
-            $urlReservas = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas";
-            $resultado   = firestorePost($urlReservas, $dadosReserva);
+            $resultado = fsPost("$base/reservas", $dadosReserva);
+            if ($resultado['http_code'] !== 200) throw new Exception("Erro ao registrar reserva.");
 
-            if ($resultado['http_code'] !== 200) {
-                throw new Exception("Erro ao registrar reserva no banco.");
-            }
-
-            $posicao = 0;
             if ($tipo_reserva === 'Direta') {
-                // Atualiza status da obra para Reservado
-                firestorePatch($urlObra, ['status' => ['stringValue' => 'Reservado']], ['status']);
+                fsPatch($urlObra, ['status' => ['stringValue' => 'Reservado']], ['status']);
                 $msg = "Reserva confirmada! Retire no balcão em até 48h.";
+                $posicao = 0;
             } else {
-                // Lógica de contagem de fila
-                $urlTodas = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas";
-                $todas = firestoreListar($urlTodas);
-                $fila = array_filter($todas, function($doc) use ($livro_id) {
-                    $f = $doc['fields'] ?? [];
-                    return ($f['obra_id']['stringValue'] ?? '') === $livro_id && 
-                           ($f['tipo']['stringValue'] ?? '') === 'Fila';
-                });
+                // Conta posição na fila via query filtrada
+                $fila    = buscarFilaDoLivro($base, $livro_id);
                 $posicao = count($fila);
-                $msg = "Você entrou na fila de espera.";
+                $msg     = "Você entrou na fila de espera.";
             }
 
-            echo json_encode([
-                'sucesso' => true, 
-                'mensagem' => $msg, 
-                'tipo' => $tipo_reserva, 
-                'posicao' => $posicao
-            ]);
-            break;
-
-            if ($resultado['http_code'] !== 200) {
-                throw new Exception("Erro ao registrar reserva no banco.");
-            }
-
-            if ($tipo_reserva === 'Direta') {
-                firestorePatch($urlObra, ['status' => ['stringValue' => 'Reservado']], ['status']);
-                $msg = "Reserva confirmada! Retire no balcão em até 48h.";
-            } else {
-                $msg = "Você entrou na fila de espera para este livro.";
-            }
-
-            echo json_encode(['sucesso' => true, 'mensagem' => $msg]);
+            echo json_encode(['sucesso' => true, 'mensagem' => $msg, 'tipo' => $tipo_reserva, 'posicao' => $posicao]);
             break;
 
 
-        /* ──────────────────────────────────────
-           AÇÃO 2: CONFIRMAR RETIRADA
-           Bibliotecário converte a reserva direta em empréstimo
-        ────────────────────────────────────── */
+        /* ── CONFIRMAR RETIRADA ────────────────────────────────────────── */
         case 'confirmar_retirada':
             $obra_id = $_POST['obra_id'] ?? '';
-
             if (empty($reserva_id) || empty($obra_id)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'Dados insuficientes para confirmar retirada.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'Dados insuficientes.']); exit();
             }
 
-            // 1. Busca dados da reserva
-            $urlReserva  = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas/$reserva_id";
-            $reserva_doc = firestoreGet($urlReserva);
-
-            if (!$reserva_doc) {
-                throw new Exception("Reserva não encontrada.");
-            }
+            $urlReserva  = "$base/reservas/$reserva_id";
+            $reserva_doc = fsGet($urlReserva);
+            if (!$reserva_doc) throw new Exception("Reserva não encontrada.");
 
             $rf             = $reserva_doc['fields'] ?? [];
             $matricula_aluno = $rf['matricula']['stringValue']    ?? '';
             $nome_aluno      = $rf['nome_usuario']['stringValue'] ?? '';
             $titulo_obra     = $rf['titulo_obra']['stringValue']  ?? '';
 
-            // 2. Cria o empréstimo na coleção 'emprestimos'
-            $dataEmprestimo  = date('Y-m-d');
-            $dataDevolucao   = date('Y-m-d', strtotime('+14 days')); // prazo padrão de 14 dias
+            $dataEmprestimo = date('Y-m-d');
+            $dataDevolucao  = date('Y-m-d', strtotime('+14 days'));
 
             $dadosEmprestimo = [
                 'usuario_id'              => ['stringValue' => $matricula_aluno],
@@ -236,214 +215,114 @@ try {
                 'data_emprestimo'         => ['stringValue' => $dataEmprestimo],
                 'data_devolucao_prevista' => ['stringValue' => $dataDevolucao],
                 'status'                  => ['stringValue' => 'ativo'],
-                'registrado_por'          => ['stringValue' => $_SESSION['usuario_nome']]
+                'registrado_por'          => ['stringValue' => $_SESSION['usuario_nome']],
             ];
 
-            $urlEmprestimos = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/emprestimos";
-            $resultEmp      = firestorePost($urlEmprestimos, $dadosEmprestimo);
+            $resultEmp = fsPost("$base/emprestimos", $dadosEmprestimo);
+            if ($resultEmp['http_code'] !== 200) throw new Exception("Erro ao criar empréstimo.");
 
-            if ($resultEmp['http_code'] !== 200) {
-                throw new Exception("Erro ao criar o empréstimo.");
-            }
+            fsPatch("$base/obras/$obra_id", ['status' => ['stringValue' => 'Emprestado']], ['status']);
+            fsDelete($urlReserva);
 
-            // 3. Atualiza o status da obra para 'Emprestado'
-            $urlObra = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/obras/$obra_id";
-            firestorePatch($urlObra, ['status' => ['stringValue' => 'Emprestado']], ['status']);
-
-            // 4. Remove a reserva (já foi convertida em empréstimo)
-            firestoreDelete($urlReserva);
-
-            // 5. Dispara notificação automática para o aluno
-            $dataFormatada    = date('d/m/Y', strtotime($dataDevolucao));
-            $mensagemNotif    = "Empréstimo realizado com sucesso! O livro \"$titulo_obra\" deve ser devolvido até o dia $dataFormatada.";
-
-            $dadosNotificacao = [
+            $dataFormatada = date('d/m/Y', strtotime($dataDevolucao));
+            fsPost("$base/notificacoes", [
                 'matricula' => ['stringValue' => $matricula_aluno],
-                'mensagem'  => ['stringValue' => $mensagemNotif],
+                'mensagem'  => ['stringValue' => "Empréstimo realizado! \"$titulo_obra\" deve ser devolvido até $dataFormatada."],
                 'data'      => ['stringValue' => date('Y-m-d H:i:s')],
-                'lida'      => ['booleanValue' => false]
-            ];
-
-            $urlNotificacoes = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes";
-            firestorePost($urlNotificacoes, $dadosNotificacao);
-            // Notificação é enviada em "best-effort" — falha silenciosa não bloqueia o empréstimo
-
-            echo json_encode([
-                'sucesso'   => true,
-                'mensagem'  => "Retirada confirmada! Empréstimo criado para $nome_aluno. Devolução prevista: " . date('d/m/Y', strtotime($dataDevolucao)) . "."
+                'lida'      => ['booleanValue' => false],
             ]);
+
+            echo json_encode(['sucesso' => true,
+                'mensagem' => "Retirada confirmada para $nome_aluno. Devolução: $dataFormatada."]);
             break;
 
 
-        /* ──────────────────────────────────────
-           AÇÃO 3: CANCELAR RESERVA DIRETA
-           Bibliotecário cancela uma reserva direta e libera o livro
-        ────────────────────────────────────── */
+        /* ── CANCELAR ──────────────────────────────────────────────────── */
         case 'cancelar':
             if (empty($reserva_id)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'ID da reserva não informado.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'ID da reserva não informado.']); exit();
             }
 
-            // 1. Busca a reserva para pegar o obra_id
-            $urlReserva  = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas/$reserva_id";
-            $reserva_doc = firestoreGet($urlReserva);
+            $urlReserva  = "$base/reservas/$reserva_id";
+            $reserva_doc = fsGet($urlReserva);
+            if (!$reserva_doc) throw new Exception("Reserva não encontrada.");
 
-            if (!$reserva_doc) {
-                throw new Exception("Reserva não encontrada.");
-            }
+            $obra_id  = $reserva_doc['fields']['obra_id']['stringValue'] ?? '';
+            $httpCode = fsDelete($urlReserva);
+            if ($httpCode !== 200) throw new Exception("Erro ao cancelar reserva.");
 
-            $rf      = $reserva_doc['fields'] ?? [];
-            $obra_id = $rf['obra_id']['stringValue'] ?? '';
+            // Busca próximo da fila via query filtrada
+            $fila = buscarFilaDoLivro($base, $obra_id);
 
-            // 2. Deleta a reserva
-            $httpCode = firestoreDelete($urlReserva);
-
-            if ($httpCode !== 200) {
-                throw new Exception("Erro ao cancelar a reserva.");
-            }
-
-            // 3. Verifica se há alguém na fila para este livro
-            $urlTodasReservas = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas";
-            $todasReservas    = firestoreListar($urlTodasReservas);
-
-            $filaDoLivro = array_filter($todasReservas, function($doc) use ($obra_id) {
-                $f = $doc['fields'] ?? [];
-                return ($f['obra_id']['stringValue'] ?? '') === $obra_id
-                    && ($f['tipo']['stringValue'] ?? '')   === 'Fila';
-            });
-
-            if (!empty($filaDoLivro)) {
-                // Há fila: o próximo da fila vira reserva direta
-                usort($filaDoLivro, function($a, $b) {
-                    $da = $a['fields']['data_reserva']['stringValue'] ?? '';
-                    $db = $b['fields']['data_reserva']['stringValue'] ?? '';
-                    return strcmp($da, $db);
-                });
-
-                $proximo     = reset($filaDoLivro);
-                $proximoPath = $proximo['name'];
-                $proximoId   = basename($proximoPath);
-
-                // Atualiza o tipo da reserva do próximo para 'Direta'
-                $urlProximo = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas/$proximoId";
-                firestorePatch($urlProximo, ['tipo' => ['stringValue' => 'Direta']], ['tipo']);
-
-                // Mantém o status da obra como 'Reservado'
-                $urlObra = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/obras/$obra_id";
-                firestorePatch($urlObra, ['status' => ['stringValue' => 'Reservado']], ['status']);
-
-                $msg = "Reserva cancelada. O próximo da fila foi notificado e agora tem prioridade de retirada.";
+            if (!empty($fila)) {
+                $proximo   = $fila[0];
+                $proximoId = basename($proximo['name']);
+                fsPatch("$base/reservas/$proximoId", ['tipo' => ['stringValue' => 'Direta']], ['tipo']);
+                fsPatch("$base/obras/$obra_id",      ['status' => ['stringValue' => 'Reservado']], ['status']);
+                $msg = "Reserva cancelada. O próximo da fila foi promovido.";
             } else {
-                // Sem fila: livro volta para disponível
                 if (!empty($obra_id)) {
-                    $urlObra = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/obras/$obra_id";
-                    firestorePatch($urlObra, ['status' => ['stringValue' => 'Disponivel']], ['status']);
+                    fsPatch("$base/obras/$obra_id", ['status' => ['stringValue' => 'Disponivel']], ['status']);
                 }
-                $msg = "Reserva cancelada. O exemplar está disponível novamente no acervo.";
+                $msg = "Reserva cancelada. Exemplar disponível novamente.";
             }
 
             echo json_encode(['sucesso' => true, 'mensagem' => $msg]);
             break;
 
 
-        /* ──────────────────────────────────────
-           AÇÃO 4: REMOVER DA FILA
-           Bibliotecário remove um aluno da fila de espera
-        ────────────────────────────────────── */
+        /* ── REMOVER DA FILA ───────────────────────────────────────────── */
         case 'remover_fila':
             if (empty($reserva_id)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'ID da reserva não informado.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'ID da reserva não informado.']); exit();
             }
-
-            $urlReserva = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas/$reserva_id";
-            $httpCode   = firestoreDelete($urlReserva);
-
-            if ($httpCode !== 200) {
-                throw new Exception("Erro ao remover da fila.");
-            }
-
-            // A fila se reordena automaticamente no frontend pelo campo data_reserva
-            echo json_encode(['sucesso' => true, 'mensagem' => 'Aluno removido da fila de espera com sucesso.']);
+            $httpCode = fsDelete("$base/reservas/$reserva_id");
+            if ($httpCode !== 200) throw new Exception("Erro ao remover da fila.");
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Aluno removido da fila.']);
             break;
 
 
-        /* ──────────────────────────────────────
-           AÇÃO 5: ADICIONAR OBSERVAÇÃO
-           Bibliotecário adiciona uma nota a uma reserva
-        ────────────────────────────────────── */
+        /* ── OBSERVAÇÃO ────────────────────────────────────────────────── */
         case 'observacao':
             $observacao = trim($_POST['observacao'] ?? '');
-
             if (empty($reserva_id)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'ID da reserva não informado.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'ID da reserva não informado.']); exit();
             }
-
             if (empty($observacao)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'O texto da observação não pode estar vazio.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'Observação não pode estar vazia.']); exit();
             }
-
-            $urlReserva = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/reservas/$reserva_id";
-
-            $novosCampos = [
-                'observacao'           => ['stringValue' => $observacao],
-                'observacao_por'       => ['stringValue' => $_SESSION['usuario_nome']],
-                'observacao_data'      => ['stringValue' => date('Y-m-d H:i:s')]
-            ];
-
-            $result = firestorePatch($urlReserva, $novosCampos, ['observacao', 'observacao_por', 'observacao_data']);
-
-            if ($result['http_code'] !== 200) {
-                throw new Exception("Erro ao salvar a observação.");
-            }
-
-            echo json_encode(['sucesso' => true, 'mensagem' => 'Observação salva com sucesso.']);
+            $res = fsPatch("$base/reservas/$reserva_id", [
+                'observacao'      => ['stringValue' => $observacao],
+                'observacao_por'  => ['stringValue' => $_SESSION['usuario_nome']],
+                'observacao_data' => ['stringValue' => date('Y-m-d H:i:s')],
+            ], ['observacao', 'observacao_por', 'observacao_data']);
+            if ($res['http_code'] !== 200) throw new Exception("Erro ao salvar observação.");
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Observação salva.']);
             break;
 
 
-        /* ──────────────────────────────────────
-           AÇÃO: ENVIAR NOTIFICAÇÃO MANUAL
-        ────────────────────────────────────── */
+        /* ── NOTIFICAÇÃO MANUAL ────────────────────────────────────────── */
         case 'enviar_notificacao_manual':
             $matricula    = $_POST['matricula']    ?? '';
             $titulo_livro = $_POST['titulo_livro'] ?? 'Livro';
-
             if (empty($matricula)) {
-                echo json_encode(['sucesso' => false, 'mensagem' => 'Matrícula do aluno não informada.']);
-                exit();
+                echo json_encode(['sucesso' => false, 'mensagem' => 'Matrícula não informada.']); exit();
             }
-
-            $urlNotificacoes = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes";
-            
-            $dadosNotificacao = [
+            $resultado = fsPost("$base/notificacoes", [
                 'matricula' => ['stringValue' => $matricula],
-                'mensagem'  => ['stringValue' => "Lembrete: O livro \"$titulo_livro\" está aguardando a sua retirada no balcão da biblioteca!"],
+                'mensagem'  => ['stringValue' => "Lembrete: \"$titulo_livro\" aguarda sua retirada no balcão!"],
                 'data'      => ['stringValue' => date('Y-m-d H:i:s')],
-                'lida'      => ['booleanValue' => false]
-            ];
-
-            $resultado = firestorePost($urlNotificacoes, $dadosNotificacao);
-
-            if ($resultado['http_code'] !== 200) {
-                throw new Exception("Erro ao registrar a notificação no banco de dados.");
-            }
-
-            echo json_encode(['sucesso' => true, 'mensagem' => 'Notificação enviada com sucesso!']);
+                'lida'      => ['booleanValue' => false],
+            ]);
+            if ($resultado['http_code'] !== 200) throw new Exception("Erro ao enviar notificação.");
+            echo json_encode(['sucesso' => true, 'mensagem' => 'Notificação enviada!']);
             break;
 
 
-        /* ──────────────────────────────────────
-           AÇÃO DESCONHECIDA
-        ────────────────────────────────────── */
         default:
             echo json_encode(['sucesso' => false, 'mensagem' => "Ação '$acao' não reconhecida."]);
-            break;
     }
 
 } catch (Exception $e) {
     echo json_encode(['sucesso' => false, 'mensagem' => $e->getMessage()]);
 }
-?>

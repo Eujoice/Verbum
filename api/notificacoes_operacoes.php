@@ -1,4 +1,10 @@
 <?php
+/**
+ * notificacoes_operacoes.php
+ * REMOVIDO: ação 'listar_aluno' que baixava a coleção inteira e filtrava no PHP.
+ * Use listar_notificacoes.php (já usa runQuery) para listar notificações.
+ * Mantido: ação 'marcar_lida'.
+ */
 session_start();
 require '../includes/config.php';
 header('Content-Type: application/json');
@@ -12,42 +18,11 @@ $projeto_id = "verbum-bd";
 $acao = $_POST['acao'] ?? $_GET['acao'] ?? '';
 
 try {
-    // 1. LISTAR NOTIFICAÇÕES (Usado pelo Aluno)
-    if ($acao === 'listar_aluno') {
-        $matricula = $_SESSION['usuario_matricula'] ?? '';
-        $url = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes";
-        
-        $json = @file_get_contents($url);
-        $dados = $json ? json_decode($json, true) : [];
-        $documentos = $dados['documents'] ?? [];
-
-        $filtradas = [];
-        foreach ($documentos as $doc) {
-            $f = $doc['fields'] ?? [];
-            $mat = $f['matricula']['stringValue'] ?? '';
-            $lida = $f['lida']['booleanValue'] ?? false;
-
-            if ($mat === $matricula) {
-                $filtradas[] = [
-                    'id' => basename($doc['name']),
-                    'mensagem' => $f['mensagem']['stringValue'] ?? '',
-                    'data' => $f['data']['stringValue'] ?? '',
-                    'lida' => $lida
-                ];
-            }
-        }
-        // Ordena pela data mais recente
-        usort($filtradas, fn($a, $b) => strcmp($b['data'], $a['data']));
-        echo json_encode($filtradas);
-        exit();
-    }
-
-    // 2. MARCAR COMO LIDA (Usado pelo Aluno ao abrir o sininho ou clicar)
     if ($acao === 'marcar_lida') {
         $id = $_POST['id'] ?? '';
         if (empty($id)) throw new Exception("ID inválido.");
 
-        $url = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes/$id?updateMask.fieldPaths=lida";
+        $url  = "https://firestore.googleapis.com/v1/projects/$projeto_id/databases/(default)/documents/notificacoes/$id?updateMask.fieldPaths=lida";
         $body = json_encode(['fields' => ['lida' => ['booleanValue' => true]]]);
 
         $ch = curl_init($url);
@@ -62,7 +37,14 @@ try {
         exit();
     }
 
+    // Ação 'listar_aluno' foi migrada para listar_notificacoes.php
+    if ($acao === 'listar_aluno') {
+        echo json_encode(['sucesso' => false, 'mensagem' => 'Use listar_notificacoes.php para listar notificações.']);
+        exit();
+    }
+
+    echo json_encode(['sucesso' => false, 'mensagem' => "Ação '$acao' não reconhecida."]);
+
 } catch (Exception $e) {
     echo json_encode(['sucesso' => false, 'mensagem' => $e->getMessage()]);
 }
-?>
