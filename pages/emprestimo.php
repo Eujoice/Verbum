@@ -65,10 +65,13 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <nav class="menu-lateral" id="menuLateral">
         <div class="sb-profile">
             <div class="sb-avatar">
-                <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                <div class="sb-avatar-icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                </div>
             </div>
             <div class="sb-name"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></div>
             <div class="sb-mat">Matrícula: <?php echo htmlspecialchars($_SESSION['usuario_matricula']); ?></div>
+            <div class="sb-divider"></div>
         </div>
         <div class="sb-nav">
             <a class="nav-item nav-admin" href="acervo.php">
@@ -79,7 +82,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 </div>
                 Acessar Acervo
             </a>
-            <a class="nav-item" href="dpessoais.php">
+            <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 Dados Pessoais
             </a>
@@ -259,5 +262,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     <script src="../assets/js/script-acervo.js"></script>
 
     <?php include '../includes/footer.php'; ?>
+    <?php include '../includes/dp_modal.php'; ?>
+
 </body>
 </html>

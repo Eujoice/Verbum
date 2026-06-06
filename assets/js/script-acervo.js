@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         timer = setInterval(function () {
             irParaSlide(slideAtual + 1);
-        }, 4200);
+        }, 2500);
     }
 
     window.irParaSlide = irParaSlide;

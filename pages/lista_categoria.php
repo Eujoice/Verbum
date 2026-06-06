@@ -4,12 +4,14 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     header("Location: ../includes/index.php");
     exit();
 }
+$categoria_id   = isset($_GET['cat'])  ? htmlspecialchars($_GET['cat'])  : '';
+$categoria_nome = isset($_GET['nome']) ? htmlspecialchars($_GET['nome']) : '';
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Verbum | Acervo</title>
+    <title>Verbum | <?php echo $categoria_nome ?: 'Categoria'; ?></title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Milonga&family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -20,7 +22,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 <body class="body-acervo">
 
     <div class="overlay-menu" id="overlayMenu" onclick="fecharMenu()"></div>
-
     <nav class="menu-lateral" id="menuLateral">
         <div class="sb-profile">
             <div class="sb-avatar">
@@ -28,8 +29,8 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                     <svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
                 </div>
             </div>
-            <div class="sb-name" id="nomeUsuario"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></div>
-            <div class="sb-mat" id="matriculaUsuario">Matrícula: <?php echo htmlspecialchars($_SESSION['usuario_matricula']); ?></div>
+            <div class="sb-name"><?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></div>
+            <div class="sb-mat">Matrícula: <?php echo htmlspecialchars($_SESSION['usuario_matricula']); ?></div>
             <div class="sb-divider"></div>
         </div>
         <div class="sb-nav">
@@ -47,12 +48,10 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
                 Histórico de Empréstimos
             </a>
-
             <a class="nav-item" href="javascript:void(0)" onclick="abrirDpOverlay(); fecharMenu();">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div>
                 Dados Pessoais
             </a>
-
             <a class="nav-item" href="favoritos.php">
                 <div class="nav-ic"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
                 Favoritos
@@ -65,36 +64,28 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     </nav>
 
     <div class="container-acervo">
-
         <header class="header" style="box-sizing: border-box; width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; overflow: visible;">
-    
             <div class="header-left" style="display: flex; align-items: center; flex: 1; justify-content: flex-start; flex-shrink: 0;">
                 <div class="logo"><a href="acervo.php">Verbum</a></div>
                 <img class="logo-vb" src="../assets/imgs/ig_aviao.png" alt="Logo">
             </div>
-
             <div class="busca" style="flex: 2; max-width: 500px; display: flex; align-items: center; justify-content: center; margin: 0 15px;">
                 <svg class="icone-lupa" viewBox="0 0 24 24" style="flex-shrink: 0;">
                     <path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#9aaa98" stroke-width="2" fill="none" stroke-linecap="round"/>
                 </svg>
                 <input type="text" id="pesquisa" placeholder="O que você quer ler?" style="width: 100%;">
             </div>
-
             <div class="icones" style="display: flex; align-items: center; gap: 20px; flex: 1; justify-content: flex-end; flex-shrink: 0;">
-                
                 <div class="notificacao-container" id="notificacaoContainer" style="position: relative; display: flex; align-items: center; color: #ffffff;">
                     <button class="notificacao-btn" id="notificacaoBtn" onclick="toggleDropdownNotificacoes(event)" style="background: none; border: none; cursor: pointer; color: #ffffff; padding: 4px; display: flex; align-items: center; justify-content: center;">
                         <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
                             <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
                         </svg>
-                        <span class="notificacao-badge" id="notificacaoBadge" style="display: none; position: absolute; top: -2px; right: -2px; background-color: #e05252; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 700; display: none; align-items: center; justify-content: center; line-height: 1;">0</span>
+                        <span class="notificacao-badge" id="notificacaoBadge" style="display: none; position: absolute; top: -2px; right: -2px; background-color: #e05252; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 10px; font-weight: 700; align-items: center; justify-content: center; line-height: 1;">0</span>
                     </button>
-
                     <div class="notificacao-dropdown" id="notificacaoDropdown" style="display: none;">
-                        <div class="notif-topo">
-                            <span class="notif-topo-titulo">Notificações</span>
-                        </div>
+                        <div class="notif-topo"><span class="notif-topo-titulo">Notificações</span></div>
                         <div class="notif-corpo">
                             <div class="notificacao-lista" id="notificacaoLista">
                                 <div class="notif-vazia">
@@ -106,10 +97,9 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                         </div>
                     </div>
                 </div>
-
                 <div class="user-profile" style="display: flex; align-items: center; gap: 10px; color: #ffffff;">
                     <span class="user-name" style="font-size: 15px; font-weight: 500; white-space: nowrap; color: #ffffff; display: inline-block; margin-right: 2px;">
-                        <?php 
+                        <?php
                             $nome_completo = trim($_SESSION['usuario_nome']);
                             $partes_nome = explode(' ', $nome_completo);
                             $primeiro_nome = $partes_nome[0];
@@ -122,7 +112,6 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
                         </svg>
                     </div>
                 </div>
-
                 <button class="hambtn" id="hambtn" style="flex-shrink: 0;">
                     <div class="bar"></div>
                     <div class="bar"></div>
@@ -138,95 +127,40 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
             <a class="tab" href="titulos-pendentes.php">Títulos pendentes</a>
         </nav>
 
-        <section class="banner-section">
-            <div class="carousel" id="carousel">
-                <div class="slides" id="slides">
-                <div class="slide slide-1">
-    <a href="/verbum/pages/detalheslivro.php?id=L07" style="display:block;height:100%;">
-        <img class="slide-img" src="../assets/imgs/banner-percy.png" alt="Percy Jackson e os Olimpianos">
-    </a>
-</div>
-<div class="slide slide-2">
-    <a href="/verbum/pages/detalheslivro.php?id=L01" style="display:block;height:100%;">
-        <img class="slide-img" src="../assets/imgs/crime.jpg" alt="Crime e Castigo">
-    </a>
-</div>
-<div class="slide slide-3">
-    <a href="/verbum/pages/detalheslivro.php?id=L04" style="display:block;height:100%;">
-        <img class="slide-img" src="../assets/imgs/met.png" alt="A Metamorfose">
-    </a>
-</div>
-<div class="slide slide-4">
-    <a href="/verbum/pages/detalheslivro.php?id=L06" style="display:block;height:100%;">
-        <img class="slide-img" src="../assets/imgs/bibliotb.jpg" alt="Biblioteca da meia noite">
-    </a>
-</div>
-<div class="slide slide-5">
-    <a href="/verbum/pages/detalheslivro.php?id=L22" style="display:block;height:100%;">
-        <img class="slide-img" src="../assets/imgs/vds.png" alt="Vidas Secas">
-    </a>
-</div>
+        <!-- TELA DE LIVROS DA CATEGORIA -->
+        <section class="pg-livros" id="tela-livros">
+            <button class="btn-voltar" onclick="history.back()">
+                <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6" stroke="#6C9467" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Voltar ao acervo
+            </button>
+            <div class="livros-header">
+                <div class="genero-badge" id="badge-categoria"></div>
+                <div>
+                    <h2 id="titulo-categoria"><?php echo $categoria_nome; ?></h2>
+                    <p class="genero-desc" id="desc-categoria"></p>
                 </div>
-                <button class="carr-prev" onclick="mudarSlide(-1)">
-                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
-                <button class="carr-next" onclick="mudarSlide(1)">
-                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </button>
             </div>
-            <div class="dots" id="dots">
-                <button class="dot active" onclick="irParaSlide(0)"></button>
-                <button class="dot" onclick="irParaSlide(1)"></button>
-                <button class="dot" onclick="irParaSlide(2)"></button>
-                <button class="dot" onclick="irParaSlide(3)"></button>
-                <button class="dot" onclick="irParaSlide(4)"></button>
+            <div class="filtros-bar">
+                <span class="filtros-label">Ordenar por:</span>
+                <button class="filtro-pill ativo" data-filtro="titulo">A–Z</button>
+                <button class="filtro-pill" data-filtro="avaliacao">Avaliação</button>
             </div>
-        </section>
-
- <!-- ============================================================
-     COLE ESTE TRECHO NO acervo.php
-     Substitui as seções populares + classicos
-     e adiciona internacionais + contos
-     ============================================================ -->
-
-     <section class="populares">
-            <div class="sec-header">
-                <h2>Populares</h2>
-                <a href="lista_categoria.php?cat=populares&nome=Populares" class="ver-todos">Ver todos →</a>
-            </div>
-            <div class="lista-livros" id="lista-populares"></div>
-        </section>
-
-        <section class="classicos">
-            <div class="sec-header">
-                <h2>Clássicos</h2>
-                <a href="lista_categoria.php?cat=classicos&nome=Clássicos" class="ver-todos">Ver todos →</a>
-            </div>
-            <div class="lista-livros" id="lista-classicos"></div>
-        </section>
-
-        <section class="internacionais">
-            <div class="sec-header">
-                <h2>Internacionais</h2>
-                <a href="lista_categoria.php?cat=internacionais&nome=Internacionais" class="ver-todos">Ver todos →</a>
-            </div>
-            <div class="lista-livros" id="lista-internacionais"></div>
-        </section>
-
-        <section class="contos">
-            <div class="sec-header">
-                <h2>Contos</h2>
-                <a href="lista_categoria.php?cat=contos&nome=Contos" class="ver-todos">Ver todos →</a>
-            </div>
-            <div class="lista-livros" id="lista-contos"></div>
+            <p class="livros-count" id="livros-count"></p>
+            <div id="livros-grid" style="display:grid; grid-template-columns: repeat(auto-fill, 148px); gap:28px 24px; padding: 4px;"></div>
         </section>
     </div>
 
     <?php include '../includes/dp_modal.php'; ?>
+
+    <script>
+        var CATEGORIA_ID   = '<?php echo $categoria_id; ?>';
+        var CATEGORIA_NOME = '<?php echo $categoria_nome; ?>';
+    </script>
+
     <script src="../assets/js/busca_detalhes.js"></script>
     <script src="../assets/js/multa.js"></script>
     <script src="../assets/js/script-acervo.js"></script>
-    <script type="module" src="../assets/js/acervo_logic.js"></script>
+    <script type="module" src="../assets/js/lista_categoria_logic.js"></script>
 
     <?php include '../includes/footer.php'; ?>
 </body>

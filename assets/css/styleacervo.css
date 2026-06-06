@@ -308,6 +308,12 @@
     margin: 40px auto; 
     padding: 0 20px;
 }
+.internacionais, .contos {
+    width: 100%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
 
 .sec-header {
     display: flex;
