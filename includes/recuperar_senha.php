@@ -5,19 +5,20 @@ require '../includes/config.php';
 $tokenURL = $_GET['token'] ?? '';
 $matricula = $_GET['mat'] ?? '';
 
+if (empty($tokenURL) || empty($matricula)) {
+    header("Location: ../pages/esqueceu_senha.php?erro=link_invalido");
+    exit();
+}
+
 $dados = buscarUsuario($matricula);
 $tokenNoBanco = $dados['fields']['token_recuperacao']['stringValue'] ?? '';
-$expiracao = $dados['fields']['token_expiracao']['stringValue'] ?? '';
+$expiracao    = $dados['fields']['token_expiracao']['stringValue'] ?? '';
 
-// VALIDAR O TOKEN
-if ($tokenURL !== '' && $tokenURL === $tokenNoBanco && strtotime($expiracao) > time()) {
-    // Se o token está certo, criamos a sessão que o processar_troca.php exige
-    $_SESSION['usuario_matricula'] = $matricula;
-    $_SESSION['autorizado_pelo_token'] = true; 
-
-    //  manda para a página de trocar a senha (reutilizando)
+if ($tokenURL === $tokenNoBanco && strtotime($expiracao) > time()) {
+    $_SESSION['usuario_matricula']    = $matricula;
+    $_SESSION['autorizado_pelo_token'] = true;
     header("Location: ../pages/trocar_senha.php");
-    exit();
 } else {
-    echo "<h1>Link inválido ou expirado!</h1>";
+    header("Location: ../pages/esqueceu_senha.php?erro=link_invalido");
 }
+exit();
