@@ -22,12 +22,35 @@ if (!empty($idEmprestimo)) {
     $dadosEmp = json_decode(curl_exec($ch), true);
 
     if (isset($dadosEmp['fields'])) {
-        // Salva histórico
+        $obraId    = $dadosEmp['fields']['obra_id']['stringValue']    ?? '';
+        $matriculaAluno = $dadosEmp['fields']['usuario_id']['stringValue'] ?? '';
+
+        // Busca título da obra (não está no documento de empréstimo)
+        $tituloObra = $obraId;
+        curl_setopt($ch, CURLOPT_URL, "$base/obras/$obraId");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        $dadosObra = json_decode(curl_exec($ch), true);
+        if (isset($dadosObra['fields']['titulo']['stringValue'])) {
+            $tituloObra = $dadosObra['fields']['titulo']['stringValue'];
+        }
+
+        // Busca nome do usuário (não está no documento de empréstimo)
+        $nomeUsuario = $matriculaAluno;
+        curl_setopt($ch, CURLOPT_URL, "$base/usuarios/$matriculaAluno");
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        $dadosUsuario = json_decode(curl_exec($ch), true);
+        if (isset($dadosUsuario['fields']['nome']['stringValue'])) {
+            $nomeUsuario = $dadosUsuario['fields']['nome']['stringValue'];
+        }
+
+        // Salva histórico com todos os campos preenchidos
         curl_setopt($ch, CURLOPT_URL, "$base/historico");
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
         curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['fields' => [
             'usuario_id'          => $dadosEmp['fields']['usuario_id'],
             'obra_id'             => $dadosEmp['fields']['obra_id'],
+            'titulo_obra'         => ['stringValue' => $tituloObra],
+            'nome_usuario'        => ['stringValue' => $nomeUsuario],
             'data_retirada'       => $dadosEmp['fields']['data_emprestimo'],
             'data_devolucao_real' => ['stringValue' => date('Y-m-d')],
         ]]));
@@ -40,8 +63,6 @@ if (!empty($idEmprestimo)) {
         curl_exec($ch);
 
         // Notificação ao aluno
-        $matriculaAluno = $dadosEmp['fields']['usuario_id']['stringValue'] ?? '';
-        $tituloObra     = $dadosEmp['fields']['titulo_obra']['stringValue'] ?? 'Livro';
         if (!empty($matriculaAluno)) {
             curl_setopt($ch, CURLOPT_URL, "$base/notificacoes");
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');

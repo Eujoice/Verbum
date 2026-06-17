@@ -58,9 +58,23 @@ $dataIniStr   = $f['data_emprestimo']['stringValue']         ?? '';
 
 $diasRestantes = null;
 if (!empty($dataFimStr)) {
+    require_once '../includes/dias_uteis.php';
     $hoje    = new DateTime(); $hoje->setTime(0,0,0);
     $dataFim = new DateTime($dataFimStr); $dataFim->setTime(0,0,0);
-    $diasRestantes = (int)$hoje->diff($dataFim)->format('%r%a');
+
+    if ($hoje <= $dataFim) {
+        // Dias úteis restantes (positivo)
+        $diasRestantes = 0;
+        $cursor = clone $hoje;
+        $cursor->modify('+1 day');
+        while ($cursor <= $dataFim) {
+            if ((int)$cursor->format('N') <= 5) $diasRestantes++;
+            $cursor->modify('+1 day');
+        }
+    } else {
+        // Dias úteis de atraso (negativo)
+        $diasRestantes = -contarDiasUteisAtraso($dataFimStr);
+    }
 }
 
 echo json_encode([

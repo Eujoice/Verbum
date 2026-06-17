@@ -42,10 +42,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+/**
+ * Converte string "YYYY-MM-DD" para Date no horário local,
+ * evitando o bug UTC: new Date("2026-06-16") → UTC midnight → UTC-3 → 15/06.
+ */
+function parseDateLocal(str) {
+    if (!str || str === '—') return null;
+    const partes = str.split('-');
+    if (partes.length !== 3) return null;
+    return new Date(+partes[0], +partes[1] - 1, +partes[2]);
+}
+
 function formatarDataBR(data) {
     if (!data || data === '—') return '—';
     try {
-        const d = new Date(data);
+        const d = parseDateLocal(data);
+        if (!d || isNaN(d)) return data;
         return d.toLocaleDateString('pt-BR');
     } catch {
         return data;
@@ -197,6 +209,41 @@ function htmlCardExemplar(ex) {
 
 let filtroEmpStatus = 'todos'; // 'todos' | 'atrasado' | 'hoje' | 'ok'
 
+function calcularDiasUteisConsulta(dataPrevista) {
+    // Retorna positivo se em atraso, negativo se no prazo, 0 se vence hoje
+    const partes = dataPrevista.split('-');
+    const prevista = new Date(+partes[0], +partes[1] - 1, +partes[2]);
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+    prevista.setHours(0, 0, 0, 0);
+
+    if (prevista.getTime() === hoje.getTime()) return 0; // vence hoje
+
+    if (hoje > prevista) {
+        // Atraso: conta dias úteis de cursor+1 até hoje
+        let dias = 0;
+        const cursor = new Date(prevista);
+        cursor.setDate(cursor.getDate() + 1);
+        while (cursor <= hoje) {
+            const dow = cursor.getDay();
+            if (dow !== 0 && dow !== 6) dias++;
+            cursor.setDate(cursor.getDate() + 1);
+        }
+        return dias; // positivo = atraso
+    } else {
+        // Prazo restante: conta dias úteis de hoje+1 até prevista
+        let dias = 0;
+        const cursor = new Date(hoje);
+        cursor.setDate(cursor.getDate() + 1);
+        while (cursor <= prevista) {
+            const dow = cursor.getDay();
+            if (dow !== 0 && dow !== 6) dias++;
+            cursor.setDate(cursor.getDate() + 1);
+        }
+        return -dias; // negativo = ainda no prazo
+    }
+}
+
 function calcularStatusEmprestimo(devolucao) {
     let classeStatus = 'ok';
     let textoStatus = 'Em dia';
@@ -204,21 +251,19 @@ function calcularStatusEmprestimo(devolucao) {
 
     if (devolucao && devolucao !== '—') {
         try {
-            const dataPrevista = new Date(devolucao + 'T00:00:00');
-            const hoje = new Date();
-            hoje.setHours(0, 0, 0, 0);
-            const diff = Math.floor((hoje - dataPrevista) / 86400000);
+            const diff = calcularDiasUteisConsulta(devolucao);
 
             if (diff > 0) {
                 classeStatus = 'atrasado';
-                textoStatus = `Atrasado ${diff} ${diff === 1 ? 'dia' : 'dias'}`;
+                textoStatus = `Atrasado ${diff} dia${diff === 1 ? ' útil' : 's úteis'}`;
                 diasAtraso = diff;
             } else if (diff === 0) {
                 classeStatus = 'hoje';
                 textoStatus = 'Entrega Hoje';
             } else if (diff >= -3) {
                 classeStatus = 'proximo';
-                textoStatus = `Vence em ${Math.abs(diff)} ${Math.abs(diff) === 1 ? 'dia' : 'dias'}`;
+                const abs = Math.abs(diff);
+                textoStatus = `Vence em ${abs} dia${abs === 1 ? ' útil' : 's úteis'}`;
             }
         } catch (e) { console.error(e); }
     }

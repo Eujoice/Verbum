@@ -102,10 +102,13 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ─── Renovação ─── */
     document.getElementById('btnRenovar').onclick = function() {
         const idObra = document.getElementById('buscaLivro').value;
-        if (!idObra)              return abrirModal("Aviso", "Selecione um livro para renovar.", false);
-        if (!idEmprestimoAtual)   return abrirModal("Aviso", "Este exemplar não possui um empréstimo ativo registrado.", false);
+        // Tenta do closure; se vazio, tenta do dataset (seleção via popup)
+        const empId = idEmprestimoAtual || document.getElementById('buscaLivro').dataset.emprestimoId || '';
 
-        const novaData          = calcularNovaDataRenovacao(7);
+        if (!idObra)  return abrirModal("Aviso", "Selecione um livro para renovar.", false);
+        if (!empId)   return abrirModal("Aviso", "Este exemplar não possui um empréstimo ativo registrado.", false);
+
+        const novaData          = calcularNovaDataRenovacao(14, dataPrevistaAtual);
         const novaDataFormatada = formatarDataBR(novaData);
 
         abrirModal("Confirmar Renovação",
@@ -114,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
             true,
             async () => {
                 const fd = new FormData();
-                fd.append('emprestimo_id', idEmprestimoAtual);
+                fd.append('emprestimo_id', empId);
                 fd.append('livro_id', idObra);
                 fd.append('nova_data_fim', novaData);
 
@@ -141,14 +144,17 @@ document.addEventListener('DOMContentLoaded', () => {
     /* ─── Devolução ─── */
     document.getElementById('btnDevolver').onclick = function() {
         const idObra = document.getElementById('buscaLivro').value;
-        if (!idObra)            return abrirModal("Aviso", "Selecione um livro para devolver.", false);
-        if (!idEmprestimoAtual) return abrirModal("Aviso", "Este exemplar não possui um empréstimo ativo registrado.", false);
+        // Tenta do closure; se vazio, tenta do dataset (seleção via popup)
+        const empId = idEmprestimoAtual || document.getElementById('buscaLivro').dataset.emprestimoId || '';
+
+        if (!idObra)  return abrirModal("Aviso", "Selecione um livro para devolver.", false);
+        if (!empId)   return abrirModal("Aviso", "Este exemplar não possui um empréstimo ativo registrado.", false);
 
         abrirModal("Confirmar Devolução", `Deseja confirmar a devolução do exemplar <strong>#${idObra}</strong>?`, true, async () => {
             const fd = new FormData();
             fd.append('acao', 'devolver');
             fd.append('livro_id', idObra);
-            fd.append('emprestimo_id', idEmprestimoAtual);
+            fd.append('emprestimo_id', empId);
 
             try {
                 const res    = await fetch('/verbum/api/processar_devolucao.php', { method: 'POST', body: fd });
@@ -166,6 +172,25 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('click', () => {
         document.querySelectorAll('.sugestoes-box').forEach(b => b.style.display = 'none');
     });
+
+    // Atualiza idEmprestimoAtual e dataPrevistaAtual quando o popup selecionar um livro
+    document.addEventListener('_atualizarEmprestimoAtual', (e) => {
+        idEmprestimoAtual = e.detail.emprestimoId;
+        dataPrevistaAtual = e.detail.dataFim;
+    });
+
+    // Preenche data_fim automaticamente com 14 dias úteis ao mudar data_ini
+    document.getElementById('data_ini').addEventListener('change', function() {
+        const ini = this.value;
+        if (ini) {
+            document.getElementById('data_fim').value = calcularDataFimUteis(ini, 14);
+        }
+    });
+    // Preenche data_fim na carga inicial se data_ini já tiver valor
+    const dataIniInicial = document.getElementById('data_ini').value;
+    if (dataIniInicial && !document.getElementById('data_fim').value) {
+        document.getElementById('data_fim').value = calcularDataFimUteis(dataIniInicial, 14);
+    }
 });
 
 /* ═══════════════════════════════════════════
@@ -227,13 +252,23 @@ function renderizarPerfil(data) {
     // Monta HTML do histórico
     const historicoHtml = historico.length === 0
         ? `<div class="perfil-vazio"><p>Sem histórico de empréstimos</p></div>`
-        : historico.map(e => `
-            <div class="perfil-hist-row">
+        : historico.map(e => {
+            const foiDevolvido = !!e.data_devolucao_real;
+            const statusHtml = foiDevolvido
+                ? `<span class="perfil-hist-status status-devolvido">\u2713 Devolvido em ${formatarDataBR(e.data_devolucao_real)}</span>`
+                : `<span class="perfil-hist-status status-pendente">\u26a0 Devolução pendente</span>`;
+            const btnAcao = !foiDevolvido
+                ? `<button class="btn-selecionar-livro btn-selecionar-livro--hist" onclick="selecionarLivroDoPopup('${e.obra_id}', '${e.id}', '${e.data_fim}')">Pagar multa / Devolver</button>`
+                : '';
+            return `
+            <div class="perfil-hist-row ${!foiDevolvido ? 'perfil-hist-row--pendente' : ''}">
                 <span class="perfil-hist-id">${e.obra_id}</span>
                 <span class="perfil-hist-titulo">${e.titulo}</span>
-                <span class="perfil-hist-data">${formatarDataBR(e.data_ini)}</span>
-                <span class="perfil-hist-status status-devolvido">Devolvido</span>
-            </div>`).join('');
+                <span class="perfil-hist-data">Retirada: ${formatarDataBR(e.data_ini)}</span>
+                ${statusHtml}
+                ${btnAcao}
+            </div>`;
+        }).join('');
 
     document.getElementById('popupPerfilCorpo').innerHTML = `
         <div class="perfil-header-usr">
@@ -304,7 +339,7 @@ function selecionarLivroDoPopup(obraId, emprestimoId, dataFim) {
     }));
     fecharPerfilUsuario();
     calcularMulta(dataFim);
-    mostrarToast(`Livro ${obraId} selecionado para devolução.`);
+    mostrarToast(`Livro ${obraId} selecionado para devolução ou renovação.`);
 }
 
 // Listener para capturar seleção do popup no escopo do DOMContentLoaded
@@ -312,6 +347,8 @@ document.addEventListener('selecionarEmprestimo', (e) => {
     // Precisa acessar variáveis do closure — redefine via data attributes
     document.getElementById('buscaLivro').dataset.emprestimoId = e.detail.emprestimoId;
     document.getElementById('buscaLivro').dataset.dataFim      = e.detail.dataFim;
+    // Dispara evento de atualização para o closure do DOMContentLoaded
+    document.dispatchEvent(new CustomEvent('_atualizarEmprestimoAtual', { detail: e.detail }));
 });
 
 /* ═══════════════════════════════════════════
@@ -362,20 +399,55 @@ function calcularMulta(dataPrevista) {
 }
 
 /**
+ * Adiciona N dias úteis (seg–sex) a partir de uma data de início.
+ * @param {string} dataInicio  'YYYY-MM-DD'
+ * @param {number} n           dias úteis a adicionar
+ * @returns {string}           'YYYY-MM-DD'
+ */
+function calcularDataFimUteis(dataInicio, n = 14) {
+    const [ano, mes, dia] = dataInicio.split('-').map(Number);
+    const data = new Date(ano, mes - 1, dia);
+    let adicionados = 0;
+    while (adicionados < n) {
+        data.setDate(data.getDate() + 1);
+        const dow = data.getDay(); // 0=dom, 6=sáb
+        if (dow !== 0 && dow !== 6) adicionados++;
+    }
+    const a = data.getFullYear();
+    const m = String(data.getMonth() + 1).padStart(2, '0');
+    const d = String(data.getDate()).padStart(2, '0');
+    return `${a}-${m}-${d}`;
+}
+
+/**
  * Adiciona N dias úteis a partir de HOJE (não inclui hoje).
  * Retorna string YYYY-MM-DD.
  */
-function calcularNovaDataRenovacao(n = 7) {
-    const data = new Date();
-    data.setHours(0, 0, 0, 0);
+/**
+ * Calcula nova data de renovação adicionando N dias úteis.
+ * Parte da dataPrevista se ainda no prazo; caso contrário parte de hoje.
+ * Garante que a nova data seja sempre >= hoje + 1 dia útil.
+ */
+function calcularNovaDataRenovacao(n = 14, dataPrevista = null) {
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
 
+    // Base: data prevista atual (se ainda no prazo) ou hoje (se já atrasado)
+    let base = hoje;
+    if (dataPrevista) {
+        const [a, m, d] = dataPrevista.split('-').map(Number);
+        const prev = new Date(a, m - 1, d);
+        prev.setHours(0, 0, 0, 0);
+        if (prev > hoje) base = prev;
+    }
+
+    const data = new Date(base);
     let adicionados = 0;
     while (adicionados < n) {
         data.setDate(data.getDate() + 1);
         const dow = data.getDay();
         if (dow !== 0 && dow !== 6) adicionados++;
     }
-    // Usa formato local para evitar deslocamento UTC (toISOString() usa UTC)
     const ano = data.getFullYear();
     const mes = String(data.getMonth() + 1).padStart(2, '0');
     const dia = String(data.getDate()).padStart(2, '0');

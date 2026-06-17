@@ -15,9 +15,10 @@ if (isset($dados['documents'])) {
     foreach ($dados['documents'] as $doc) {
         $fields = $doc['fields'];
         $lista[] = [
-            'id' => basename($doc['name']),
-            'ocupado' => $fields['ocupado']['booleanValue'] ?? false,
-            'usuario' => $fields['usuario_matricula']['stringValue'] ?? ''
+            'id'           => basename($doc['name']),
+            'ocupado'      => $fields['ocupado']['booleanValue'] ?? false,
+            'usuario'      => $fields['usuario_matricula']['stringValue'] ?? '',
+            'data_ocupacao'=> $fields['data_ocupacao']['stringValue'] ?? '',
         ];
     }
 }

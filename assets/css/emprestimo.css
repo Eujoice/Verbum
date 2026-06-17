@@ -1291,7 +1291,7 @@ input:focus {
 
 .perfil-hist-row {
     display: grid;
-    grid-template-columns: 50px 1fr 90px 80px;
+    grid-template-columns: 50px 1fr 120px auto;
     align-items: center;
     gap: 10px;
     padding: 9px 14px;
@@ -1329,7 +1329,35 @@ input:focus {
     padding: 2px 8px;
     border-radius: 20px;
     text-align: center;
+    white-space: nowrap;
 }
+
+.status-pendente {
+    font-size: 11px;
+    font-weight: 700;
+    color: #92400e;
+    background: #fef3c7;
+    padding: 2px 8px;
+    border-radius: 20px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+/* Linha de histórico com devolução pendente */
+.perfil-hist-row--pendente {
+    background: #fffbeb;
+    grid-template-columns: 50px 1fr 120px auto auto;
+}
+.perfil-hist-row--pendente:hover { background: #fef9e7; }
+
+/* Botão devolver/pagar no histórico */
+.btn-selecionar-livro--hist {
+    background: #b45309;
+    font-size: 11px;
+    padding: 5px 10px;
+    white-space: nowrap;
+}
+.btn-selecionar-livro--hist:hover { background: #92400e; }
 
 /* Vazio */
 .perfil-vazio {

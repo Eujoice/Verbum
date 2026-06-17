@@ -76,11 +76,33 @@ function calcularStatus(emp) {
 
 function calcularDiasRestantes(dataPrevista) {
     if (!dataPrevista) return 999;
-    var hoje = new Date();
-    hoje.setHours(0, 0, 0, 0);
     var partes = dataPrevista.split('-');
+    var hoje = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
     var prevista = new Date(partes[0], partes[1] - 1, partes[2]);
-    return Math.round((prevista - hoje) / (1000 * 60 * 60 * 24));
+
+    if (prevista >= hoje) {
+        // Dias úteis restantes (positivo)
+        var dias = 0;
+        var cursor = new Date(hoje);
+        cursor.setDate(cursor.getDate() + 1);
+        while (cursor <= prevista) {
+            var dow = cursor.getDay();
+            if (dow !== 0 && dow !== 6) dias++;
+            cursor.setDate(cursor.getDate() + 1);
+        }
+        return dias;
+    } else {
+        // Dias úteis de atraso (negativo)
+        var dias = 0;
+        var cursor = new Date(prevista);
+        cursor.setDate(cursor.getDate() + 1);
+        while (cursor <= hoje) {
+            var dow = cursor.getDay();
+            if (dow !== 0 && dow !== 6) dias++;
+            cursor.setDate(cursor.getDate() + 1);
+        }
+        return -dias;
+    }
 }
 
 function renderizarSlots(total, atrasados) {

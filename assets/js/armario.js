@@ -114,9 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.has('sucesso')) {
-        const tipo = urlParams.get('sucesso');
+        const tipo   = urlParams.get('sucesso');
+        const multa  = urlParams.get('multa');
+        const mat    = urlParams.get('matricula');
+
         if (tipo == '1') mostrarToast("Armário locado com sucesso!");
-        if (tipo == '2') mostrarToast("Armário devolvido com sucesso!");
+        if (tipo == '2') {
+            if (multa) {
+                mostrarToast(`Armário devolvido. Multa de R$ ${multa} registrada para matrícula ${mat || ''}.`);
+            } else {
+                mostrarToast("Armário devolvido com sucesso!");
+            }
+        }
         
         // Limpa a URL para não mostrar o toast de novo ao atualizar
         window.history.replaceState({}, document.title, "armario.php");

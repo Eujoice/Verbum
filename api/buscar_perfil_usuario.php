@@ -73,16 +73,21 @@ foreach ($resAtivos as $item) {
     $titulo   = $f['titulo_obra']['stringValue']             ?? $obraId;
 
     // Calcular dias úteis de atraso
-    $hoje    = new DateTime(); $hoje->setTime(0,0,0);
+    // Zeramos o horário em ambas as datas para evitar comparações incorretas
+    $hoje     = new DateTime(); $hoje->setTime(0, 0, 0);
     $prevista = DateTime::createFromFormat('Y-m-d', $dataFim);
     $diasUteis = 0;
 
-    if ($prevista && $hoje > $prevista) {
-        $cursor = clone $prevista;
-        $cursor->modify('+1 day');
-        while ($cursor <= $hoje) {
-            if ((int)$cursor->format('N') < 6) $diasUteis++;
+    if ($prevista) {
+        $prevista->setTime(0, 0, 0); // garante comparação só por data
+        if ($hoje > $prevista) {
+            // Conta dias úteis do dia seguinte à prevista até hoje (inclusive)
+            $cursor = clone $prevista;
             $cursor->modify('+1 day');
+            while ($cursor <= $hoje) {
+                if ((int)$cursor->format('N') <= 5) $diasUteis++; // 1=seg … 5=sex
+                $cursor->modify('+1 day');
+            }
         }
     }
 
@@ -99,22 +104,20 @@ foreach ($resAtivos as $item) {
     ];
 }
 
-// 3. Histórico deste usuário — query filtrada (sem status ativo)
+// 3. Histórico deste usuário — busca na coleção 'historico'
+// (evita NOT_EQUAL + orderBy em campos diferentes, que exige índice composto no Firestore)
 $historico = [];
 
 $resHist = fsQuery($base, [
     'structuredQuery' => [
-        'from' => [['collectionId' => 'emprestimos']],
+        'from' => [['collectionId' => 'historico']],
         'where' => [
-            'compositeFilter' => [
-                'op' => 'AND',
-                'filters' => [
-                    ['fieldFilter' => ['field' => ['fieldPath' => 'usuario_id'], 'op' => 'EQUAL', 'value' => ['stringValue' => $matricula]]],
-                    ['fieldFilter' => ['field' => ['fieldPath' => 'status'],     'op' => 'NOT_EQUAL', 'value' => ['stringValue' => 'ativo']]],
-                ]
+            'fieldFilter' => [
+                'field' => ['fieldPath' => 'usuario_id'],
+                'op'    => 'EQUAL',
+                'value' => ['stringValue' => $matricula]
             ]
         ],
-        'orderBy' => [['field' => ['fieldPath' => 'data_emprestimo'], 'direction' => 'DESCENDING']],
         'limit' => 20
     ]
 ]);
@@ -123,16 +126,28 @@ foreach ($resHist as $item) {
     if (!isset($item['document'])) continue;
     $f = $item['document']['fields'] ?? [];
     $pathParts = explode('/', $item['document']['name']);
+
+    // Busca o título da obra se não estiver direto no registro de histórico
+    $obraId = $f['obra_id']['stringValue'] ?? '';
+    $titulo = $f['titulo_obra']['stringValue'] ?? '';
+    if (empty($titulo) && !empty($obraId)) {
+        $obraDoc = fsGet("$base/obras/$obraId");
+        $titulo = $obraDoc['fields']['titulo']['stringValue'] ?? $obraId;
+    }
+
     $historico[] = [
         'id'                  => end($pathParts),
-        'obra_id'             => $f['obra_id']['stringValue']                 ?? '',
-        'titulo'              => $f['titulo_obra']['stringValue']              ?? '',
-        'data_ini'            => $f['data_emprestimo']['stringValue']          ?? '',
-        'data_fim'            => $f['data_devolucao_prevista']['stringValue']  ?? '',
-        'data_devolucao_real' => $f['data_devolucao_real']['stringValue']      ?? '',
-        'status'              => $f['status']['stringValue']                   ?? '',
+        'obra_id'             => $obraId,
+        'titulo'              => $titulo,
+        'data_ini'            => $f['data_retirada']['stringValue']       ?? '',
+        'data_fim'            => '',
+        'data_devolucao_real' => $f['data_devolucao_real']['stringValue'] ?? '',
+        'status'              => 'inativo',
     ];
 }
+
+// Ordena histórico do mais recente para o mais antigo
+usort($historico, fn($a, $b) => strcmp($b['data_devolucao_real'], $a['data_devolucao_real']));
 
 echo json_encode([
     'usuario'           => $usuario,

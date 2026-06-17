@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../includes/config.php';
+require_once '../includes/dias_uteis.php';
 header('Content-Type: application/json');
 
 if (!isset($_SESSION['logado'])) {
@@ -135,16 +136,14 @@ try {
             $docsEmp = json_decode(curl_exec($ch), true) ?? [];
             curl_close($ch);
 
-            $hojeMulta = new DateTime(); $hojeMulta->setTime(0,0,0);
             foreach ($docsEmp as $eItem) {
                 if (!isset($eItem['document'])) continue;
                 $ef    = $eItem['document']['fields'] ?? [];
                 $dfStr = $ef['data_devolucao_prevista']['stringValue'] ?? '';
                 if (empty($dfStr)) continue;
-                $df   = new DateTime($dfStr); $df->setTime(0,0,0);
-                $diff = (int)$hojeMulta->diff($df)->format('%r%a');
-                if ($diff < 0) {
-                    $valor = number_format(abs($diff) * 1.00, 2, ',', '.');
+                $diasAtraso = contarDiasUteisAtraso($dfStr);
+                if ($diasAtraso > 0) {
+                    $valor = number_format($diasAtraso * 1.00, 2, ',', '.');
                     echo json_encode(['sucesso' => false, 'temMulta' => true,
                         'mensagem' => "Você possui multa pendente de R$ $valor. Quite antes de reservar."]);
                     exit();
@@ -205,7 +204,7 @@ try {
             $titulo_obra     = $rf['titulo_obra']['stringValue']  ?? '';
 
             $dataEmprestimo = date('Y-m-d');
-            $dataDevolucao  = date('Y-m-d', strtotime('+14 days'));
+            $dataDevolucao  = adicionarDiasUteis($dataEmprestimo, 14);
 
             $dadosEmprestimo = [
                 'usuario_id'              => ['stringValue' => $matricula_aluno],

@@ -4,6 +4,7 @@ set_time_limit(0);
 date_default_timezone_set('America/Sao_Paulo'); 
 
 require '../includes/config.php';
+require_once '../includes/dias_uteis.php';
 $projeto_id = "verbum-bd";
 
 function firestoreListar($url) {
@@ -85,21 +86,33 @@ while (true) {
 
         $data_prevista = new DateTime($data_prevista_str);
         $data_prevista->setTime(0, 0, 0);
-        
-        $intervalo = $hoje->diff($data_prevista);
-        $diferenca_dias = (int)$intervalo->format('%r%a'); 
+
+        // Calcula em dias ÚTEIS para prazo restante e atraso
+        $diferenca_dias = 0;
+        if ($hoje <= $data_prevista) {
+            // Dias úteis restantes (positivo)
+            $cursor = clone $hoje;
+            $cursor->modify('+1 day');
+            while ($cursor <= $data_prevista) {
+                if ((int)$cursor->format('N') <= 5) $diferenca_dias++;
+                $cursor->modify('+1 day');
+            }
+        } else {
+            // Dias úteis de atraso (negativo)
+            $diferenca_dias = -contarDiasUteisAtraso($data_prevista_str);
+        }
 
         $enviar_mensagem = "";
 
         if ($diferenca_dias === 2) {
-            $enviar_mensagem = "Atenção: Faltam 2 dias para o prazo de devolução do livro \"$titulo_obra\". Não se esqueça de devolvê-lo no balcão!";
+            $enviar_mensagem = "Atenção: Faltam 2 dias úteis para o prazo de devolução do livro \"$titulo_obra\". Não se esqueça de devolvê-lo no balcão!";
         } elseif ($diferenca_dias === 1) {
-            $enviar_mensagem = "Lembrete importante: O prazo de devolução do livro \"$titulo_obra\" vence AMANHÃ. Evite suspensões!";
+            $enviar_mensagem = "Lembrete importante: O prazo de devolução do livro \"$titulo_obra\" vence no próximo dia útil. Evite suspensões!";
         } elseif ($diferenca_dias === 0) {
             $enviar_mensagem = "Atenção: O prazo de devolução do livro \"$titulo_obra\" vence HOJE!";
         } elseif ($diferenca_dias < 0) {
             $dias_atraso = abs($diferenca_dias);
-            $enviar_mensagem = "Aviso de Atraso: O livro \"$titulo_obra\" está atrasado há $dias_atraso dia(s). Por favor, compareça à biblioteca.";
+            $enviar_mensagem = "Aviso de Atraso: O livro \"$titulo_obra\" está atrasado há $dias_atraso dia(s) útil(eis). Por favor, compareça à biblioteca.";
         }
 
         if (!empty($enviar_mensagem)) {
